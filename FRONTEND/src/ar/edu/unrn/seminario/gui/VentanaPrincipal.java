@@ -2,13 +2,11 @@ package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.FlowLayout;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -41,49 +39,41 @@ public class VentanaPrincipal extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaPrincipal(IApi api) {
-		getContentPane().setLayout(null);
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-
+		
+		setSize(1426, 780);
+		// para que se abra la ventana centrada
+		setLocationRelativeTo(null);    
+		setResizable(false);   
+		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
+		// 10: horizontal. 5: vertical
+		JPanel panelMenu = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
 
-		JMenu usuarioMenu = new JMenu("Usuarios");
-		menuBar.add(usuarioMenu);
+		JButton btnBiblioteca = new JButton("Biblioteca");
+		JButton btnJuegos = new JButton("Juegos");
+		JButton btnTienda = new JButton("Tienda");
+		JButton btnAjustes = new JButton("Ajustes");
 
-		JMenuItem altaUsuarioMenuItem = new JMenuItem("Alta/Modificación");
-		altaUsuarioMenuItem.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent arg0) {
-				AltaUsuario alta = new AltaUsuario(api);
-				alta.setLocationRelativeTo(null);
-				alta.setVisible(true);
-			}
-			
-		});
-		usuarioMenu.add(altaUsuarioMenuItem);
+		panelMenu.add(btnBiblioteca);
+		panelMenu.add(btnJuegos);
+		panelMenu.add(btnTienda);
+		panelMenu.add(btnAjustes);
 
-		JMenuItem listadoUsuarioMenuItem = new JMenuItem("Listado");
-		listadoUsuarioMenuItem.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent arg0) {
-				ListadoUsuario listado= new ListadoUsuario(api);
-				listado.setLocationRelativeTo(null);
-				listado.setVisible(true);
-			}
-			
-		});
-		usuarioMenu.add(listadoUsuarioMenuItem);
-
-		JMenu configuracionMenu = new JMenu("Configuración");
-		menuBar.add(configuracionMenu);
-
-		JMenuItem salirMenuItem = new JMenuItem("Salir");
-		configuracionMenu.add(salirMenuItem);
+		menuBar.add(panelMenu);
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setLayout(new BorderLayout());
 		setContentPane(contentPane);
+		
+		JPanel panelHome = new JPanel();
+		contentPane.add(panelHome, BorderLayout.CENTER);
+
+		JButton btnJugar = new JButton("Jugar");
+		panelHome.add(btnJugar);
 	}
 
 }
