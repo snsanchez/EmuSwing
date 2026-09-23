@@ -12,6 +12,11 @@ import javax.swing.border.EmptyBorder;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.api.MemoryApi;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import java.awt.Panel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -51,18 +56,28 @@ public class VentanaPrincipal extends JFrame {
 		setJMenuBar(menuBar);
 		// 10: horizontal. 5: vertical
 		JPanel panelMenu = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
-
-		JButton btnBiblioteca = new JButton("Biblioteca");
 		JButton btnJuegos = new JButton("Juegos");
 		JButton btnTienda = new JButton("Tienda");
-		JButton btnAjustes = new JButton("Ajustes");
-
-		panelMenu.add(btnBiblioteca);
+				
+				JButton btnMiPerfil = new JButton("Mi Perfil");
+				panelMenu.add(btnMiPerfil);
+		
+				JButton btnBiblioteca = new JButton("Biblioteca");
+				
+						panelMenu.add(btnBiblioteca);
 		panelMenu.add(btnJuegos);
 		panelMenu.add(btnTienda);
-		panelMenu.add(btnAjustes);
 
 		menuBar.add(panelMenu);
+		
+		JButton btnSoporte = new JButton("Soporte");
+		panelMenu.add(btnSoporte);
+		JButton btnAjustes = new JButton("Ajustes");
+		btnAjustes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		panelMenu.add(btnAjustes);
 		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
