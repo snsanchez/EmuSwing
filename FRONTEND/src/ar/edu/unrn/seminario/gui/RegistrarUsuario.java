@@ -1,4 +1,4 @@
-package ar.edu.unrn.seminario.main;
+package ar.edu.unrn.seminario.gui;
 
 import java.awt.EventQueue;
 
@@ -9,6 +9,8 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class RegistrarUsuario {
 
@@ -92,6 +94,11 @@ public class RegistrarUsuario {
 		textField_3.setColumns(10);
 		
 		JButton btnAceptar = new JButton("Aceptar");
+		btnAceptar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		btnAceptar.setBounds(199, 231, 105, 27);
 		frame.getContentPane().add(btnAceptar);
 		
