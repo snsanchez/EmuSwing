@@ -1,3 +1,4 @@
+// by: Santiago Sánchez
 package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
@@ -46,7 +47,7 @@ public class VentanaPrincipal extends JFrame {
 	public VentanaPrincipal(IApi api) {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+		setTitle("Home");
 		setSize(1426, 780);
 		// para que se abra la ventana centrada
 		setLocationRelativeTo(null);    
