@@ -1,33 +1,37 @@
 package ar.edu.unrn.seminario.gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.border.TitledBorder;
-import javax.swing.JSlider;
-import javax.swing.JCheckBox;
 import java.awt.Font;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JScrollPane;
-import javax.swing.border.EtchedBorder;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 
 public class VentanaConfiguracion extends JFrame {
 
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPanel panelLateral;
 	private JPanel panelPrincipal;
-	private JButton btnSonido;
-	private JButton btnEmulador;
-	private JButton btnSuscripcion;
-	private JTextField txtRutaEmulador;
+	
+	public static final Color FONDO_OSCURO = new Color(35, 15, 45);
+	public static final Color FONDO_CLARO  = new Color(74, 36, 92);
+	public static final Color COLOR_BORDE  = new Color(169, 65, 196);
+	public static final Color COLOR_TEXTO  = new Color(245, 240, 247);
+	
+	private JLabel lblNewLabel_1;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -43,165 +47,202 @@ public class VentanaConfiguracion extends JFrame {
 	}
 
 	public VentanaConfiguracion() {
-		setTitle("\r\n");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 744, 488);
-		setLocationRelativeTo(null);
-
+		setBounds(100, 100, 755, 520);
+		
 		contentPane = new JPanel();
+		contentPane.setBackground(FONDO_OSCURO);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(null); 
-
-		panelLateral = new JPanel();// Panel lateral con layout libre
-		panelLateral.setBounds(10, 10, 160, 440);
-		panelLateral.setBackground(new Color(230, 230, 230));
-		panelLateral.setLayout(null);
+		contentPane.setLayout(null);
+		
+		panelLateral = new JPanel();
+		panelLateral.setBackground(FONDO_OSCURO);
+		panelLateral.setBorder(new LineBorder(COLOR_BORDE, 1));
+		panelLateral.setBounds(10, 10, 160, 451);
 		contentPane.add(panelLateral);
-
-	
-		btnSonido = new JButton("Sonido"); 	
-		btnSonido.setBounds(10, 82, 140, 35);
-		panelLateral.add(btnSonido);
-
-		btnEmulador = new JButton("Emulador");
-		btnEmulador.setBounds(10, 128, 140, 35);
-		panelLateral.add(btnEmulador);
-
-		btnSuscripcion = new JButton("Suscripción");
-		btnSuscripcion.setBounds(10, 33, 140, 35);
-		panelLateral.add(btnSuscripcion);
+		panelLateral.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("CONFIGURACION");
-		lblNewLabel.setBounds(33, 8, 98, 14);
+		lblNewLabel.setForeground(COLOR_TEXTO);
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
+		lblNewLabel.setBounds(20, 15, 120, 14);
 		panelLateral.add(lblNewLabel);
 		
+		JButton btnSuscripcion = new JButton("Suscripción");
+		btnSuscripcion.setBackground(FONDO_CLARO);
+		btnSuscripcion.setForeground(COLOR_TEXTO);
+		btnSuscripcion.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnSuscripcion.setBounds(10, 45, 140, 35);
+		panelLateral.add(btnSuscripcion);
+		
+		JButton btnSonido = new JButton("Sonido");
+		btnSonido.setBackground(FONDO_CLARO);
+		btnSonido.setForeground(COLOR_TEXTO);
+		btnSonido.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnSonido.setBounds(10, 95, 140, 35);
+		panelLateral.add(btnSonido);
+		
+		JButton btnEmulador = new JButton("Emulador");
+		btnEmulador.setBackground(FONDO_CLARO);
+		btnEmulador.setForeground(COLOR_TEXTO);
+		btnEmulador.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnEmulador.setBounds(10, 145, 140, 35);
+		panelLateral.add(btnEmulador);
+		
 		JButton btnNewButton_1 = new JButton("Control Parental");
-		btnNewButton_1.setBounds(10, 174, 140, 35);
+		btnNewButton_1.setBackground(FONDO_CLARO);
+		btnNewButton_1.setForeground(COLOR_TEXTO);
+		btnNewButton_1.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnNewButton_1.setBounds(10, 195, 140, 35);
 		panelLateral.add(btnNewButton_1);
 		
-		JButton btnNewButton_2 = new JButton("Restablecer Configuracion");
-		btnNewButton_2.setBounds(0, 362, 160, 35);
+		JButton btnNewButton_2 = new JButton("Por Defecto");
+		btnNewButton_2.setBackground(FONDO_CLARO);
+		btnNewButton_2.setForeground(COLOR_TEXTO);
+		btnNewButton_2.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnNewButton_2.setBounds(10, 245, 140, 35);
 		panelLateral.add(btnNewButton_2);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.getVerticalScrollBar().setUnitIncrement(15);
-		scrollPane.setBounds(180, 10, 548, 440);
+		scrollPane.setBackground(FONDO_OSCURO);
+		scrollPane.getViewport().setBackground(FONDO_OSCURO);
+		scrollPane.setBorder(new LineBorder(COLOR_BORDE, 1));
+		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+		scrollPane.setBounds(180, 10, 544, 451);
 		contentPane.add(scrollPane);
-
-		// Panel principal con layout libre
+		
 		panelPrincipal = new JPanel();
-		panelPrincipal.setPreferredSize(new java.awt.Dimension(520, 650));
+		panelPrincipal.setBackground(FONDO_OSCURO);
+		panelPrincipal.setPreferredSize(new Dimension(520, 650));
 		scrollPane.setViewportView(panelPrincipal);
-		panelPrincipal.setBackground(new Color(245, 245, 245));
 		panelPrincipal.setLayout(null);
 		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(FONDO_CLARO);
+		panel_1.setBorder(BorderFactory.createTitledBorder(new LineBorder(COLOR_BORDE, 1), "Plan & Suscripción", TitledBorder.LEADING, TitledBorder.TOP, null, COLOR_TEXTO));
+		panel_1.setBounds(15, 15, 490, 130);
+		panelPrincipal.add(panel_1);
+		panel_1.setLayout(null);
+		
+		JLabel lblNewLabel_2 = new JLabel("EmuSwing Premium");
+		lblNewLabel_2.setForeground(COLOR_TEXTO);
+		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblNewLabel_2.setBounds(15, 25, 200, 20);
+		panel_1.add(lblNewLabel_2);
+		
+		JLabel lblNewLabel_3 = new JLabel("Desbloqueá partidas en la nube, cero anuncios y juego online sin límites.");
+		lblNewLabel_3.setForeground(COLOR_TEXTO);
+		lblNewLabel_3.setBounds(15, 50, 460, 15);
+		panel_1.add(lblNewLabel_3);
+		
+		JButton btnNewButton_3 = new JButton("¡Mejorar a Premium por solo $0,99/mes!");
+		btnNewButton_3.setBackground(new Color(130, 40, 150));
+		btnNewButton_3.setForeground(COLOR_TEXTO);
+		btnNewButton_3.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnNewButton_3.setBounds(15, 80, 460, 32);
+		panel_1.add(btnNewButton_3);
+		
 		JPanel panel = new JPanel();
-		panel.setBorder(new TitledBorder(null, "Sonido del Emulador", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel.setBounds(37, 146, 454, 116);
+		panel.setBackground(FONDO_CLARO);
+		panel.setBorder(BorderFactory.createTitledBorder(new LineBorder(COLOR_BORDE, 1), "Sonido del Emulador", TitledBorder.LEADING, TitledBorder.TOP, null, COLOR_TEXTO));
+		panel.setBounds(15, 155, 490, 115);
 		panelPrincipal.add(panel);
 		panel.setLayout(null);
 		
 		JSlider sliderVolumen = new JSlider();
+		sliderVolumen.setBackground(FONDO_CLARO);
+		sliderVolumen.setForeground(COLOR_TEXTO);
 		sliderVolumen.setPaintTicks(true);
-		sliderVolumen.setMinorTickSpacing(25);
 		sliderVolumen.setMajorTickSpacing(25);
 		sliderVolumen.setValue(70);
-		sliderVolumen.setBounds(10, 48, 434, 31);
+		sliderVolumen.setBounds(15, 40, 460, 35);
 		panel.add(sliderVolumen);
 		
-		JLabel lblNewLabel_1 = new JLabel("Volumen: ");
-		lblNewLabel_1.setBounds(335, 11, 60, 14);
+		lblNewLabel_1 = new JLabel("Volumen: 70%");
+		lblNewLabel_1.setForeground(COLOR_TEXTO);
+		lblNewLabel_1.setBounds(380, 20, 95, 14);
 		panel.add(lblNewLabel_1);
 		
 		JCheckBox chckbxMute = new JCheckBox("Silenciar Volumen");
-		chckbxMute.setBounds(10, 86, 142, 23);
+		chckbxMute.setBackground(FONDO_CLARO);
+		chckbxMute.setForeground(COLOR_TEXTO);
+		chckbxMute.setBounds(15, 80, 150, 23);
 		panel.add(chckbxMute);
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(new Color(255, 255, 255));
-		panel_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Plan & Suscripci\u00F3n", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panel_1.setBounds(37, 11, 454, 116);
-		panelPrincipal.add(panel_1);
-		panel_1.setLayout(null);
-		
-		JLabel lblNewLabel_2 = new JLabel("EmuSwing Premium ");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD, 13));
-		lblNewLabel_2.setBounds(10, 21, 149, 20);
-		panel_1.add(lblNewLabel_2);
-		
-		JLabel lblNewLabel_3 = new JLabel("Desbloqueá partidas en la nube, cero anuncios y juego online sin límites.");
-		lblNewLabel_3.setBounds(10, 40, 358, 34);
-		panel_1.add(lblNewLabel_3);
-		
-		JButton btnSuscribirse = new JButton("¡Mejorar a Premium por solo $0,99/mes!");
-		btnSuscribirse.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnSuscribirse.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnSuscribirse.setBounds(10, 85, 434, 20);
-		panel_1.add(btnSuscribirse);
-		
 		JPanel panel_2 = new JPanel();
-		panel_2.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Ruta del Ejecutable", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panel_2.setBounds(37, 291, 454, 94);
+		panel_2.setBackground(FONDO_CLARO);
+		panel_2.setBorder(BorderFactory.createTitledBorder(new LineBorder(COLOR_BORDE, 1), "Ruta del Ejecutable", TitledBorder.LEADING, TitledBorder.TOP, null, COLOR_TEXTO));
+		panel_2.setBounds(15, 280, 490, 100);
 		panelPrincipal.add(panel_2);
 		panel_2.setLayout(null);
 		
-		txtRutaEmulador = new JTextField();
+		JTextField txtRutaEmulador = new JTextField();
+		txtRutaEmulador.setBackground(Color.WHITE);
+		txtRutaEmulador.setForeground(Color.BLACK);
+		txtRutaEmulador.setBorder(new LineBorder(COLOR_BORDE, 1));
 		txtRutaEmulador.setText("C:\\Emulador\\JavaSwing.exe");
-		txtRutaEmulador.setBounds(10, 34, 434, 20);
+		txtRutaEmulador.setBounds(15, 30, 355, 25);
 		panel_2.add(txtRutaEmulador);
-		txtRutaEmulador.setColumns(10);
 		
 		JButton btnNewButton = new JButton("Examinar");
-		btnNewButton.setBounds(345, 65, 99, 23);
+		btnNewButton.setBackground(FONDO_OSCURO);
+		btnNewButton.setForeground(COLOR_TEXTO);
+		btnNewButton.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnNewButton.setBounds(380, 30, 95, 25);
 		panel_2.add(btnNewButton);
 		
 		JPanel panel_3 = new JPanel();
-		panel_3.setBorder(new TitledBorder(null, "Control Parental", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_3.setBounds(37, 404, 454, 83);
+		panel_3.setBackground(FONDO_CLARO);
+		panel_3.setBorder(BorderFactory.createTitledBorder(new LineBorder(COLOR_BORDE, 1), "Control Parental", TitledBorder.LEADING, TitledBorder.TOP, null, COLOR_TEXTO));
+		panel_3.setBounds(15, 390, 490, 95);
 		panelPrincipal.add(panel_3);
 		panel_3.setLayout(null);
 		
 		JLabel lblNewLabel_4 = new JLabel("Establecé un límite diario de horas de juego.");
-		lblNewLabel_4.setBounds(10, 21, 377, 28);
+		lblNewLabel_4.setForeground(COLOR_TEXTO);
+		lblNewLabel_4.setBounds(15, 25, 300, 14);
 		panel_3.add(lblNewLabel_4);
 		
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		JComboBox comboBox = new JComboBox();
+		comboBox.setBackground(Color.WHITE);
+		comboBox.setForeground(Color.BLACK);
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Sin límite", "1 hora al día", "2 horas al día", "3 horas al día"}));
-		comboBox.setBounds(307, 50, 105, 22);
+		comboBox.setBounds(330, 45, 145, 25);
 		panel_3.add(comboBox);
 		
 		JPanel panel_4 = new JPanel();
-		panel_4.setBorder(new TitledBorder(null, "Establecer Configuracion por Defecto", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_4.setBounds(37, 513, 454, 54);
+		panel_4.setBackground(FONDO_CLARO);
+		panel_4.setBorder(BorderFactory.createTitledBorder(new LineBorder(COLOR_BORDE, 1), "Establecer Configuración por Defecto", TitledBorder.LEADING, TitledBorder.TOP, null, COLOR_TEXTO));
+		panel_4.setBounds(15, 495, 490, 75);
 		panelPrincipal.add(panel_4);
 		panel_4.setLayout(null);
 		
-		JLabel lblNewLabel_5 = new JLabel("Se estableceran todas las configuraciones por defecto");
-		lblNewLabel_5.setBounds(10, 23, 319, 14);
+		JLabel lblNewLabel_5 = new JLabel("Se restablecerán todas las configuraciones por defecto");
+		lblNewLabel_5.setForeground(COLOR_TEXTO);
+		lblNewLabel_5.setBounds(15, 30, 320, 14);
 		panel_4.add(lblNewLabel_5);
 		
-		JButton btnNewButton_3 = new JButton("Restablecer");
-		btnNewButton_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton_3.setBounds(339, 19, 105, 23);
-		panel_4.add(btnNewButton_3);
-		
-		JButton btnNewButton_4 = new JButton("Aplicar Cambios");
-		btnNewButton_4.setBounds(379, 605, 141, 23);
-		panelPrincipal.add(btnNewButton_4);
+		JButton btnNewButton_6 = new JButton("Restablecer");
+		btnNewButton_6.setBackground(FONDO_OSCURO);
+		btnNewButton_6.setForeground(COLOR_TEXTO);
+		btnNewButton_6.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnNewButton_6.setBounds(350, 25, 125, 25);
+		panel_4.add(btnNewButton_6);
 		
 		JButton btnNewButton_5 = new JButton("Cancelar");
-		btnNewButton_5.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnNewButton_5.setBounds(280, 605, 89, 23);
+		btnNewButton_5.setBackground(FONDO_OSCURO);
+		btnNewButton_5.setForeground(COLOR_TEXTO);
+		btnNewButton_5.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnNewButton_5.setBounds(240, 585, 110, 28);
 		panelPrincipal.add(btnNewButton_5);
+		
+		JButton btnNewButton_4 = new JButton("Aplicar Cambios");
+		btnNewButton_4.setBackground(FONDO_OSCURO);
+		btnNewButton_4.setForeground(COLOR_TEXTO);
+		btnNewButton_4.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnNewButton_4.setBounds(365, 585, 140, 28);
+		panelPrincipal.add(btnNewButton_4);
 	}
 }
