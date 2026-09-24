@@ -48,7 +48,7 @@ public class VentanaConfiguracion extends JFrame {
 
 	public VentanaConfiguracion() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 755, 520);
+		setBounds(100, 100, 767, 452);
 		
 		contentPane = new JPanel();
 		contentPane.setBackground(FONDO_OSCURO);
@@ -103,18 +103,34 @@ public class VentanaConfiguracion extends JFrame {
 		btnNewButton_2.setBorder(new LineBorder(COLOR_BORDE, 1));
 		btnNewButton_2.setBounds(10, 245, 140, 35);
 		panelLateral.add(btnNewButton_2);
+
+		// AGREGADO: Botón lateral para Cerrar Sesión
+		JButton btnNewButton_9 = new JButton("Cerrar Sesión");
+		btnNewButton_9.setBackground(FONDO_CLARO);
+		btnNewButton_9.setForeground(COLOR_TEXTO);
+		btnNewButton_9.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnNewButton_9.setBounds(10, 295, 140, 35);
+		panelLateral.add(btnNewButton_9);
+
+		// AGREGADO: Botón lateral para Cancelar Suscripción
+		JButton btnNewButton_10 = new JButton("Cancelar Susc.");
+		btnNewButton_10.setBackground(FONDO_CLARO);
+		btnNewButton_10.setForeground(COLOR_TEXTO);
+		btnNewButton_10.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnNewButton_10.setBounds(10, 345, 140, 35);
+		panelLateral.add(btnNewButton_10);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBackground(FONDO_OSCURO);
 		scrollPane.getViewport().setBackground(FONDO_OSCURO);
 		scrollPane.setBorder(new LineBorder(COLOR_BORDE, 1));
 		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-		scrollPane.setBounds(180, 10, 544, 451);
+		scrollPane.setBounds(180, 10, 561, 392);
 		contentPane.add(scrollPane);
 		
 		panelPrincipal = new JPanel();
 		panelPrincipal.setBackground(FONDO_OSCURO);
-		panelPrincipal.setPreferredSize(new Dimension(520, 650));
+		panelPrincipal.setPreferredSize(new Dimension(520, 893));
 		scrollPane.setViewportView(panelPrincipal);
 		panelPrincipal.setLayout(null);
 		
@@ -199,7 +215,7 @@ public class VentanaConfiguracion extends JFrame {
 		panelPrincipal.add(panel_3);
 		panel_3.setLayout(null);
 		
-		JLabel lblNewLabel_4 = new JLabel("Establecé un límite diario de horas de juego.");
+		JLabel lblNewLabel_4 = new JLabel("Establecé un límite diario de horas de juego");
 		lblNewLabel_4.setForeground(COLOR_TEXTO);
 		lblNewLabel_4.setBounds(15, 25, 300, 14);
 		panel_3.add(lblNewLabel_4);
@@ -235,14 +251,52 @@ public class VentanaConfiguracion extends JFrame {
 		btnNewButton_5.setBackground(FONDO_OSCURO);
 		btnNewButton_5.setForeground(COLOR_TEXTO);
 		btnNewButton_5.setBorder(new LineBorder(COLOR_BORDE, 1));
-		btnNewButton_5.setBounds(240, 585, 110, 28);
+		btnNewButton_5.setBounds(245, 807, 110, 28);
 		panelPrincipal.add(btnNewButton_5);
 		
 		JButton btnNewButton_4 = new JButton("Aplicar Cambios");
 		btnNewButton_4.setBackground(FONDO_OSCURO);
 		btnNewButton_4.setForeground(COLOR_TEXTO);
 		btnNewButton_4.setBorder(new LineBorder(COLOR_BORDE, 1));
-		btnNewButton_4.setBounds(365, 585, 140, 28);
+		btnNewButton_4.setBounds(365, 807, 140, 28);
 		panelPrincipal.add(btnNewButton_4);
+		
+		JPanel panel_5 = new JPanel();
+		panel_5.setBackground(FONDO_CLARO);
+		panel_5.setBorder(BorderFactory.createTitledBorder(new LineBorder(COLOR_BORDE, 1), "Cerrar Sesion", TitledBorder.LEADING, TitledBorder.TOP, null, COLOR_TEXTO));
+		panel_5.setBounds(15, 586, 490, 76);
+		panelPrincipal.add(panel_5);
+		panel_5.setLayout(null);
+		
+		JLabel lblNewLabel_6 = new JLabel("Se cerrara la sesion actual");
+		lblNewLabel_6.setForeground(COLOR_TEXTO);
+		lblNewLabel_6.setBounds(10, 31, 149, 14);
+		panel_5.add(lblNewLabel_6);
+		
+		JButton btnNewButton_7 = new JButton("Cerrar Sesion");
+		btnNewButton_7.setBackground(FONDO_OSCURO);
+		btnNewButton_7.setForeground(COLOR_TEXTO);
+		btnNewButton_7.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnNewButton_7.setBounds(318, 42, 162, 23);
+		panel_5.add(btnNewButton_7);
+		
+		JPanel panel_6 = new JPanel();
+		panel_6.setBackground(FONDO_CLARO);
+		panel_6.setBorder(BorderFactory.createTitledBorder(new LineBorder(COLOR_BORDE, 1), "Cancelar Suscripcion Premium", TitledBorder.LEADING, TitledBorder.TOP, null, COLOR_TEXTO));
+		panel_6.setBounds(15, 686, 490, 75);
+		panelPrincipal.add(panel_6);
+		panel_6.setLayout(null);
+		
+		JLabel lblNewLabel_7 = new JLabel("Se cancleara la suscripcion automaticamente");
+		lblNewLabel_7.setForeground(COLOR_TEXTO);
+		lblNewLabel_7.setBounds(10, 29, 263, 14);
+		panel_6.add(lblNewLabel_7);
+		
+		JButton btnNewButton_8 = new JButton("Cancelar Suscripcion");
+		btnNewButton_8.setBackground(FONDO_OSCURO);
+		btnNewButton_8.setForeground(COLOR_TEXTO);
+		btnNewButton_8.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnNewButton_8.setBounds(324, 41, 156, 23);
+		panel_6.add(btnNewButton_8);
 	}
 }
