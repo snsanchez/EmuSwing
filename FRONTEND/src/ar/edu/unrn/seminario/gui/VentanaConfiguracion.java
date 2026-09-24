@@ -51,17 +51,16 @@ public class VentanaConfiguracion extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(null); // Layout libre general
+		contentPane.setLayout(null); 
 
-		// Panel lateral con layout libre
-		panelLateral = new JPanel();
+		panelLateral = new JPanel();// Panel lateral con layout libre
 		panelLateral.setBounds(10, 10, 160, 440);
 		panelLateral.setBackground(new Color(230, 230, 230));
-		panelLateral.setLayout(null); // Layout libre adentro
+		panelLateral.setLayout(null);
 		contentPane.add(panelLateral);
 
-		// Botones con posición y tamaño libre inicial
-		btnSonido = new JButton("Sonido");
+	
+		btnSonido = new JButton("Sonido"); 	
 		btnSonido.setBounds(10, 82, 140, 35);
 		panelLateral.add(btnSonido);
 
