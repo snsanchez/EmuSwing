@@ -99,18 +99,20 @@ public class Biblioteca {
 		JButton btnRemove_1 = new JButton("Remove");
 		btnRemove_1.setBounds(424, 294, 105, 27);
 		frame.getContentPane().add(btnRemove_1);
-		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		//scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
 		
 		
 		JButton btnHome = new JButton("Home");
+		btnHome.setBackground(LETRAS);
 		menuBar.add(btnHome);
 		
-		JMenu mnOrder = FONDO_OSCUROnew JMenu("order");
+		JMenu mnOrder = new JMenu("order");
+		mnOrder.setBackground(LETRAS);
 		menuBar.add(mnOrder);
-		
+		menuBar.setBackground(LETRAS);
 		JMenuItem mntmNumber = new JMenuItem("number");
 		mnOrder.add(mntmNumber);
 		
