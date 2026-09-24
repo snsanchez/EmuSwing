@@ -135,7 +135,7 @@ public class VentanaPrincipal extends JFrame {
 
 			ImageIcon iconOriginal = new ImageIcon(imgURL);
 
-			Image imagenEscalada = iconOriginal.getImage().getScaledInstance(140, 320, java.awt.Image.SCALE_SMOOTH);
+			Image imagenEscalada = iconOriginal.getImage().getScaledInstance(200, 158, java.awt.Image.SCALE_SMOOTH);
 
 			JLabel lblLogo = new JLabel(new ImageIcon(imagenEscalada));
 
