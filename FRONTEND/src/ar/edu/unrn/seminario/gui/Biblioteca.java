@@ -1,12 +1,20 @@
 package ar.edu.unrn.seminario.gui;
 
 import java.awt.EventQueue;
-
+import java.awt.Color; 
 import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.JScrollBar;
 import javax.swing.JButton;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JSpinner;
+import java.awt.event.AdjustmentListener;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Biblioteca {
 
@@ -44,24 +52,72 @@ public class Biblioteca {
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
+		frame.setSize(700,400);
+		Color FONDO_CLARO = new Color(74, 36, 92);
+		Color FONDO_OSCURO = new Color(35, 15, 45);
+	    Color BORDE = new Color(169, 65, 196);
+	    Color LETRAS = new Color(245, 240, 247);
+		frame.setBackground(FONDO_CLARO);
+		frame.getContentPane().setBackground(FONDO_OSCURO);
+	    
+	    
+	    
 		table = new JTable();
-		table.setBounds(34, 33, 359, 187);
+		table.setBounds(33, 12, 638, 239);
 		frame.getContentPane().add(table);
 		
+		JButton btnPlay = new JButton("Play");
+		btnPlay.setBounds(174, 420, 105, 27);
+		frame.getContentPane().add(btnPlay);
+		
+		JButton btnRemove = new JButton("Remove");
+		btnRemove.setBounds(424, 420, 105, 27);
+		frame.getContentPane().add(btnRemove);
+		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(394, 33, 16, 187);
+		scrollPane.setBounds(49, 392, 622, 18);
 		frame.getContentPane().add(scrollPane);
 		
-		JScrollBar scrollBar = new JScrollBar();
-		scrollPane.setColumnHeaderView(scrollBar);
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(125, 263, 452, 19);
+		frame.getContentPane().add(scrollPane_1);
 		
-		JButton btnSeleccionar = new JButton("Seleccionar");
-		btnSeleccionar.setBounds(288, 223, 105, 27);
-		frame.getContentPane().add(btnSeleccionar);
+		JScrollBar scrollBar = new JScrollBar(JScrollBar.HORIZONTAL);
+		
+		
+		
+		scrollPane_1.setViewportView(scrollBar);
+		
+		JButton btnNewButton = new JButton("Select");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnNewButton.setBounds(174, 294, 105, 27);
+		frame.getContentPane().add(btnNewButton);
+		
+		JButton btnRemove_1 = new JButton("Remove");
+		btnRemove_1.setBounds(424, 294, 105, 27);
+		frame.getContentPane().add(btnRemove_1);
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		
+		JMenuBar menuBar = new JMenuBar();
+		frame.setJMenuBar(menuBar);
+		
 		
 		JButton btnHome = new JButton("Home");
-		btnHome.setBounds(12, 0, 105, 27);
-		frame.getContentPane().add(btnHome);
+		menuBar.add(btnHome);
+		
+		JMenu mnOrder = FONDO_OSCUROnew JMenu("order");
+		menuBar.add(mnOrder);
+		
+		JMenuItem mntmNumber = new JMenuItem("number");
+		mnOrder.add(mntmNumber);
+		
+		JMenuItem mntmOld = new JMenuItem("old");
+		mnOrder.add(mntmOld);
+		
+		JMenuItem mntmNew = new JMenuItem("new");
+		mnOrder.add(mntmNew);
 	}
 }
