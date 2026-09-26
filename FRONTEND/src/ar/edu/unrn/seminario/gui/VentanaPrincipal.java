@@ -1,24 +1,32 @@
+
 // by: Santiago Sánchez
+
 package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
+import java.awt.Font;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Insets;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
@@ -27,212 +35,421 @@ import ar.edu.unrn.seminario.api.MemoryApi;
 
 public class VentanaPrincipal extends JFrame {
 
-	private JPanel contentPane;
+    // ---------- PALETA DE COLORES
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					IApi api = new MemoryApi();
-					VentanaPrincipal frame = new VentanaPrincipal(api);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    private static final Color COLOR_FONDO = new Color(24, 10, 32);
+    private static final Color COLOR_CONTENIDO = new Color(50, 22, 66);
+    private static final Color COLOR_TARJETA = new Color(64, 30, 82);
+    private static final Color COLOR_TARJETA_HOVER = new Color(82, 40, 104);
+    private static final Color COLOR_ACENTO = new Color(191, 90, 224);
+    private static final Color COLOR_ACENTO_HOVER = new Color(206, 130, 235);
+    private static final Color COLOR_TEXTO = new Color(245, 240, 247);
+    private static final Color COLOR_TEXTO_SECUNDARIO = new Color(196, 180, 206);
 
-	public VentanaPrincipal(IApi api) {
+    // ---------- FONT
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("Home - EmuSwing");
-		setSize(1426, 780);
-		setLocationRelativeTo(null);
-		setResizable(false);
+    private static final Font FONT_TITULO = new Font("Segoe UI", Font.BOLD, 28);
+    private static final Font FONT_SUBTITULO = new Font("Segoe UI", Font.PLAIN, 13);
+    private static final Font FONT_SECCION = new Font("Segoe UI", Font.BOLD, 14);
+    private static final Font FONT_MENU = new Font("Segoe UI", Font.PLAIN, 14);
+    private static final Font FONT_TARJETA = new Font("Segoe UI", Font.BOLD, 13);
+    private static final Font FONT_BOTON = new Font("Segoe UI", Font.BOLD, 15);
 
-		// --------- CONTENT PANE
+    // ---------- DIMENSIONES
+    // Si se quiere agrandar o achicar las portadas de los juegos ajustar aca
+    private static final int ANCHO_PORTADA = 150;
+    private static final int ALTO_PORTADA = 180;
 
-		contentPane = new JPanel();
-		
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout());
-		
-		contentPane.setBackground(
-		        new Color(35, 15, 45)
-		);
-		
-		setContentPane(contentPane);
-		
+    private static final int ANCHO_TARJETA = 180;
+    private static final int ALTO_TARJETA = 220;
 
-		// ---------- BARRA DE NAVEGACIÓN
+    private static final int ANCHO_CONTENIDO = 980;
+    private static final int ALTO_CONTENIDO = 470;
 
-		JMenuBar menuBar = new JMenuBar();
-		contentPane.add(menuBar, BorderLayout.NORTH);
+    private JPanel contentPane;
+    // usamos collections
+    private final List<JPanel> tarjetas = new ArrayList<JPanel>();
 
-		JPanel panelMenu = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
+    private String juegoSeleccionado;
 
-		JButton btnMiPerfil = new JButton("Mi Perfil");
-		panelMenu.add(btnMiPerfil);
+    public static void main(String[] args) {
 
-		JButton btnBiblioteca = new JButton("Biblioteca");
-		panelMenu.add(btnBiblioteca);
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    IApi api = new MemoryApi();
 
-		JButton btnJuegos = new JButton("Juegos");
-		panelMenu.add(btnJuegos);
+                    VentanaPrincipal frame = new VentanaPrincipal(api);
+                    frame.setVisible(true);
 
-		JButton btnTienda = new JButton("Tienda");
-		panelMenu.add(btnTienda);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
-		JButton btnSoporte = new JButton("Soporte");
-		panelMenu.add(btnSoporte);
+    public VentanaPrincipal(IApi api) {
 
-		JButton btnAjustes = new JButton("Ajustes");
-		panelMenu.add(btnAjustes);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Home - EmuSwing");
+        setSize(1426, 780);
+        setLocationRelativeTo(null);
+        setResizable(false);
 
-		menuBar.add(panelMenu);
+        contentPane = new JPanel(new BorderLayout());
+        contentPane.setBackground(COLOR_FONDO);
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-		// ---------- PANEL PRINCIPAL
+        setContentPane(contentPane);
 
-		JPanel panelPrincipal = new JPanel(new BorderLayout());
-		panelPrincipal.setBackground(
-		        new Color(35, 15, 45)
-		);
-		contentPane.add(panelPrincipal, BorderLayout.CENTER);
+        // ---------- BARRA DE NAVEGACIÓN
 
+        JMenuBar menuBar = new JMenuBar();
 
-		JPanel panelCentrador = new JPanel(new GridBagLayout());
-		panelCentrador.setBackground(
-		        new Color(35, 15, 45)
-		);
+        menuBar.setBackground(COLOR_FONDO);
+        menuBar.setBorder(new EmptyBorder(4, 0, 4, 0));
 
-		panelPrincipal.add(panelCentrador, BorderLayout.CENTER);
+        contentPane.add(menuBar, BorderLayout.NORTH);
 
-		GridBagConstraints gbcPanelHome = new GridBagConstraints();
-		gbcPanelHome.gridx = 0;
-		gbcPanelHome.gridy = 0;
-		gbcPanelHome.anchor = GridBagConstraints.CENTER;
+        JPanel panelMenu = new JPanel(new FlowLayout(FlowLayout.CENTER, 6, 5));
 
-		// ------------------- HOME
+        panelMenu.setOpaque(false);
 
-		JPanel panelHome = new JPanel(new BorderLayout(0, 20));
+        panelMenu.add(crearBotonMenu("Mi Perfil"));
+        panelMenu.add(crearBotonMenu("Biblioteca"));
+        panelMenu.add(crearBotonMenu("Juegos"));
+        panelMenu.add(crearBotonMenu("Tienda"));
+        panelMenu.add(crearBotonMenu("Soporte"));
 
-		panelHome.setBorder(new EmptyBorder(20, 40, 20, 40));
+        JButton btnAjustes = crearBotonMenu("Ajustes");
+        panelMenu.add(btnAjustes);
 
-		panelHome.setBackground(new Color(35, 15, 45));
+        menuBar.add(panelMenu);
 
-		panelCentrador.add(panelHome, gbcPanelHome);
+        // ---------- PANEL PRINCIPAL
 
-		// ------------ LOGO
+        JPanel panelPrincipal = new JPanel(new GridBagLayout());
+        panelPrincipal.setBackground(COLOR_FONDO);
 
-		JPanel panelLogo = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        contentPane.add(panelPrincipal, BorderLayout.CENTER);
 
-		panelLogo.setOpaque(false);
+        // ---------- HOME
 
-		URL imgURL = getClass().getResource("/img/esw-logo.png");
+        JPanel panelHome = new JPanel(new BorderLayout(0, 15));
+        panelHome.setOpaque(false);
+        panelHome.setBorder(new EmptyBorder(10, 20, 10, 20));
 
-		if (imgURL != null) {
+        panelPrincipal.add(panelHome);
 
-			ImageIcon iconOriginal = new ImageIcon(imgURL);
+        // ---------- LOGO
 
-			Image imagenEscalada = iconOriginal.getImage().getScaledInstance(200, 158, java.awt.Image.SCALE_SMOOTH);
+        JPanel panelLogo = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
 
-			JLabel lblLogo = new JLabel(new ImageIcon(imagenEscalada));
+        panelLogo.setOpaque(false);
 
-			panelLogo.add(lblLogo);
+        URL imgURL = getClass().getResource("/img/esw-logo.png");
 
-		} else {
+        if (imgURL != null) {
 
-			JLabel lblLogo = new JLabel("EmuSwing");
+            ImageIcon iconOriginal = new ImageIcon(imgURL);
+            // escalar la imagen para que no se vea gigante
+            Image imagenEscalada = iconOriginal.getImage().getScaledInstance(170, 134, Image.SCALE_SMOOTH);
+            JLabel lblLogo = new JLabel(new ImageIcon(imagenEscalada));
+            panelLogo.add(lblLogo);
 
-			lblLogo.setHorizontalAlignment(SwingConstants.CENTER);
+        } else {
+            JLabel lblLogo = new JLabel("EmuSwing");
+            lblLogo.setFont(FONT_TITULO);
+            lblLogo.setForeground(COLOR_TEXTO);
+            panelLogo.add(lblLogo);
+            System.out.println("No se encontró la imagen: /img/esw-logo.png");
+        }
 
-			panelLogo.add(lblLogo);
+        panelHome.add(panelLogo, BorderLayout.NORTH);
 
-			System.out.println("No se encontró la imagen: /img/esw-logo.png");
-		}
+        // ---------- CONTENIDO CENTRAL
 
-		panelHome.add(panelLogo, BorderLayout.NORTH);
+        JPanel panelContenido = new JPanel(new BorderLayout(0, 15));
+        panelContenido.setPreferredSize(new Dimension(ANCHO_CONTENIDO, ALTO_CONTENIDO));
+        panelContenido.setBackground(COLOR_CONTENIDO);
+        panelContenido
+                .setBorder(new CompoundBorder(new LineBorder(COLOR_ACENTO, 2, true), new EmptyBorder(10, 20, 15, 20)));
+        panelHome.add(panelContenido, BorderLayout.CENTER);
 
-		// ----------- CONTENIDO
+        // ---------- BIENVENIDA
 
-		JPanel panelContenido = new JPanel(new BorderLayout(0, 20));
-		panelContenido.setBackground(
-		        new Color(74, 36, 92)
-		);
+        JPanel panelBienvenida = new JPanel(new BorderLayout(0, 4));
+        panelBienvenida.setOpaque(false);
+        JLabel lblBienvenida = new JLabel("Bienvenido a EmuSwing", SwingConstants.CENTER);
+        lblBienvenida.setFont(FONT_TITULO);
+        lblBienvenida.setForeground(COLOR_TEXTO);
+        JLabel lblSubtitulo = new JLabel("Retomá donde lo dejaste.", SwingConstants.CENTER);
+        lblSubtitulo.setFont(FONT_SUBTITULO);
+        lblSubtitulo.setForeground(COLOR_TEXTO_SECUNDARIO);
+        panelBienvenida.add(lblBienvenida, BorderLayout.NORTH);
+        panelBienvenida.add(lblSubtitulo, BorderLayout.SOUTH);
+        panelContenido.add(panelBienvenida, BorderLayout.NORTH);
 
-		panelContenido.setBorder(new LineBorder(
-                new Color(169, 65, 196),
-                2,
-                true
-        ));
+        // ---------- ÚLTIMOS JUEGOS
 
-		panelHome.add(panelContenido, BorderLayout.CENTER);
+        JPanel panelUltimosJuegos = new JPanel(new BorderLayout(0, 8));
+        panelUltimosJuegos.setOpaque(false);
+        JLabel lblUltimoJuegoJugado = new JLabel("Tus últimos juegos");
+        lblUltimoJuegoJugado.setFont(FONT_SECCION);
+        lblUltimoJuegoJugado.setForeground(COLOR_ACENTO);
+        panelUltimosJuegos.add(lblUltimoJuegoJugado, BorderLayout.NORTH);
 
-		// ------------ BIENVENIDA
-		
-		JPanel panelBienvenida = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        // estos son solo datos de prueba, despues habria que cargarlos desde IApi
+        // pasando por una base de datos
+        String[] nombresJuegos = { "Super Street Fighter II", "Super Mario World", "Doom" };
+        String[] imagenesJuegos = { "/img/Street-Fighter-II-USA_cover_1024x705.jpg",
+                "/img/Super-Mario-Word_1990_cover_474x332.jpg", "/img/doom_1993_cover_720x1080.jpg" };
+        // GridLayout mantiene las tres tarjetas del mismo tamaño
+        JPanel panelTarjetas = new JPanel(new GridLayout(1, 3, 20, 0));
 
-		panelBienvenida.setOpaque(false);
+        panelTarjetas.setOpaque(false);
 
-		JLabel lblBienvenida = new JLabel("Bienvenido a EmuSwing");
-		lblBienvenida.setForeground(
-		        new Color(245, 240, 247)
-		);
+        panelTarjetas.setBorder(new EmptyBorder(5, 35, 5, 35));
 
-		panelBienvenida.add(lblBienvenida);
+        for (int i = 0; i < nombresJuegos.length; i++) {
 
-		panelContenido.add(panelBienvenida, BorderLayout.NORTH);
+            JPanel tarjeta = crearTarjetaJuego(nombresJuegos[i], imagenesJuegos[i]);
 
-		// ------------ ÚLTIMOS JUEGOS
+            tarjetas.add(tarjeta);
+            panelTarjetas.add(tarjeta);
+        }
 
-		JPanel panelUltimosJuegos = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
+        panelUltimosJuegos.add(panelTarjetas, BorderLayout.CENTER);
+        panelContenido.add(panelUltimosJuegos, BorderLayout.CENTER);
 
-		panelUltimosJuegos.setOpaque(false);
+        // ---------- ACCIONES
 
-		JLabel lblUltimoJuegoJugado = new JLabel("Últimos juegos");
-		lblUltimoJuegoJugado.setForeground(
-		        new Color(245, 240, 247)
-		);
-		
-		panelUltimosJuegos.add(lblUltimoJuegoJugado);
+        JPanel panelAcciones = new JPanel(new FlowLayout(FlowLayout.CENTER, 16, 5));
+        panelAcciones.setOpaque(false);
+        JButton btnDetalles = crearBotonAccion("Ver detalles", false);
+        // el \u25B6 es Unicode para el icono de jugar
+        JButton btnJugar = crearBotonAccion("\u25B6  Jugar", true);
 
-		// datos de prueba 
+        panelAcciones.add(btnDetalles);
+        panelAcciones.add(btnJugar);
+        panelContenido.add(panelAcciones, BorderLayout.SOUTH);
+        // no le pongo ningun listener aun porque por ahora solo es visual
 
-		String[] ultimosJuegos = { "Super Street Fighter II", "Super Mario World", "Doom" };
+    }
 
-		JComboBox<String> comboUltimosJuegos = new JComboBox<String>(ultimosJuegos);
+    // ------ MÉTODOS PARA CREAR COMPONENTES
 
-		comboUltimosJuegos.setPreferredSize(new java.awt.Dimension(250, 25));
+    private JButton crearBotonMenu(String texto) {
 
-		panelUltimosJuegos.add(comboUltimosJuegos);
+        final JButton boton = new JButton(texto);
 
-		panelContenido.add(panelUltimosJuegos, BorderLayout.CENTER);
+        boton.setFont(FONT_MENU);
+        boton.setForeground(COLOR_TEXTO);
 
-		// --------- ACCIONES
-	
-		JPanel panelAcciones = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
+        boton.setFocusPainted(false);
+        boton.setContentAreaFilled(false);
+        boton.setBorderPainted(false);
+        boton.setOpaque(false);
 
-		panelAcciones.setOpaque(false);
+        boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-		JButton btnJugar = new JButton("Jugar");
+        boton.setBorder(new EmptyBorder(8, 16, 8, 16));
 
-		panelAcciones.add(btnJugar);
+        boton.addMouseListener(new MouseAdapter() {
 
-		panelContenido.add(panelAcciones, BorderLayout.SOUTH);
+            @Override
+            // es para hacer el efecto del hover, cuando paso el mouse por arriba cambia el
+            // color
+            public void mouseEntered(MouseEvent e) {
+                boton.setForeground(COLOR_ACENTO);
+            }
 
-		// -------- EVENTOS
-		
-		btnJugar.addActionListener(e -> {
+            @Override
+            // para que cuando salga de la seleccion ponga el borde normal
+            public void mouseExited(MouseEvent e) {
+                boton.setForeground(COLOR_TEXTO);
+            }
+        });
 
-			String juegoSeleccionado = (String) comboUltimosJuegos.getSelectedItem();
+        return boton;
+    }
 
-			System.out.println("Jugar: " + juegoSeleccionado);
-		});
+    private JButton crearBotonAccion(String texto, boolean relleno) {
 
-		btnAjustes.addActionListener(e -> {
+        final JButton boton = new JButton(texto);
 
-			System.out.println("Abrir Ajustes");
-		});
-	}
+        boton.setFont(FONT_BOTON);
+        boton.setFocusPainted(false);
+        boton.setOpaque(true);
+
+        boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        final Color colorNormal;
+        final Color colorHover;
+
+        if (relleno) {
+
+            colorNormal = COLOR_ACENTO;
+            colorHover = COLOR_ACENTO_HOVER;
+
+            boton.setForeground(COLOR_FONDO);
+
+            boton.setBorder(new EmptyBorder(10, 28, 10, 28));
+
+        } else {
+
+            colorNormal = COLOR_CONTENIDO;
+            colorHover = COLOR_TARJETA_HOVER;
+
+            boton.setForeground(COLOR_TEXTO);
+
+            boton.setBorder(new CompoundBorder(new LineBorder(COLOR_ACENTO, 2, true), new EmptyBorder(8, 26, 8, 26)));
+        }
+
+        boton.setBackground(colorNormal);
+
+        boton.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                boton.setBackground(colorHover);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                boton.setBackground(colorNormal);
+            }
+        });
+
+        return boton;
+    }
+
+    private CompoundBorder bordeTarjeta(Color colorContorno) {
+
+        return new CompoundBorder(new LineBorder(colorContorno, 3, true), new EmptyBorder(10, 10, 10, 10));
+    }
+
+    private JPanel crearTarjetaJuego(final String nombreJuego, String rutaImagen) {
+
+        final JPanel tarjeta = new JPanel(new BorderLayout(0, 8));
+
+        tarjeta.setPreferredSize(new Dimension(ANCHO_TARJETA, ALTO_TARJETA));
+
+        tarjeta.setBackground(COLOR_TARJETA);
+
+        tarjeta.setBorder(bordeTarjeta(COLOR_TARJETA));
+
+        tarjeta.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        // ---------- PORTADA
+
+        JLabel lblPortada = new JLabel();
+
+        lblPortada.setHorizontalAlignment(SwingConstants.CENTER);
+
+        lblPortada.setVerticalAlignment(SwingConstants.CENTER);
+
+        lblPortada.setPreferredSize(new Dimension(ANCHO_PORTADA, ALTO_PORTADA));
+
+        URL urlImagen = getClass().getResource(rutaImagen);
+
+        if (urlImagen != null) {
+
+            ImageIcon iconoOriginal = new ImageIcon(urlImagen);
+
+            Image imagenOriginal = iconoOriginal.getImage();
+
+            int anchoOriginal = imagenOriginal.getWidth(null);
+
+            int altoOriginal = imagenOriginal.getHeight(null);
+
+            // Ajustamos la imagen para que entre dentro del espacio disponible sin
+            // deformarla y sin recortar partes de la portada.
+            // Tambien podriamos recortarla fisicamente manteniendo la relacion de aspecto.
+            // 3:4?
+            double escala = Math.min((double) ANCHO_PORTADA / anchoOriginal, (double) ALTO_PORTADA / altoOriginal);
+
+            int anchoEscalado = (int) (anchoOriginal * escala);
+
+            int altoEscalado = (int) (altoOriginal * escala);
+
+            Image imagenEscalada = imagenOriginal.getScaledInstance(anchoEscalado, altoEscalado, Image.SCALE_SMOOTH);
+
+            lblPortada.setIcon(new ImageIcon(imagenEscalada));
+
+        } else {
+
+            lblPortada.setText("Sin imagen");
+
+            lblPortada.setForeground(COLOR_TEXTO_SECUNDARIO);
+
+            System.out.println("No se encontró la imagen: " + rutaImagen);
+        }
+
+        // ---------- NOMBRE
+
+        JLabel lblNombre = new JLabel(nombreJuego);
+
+        lblNombre.setHorizontalAlignment(SwingConstants.CENTER);
+
+        lblNombre.setFont(FONT_TARJETA);
+        lblNombre.setForeground(COLOR_TEXTO);
+
+        tarjeta.add(lblPortada, BorderLayout.CENTER);
+
+        tarjeta.add(lblNombre, BorderLayout.SOUTH);
+
+        // ---------- EVENTOS
+
+        MouseAdapter listener = new MouseAdapter() {
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+                seleccionarTarjeta(tarjeta, nombreJuego);
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+                if (!nombreJuego.equals(juegoSeleccionado)) {
+
+                    tarjeta.setBorder(bordeTarjeta(COLOR_TARJETA_HOVER));
+                }
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+                if (!nombreJuego.equals(juegoSeleccionado)) {
+
+                    tarjeta.setBorder(bordeTarjeta(COLOR_TARJETA));
+                }
+            }
+        };
+
+        tarjeta.addMouseListener(listener);
+        lblPortada.addMouseListener(listener);
+        lblNombre.addMouseListener(listener);
+
+        return tarjeta;
+    }
+
+    private void seleccionarTarjeta(JPanel tarjetaElegida, String nombreJuego) {
+
+        for (JPanel tarjeta : tarjetas) {
+
+            if (tarjeta == tarjetaElegida) {
+
+                tarjeta.setBorder(bordeTarjeta(COLOR_ACENTO));
+
+            } else {
+
+                tarjeta.setBorder(bordeTarjeta(COLOR_TARJETA));
+            }
+        }
+
+        juegoSeleccionado = nombreJuego;
+    }
 }
