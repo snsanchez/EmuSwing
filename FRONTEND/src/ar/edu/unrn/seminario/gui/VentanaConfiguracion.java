@@ -73,6 +73,7 @@ public class VentanaConfiguracion extends JFrame {
 		btnSuscripcion.setBackground(FONDO_CLARO);
 		btnSuscripcion.setForeground(COLOR_TEXTO);
 		btnSuscripcion.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnSuscripcion.setFocusPainted(false);
 		btnSuscripcion.setBounds(10, 45, 140, 35);
 		panelLateral.add(btnSuscripcion);
 		
@@ -80,6 +81,7 @@ public class VentanaConfiguracion extends JFrame {
 		btnSonido.setBackground(FONDO_CLARO);
 		btnSonido.setForeground(COLOR_TEXTO);
 		btnSonido.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnSonido.setFocusPainted(false);
 		btnSonido.setBounds(10, 95, 140, 35);
 		panelLateral.add(btnSonido);
 		
@@ -87,6 +89,7 @@ public class VentanaConfiguracion extends JFrame {
 		btnEmulador.setBackground(FONDO_CLARO);
 		btnEmulador.setForeground(COLOR_TEXTO);
 		btnEmulador.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnEmulador.setFocusPainted(false);
 		btnEmulador.setBounds(10, 145, 140, 35);
 		panelLateral.add(btnEmulador);
 		
@@ -94,6 +97,7 @@ public class VentanaConfiguracion extends JFrame {
 		btnNewButton_1.setBackground(FONDO_CLARO);
 		btnNewButton_1.setForeground(COLOR_TEXTO);
 		btnNewButton_1.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnNewButton_1.setFocusPainted(false);
 		btnNewButton_1.setBounds(10, 195, 140, 35);
 		panelLateral.add(btnNewButton_1);
 		
@@ -101,6 +105,7 @@ public class VentanaConfiguracion extends JFrame {
 		btnNewButton_2.setBackground(FONDO_CLARO);
 		btnNewButton_2.setForeground(COLOR_TEXTO);
 		btnNewButton_2.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnNewButton_2.setFocusPainted(false);
 		btnNewButton_2.setBounds(10, 245, 140, 35);
 		panelLateral.add(btnNewButton_2);
 
@@ -109,6 +114,7 @@ public class VentanaConfiguracion extends JFrame {
 		btnNewButton_9.setBackground(FONDO_CLARO);
 		btnNewButton_9.setForeground(COLOR_TEXTO);
 		btnNewButton_9.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnNewButton_9.setFocusPainted(false);
 		btnNewButton_9.setBounds(10, 295, 140, 35);
 		panelLateral.add(btnNewButton_9);
 
@@ -117,6 +123,7 @@ public class VentanaConfiguracion extends JFrame {
 		btnNewButton_10.setBackground(FONDO_CLARO);
 		btnNewButton_10.setForeground(COLOR_TEXTO);
 		btnNewButton_10.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnNewButton_10.setFocusPainted(false);
 		btnNewButton_10.setBounds(10, 345, 140, 35);
 		panelLateral.add(btnNewButton_10);
 		
@@ -156,6 +163,7 @@ public class VentanaConfiguracion extends JFrame {
 		btnNewButton_3.setBackground(new Color(130, 40, 150));
 		btnNewButton_3.setForeground(COLOR_TEXTO);
 		btnNewButton_3.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnNewButton_3.setFocusPainted(false);
 		btnNewButton_3.setBounds(15, 80, 460, 32);
 		panel_1.add(btnNewButton_3);
 		
@@ -183,6 +191,7 @@ public class VentanaConfiguracion extends JFrame {
 		JCheckBox chckbxMute = new JCheckBox("Silenciar Volumen");
 		chckbxMute.setBackground(FONDO_CLARO);
 		chckbxMute.setForeground(COLOR_TEXTO);
+		chckbxMute.setFocusPainted(false);
 		chckbxMute.setBounds(15, 80, 150, 23);
 		panel.add(chckbxMute);
 		
@@ -205,6 +214,7 @@ public class VentanaConfiguracion extends JFrame {
 		btnNewButton.setBackground(FONDO_OSCURO);
 		btnNewButton.setForeground(COLOR_TEXTO);
 		btnNewButton.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnNewButton.setFocusPainted(false);
 		btnNewButton.setBounds(380, 30, 95, 25);
 		panel_2.add(btnNewButton);
 		
@@ -244,6 +254,7 @@ public class VentanaConfiguracion extends JFrame {
 		btnNewButton_6.setBackground(FONDO_OSCURO);
 		btnNewButton_6.setForeground(COLOR_TEXTO);
 		btnNewButton_6.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnNewButton_6.setFocusPainted(false);
 		btnNewButton_6.setBounds(350, 25, 125, 25);
 		panel_4.add(btnNewButton_6);
 		
@@ -251,6 +262,7 @@ public class VentanaConfiguracion extends JFrame {
 		btnNewButton_5.setBackground(FONDO_OSCURO);
 		btnNewButton_5.setForeground(COLOR_TEXTO);
 		btnNewButton_5.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnNewButton_5.setFocusPainted(false);
 		btnNewButton_5.setBounds(245, 807, 110, 28);
 		panelPrincipal.add(btnNewButton_5);
 		
@@ -258,6 +270,7 @@ public class VentanaConfiguracion extends JFrame {
 		btnNewButton_4.setBackground(FONDO_OSCURO);
 		btnNewButton_4.setForeground(COLOR_TEXTO);
 		btnNewButton_4.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnNewButton_4.setFocusPainted(false);
 		btnNewButton_4.setBounds(365, 807, 140, 28);
 		panelPrincipal.add(btnNewButton_4);
 		
@@ -277,6 +290,7 @@ public class VentanaConfiguracion extends JFrame {
 		btnNewButton_7.setBackground(FONDO_OSCURO);
 		btnNewButton_7.setForeground(COLOR_TEXTO);
 		btnNewButton_7.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnNewButton_7.setFocusPainted(false);
 		btnNewButton_7.setBounds(318, 42, 162, 23);
 		panel_5.add(btnNewButton_7);
 		
@@ -296,6 +310,7 @@ public class VentanaConfiguracion extends JFrame {
 		btnNewButton_8.setBackground(FONDO_OSCURO);
 		btnNewButton_8.setForeground(COLOR_TEXTO);
 		btnNewButton_8.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnNewButton_8.setFocusPainted(false);
 		btnNewButton_8.setBounds(324, 41, 156, 23);
 		panel_6.add(btnNewButton_8);
 	}
