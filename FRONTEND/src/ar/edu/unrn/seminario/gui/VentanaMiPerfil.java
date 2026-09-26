@@ -38,8 +38,10 @@ public class VentanaMiPerfil extends JFrame {
 		panel.add(lblNewLabel_1);
 		
 		JButton btnCambiarFoto = new JButton("Cambiar foto");
+		btnCambiarFoto.setFocusPainted(false);  // Para que no quede el JButoon marcado cuando lo seleccionan
 		btnCambiarFoto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 			}
 		});
 		btnCambiarFoto.setBackground(FONDO_OSCURO);
@@ -95,6 +97,7 @@ public class VentanaMiPerfil extends JFrame {
 		btnNewButton.setBackground(FONDO_OSCURO);
 		btnNewButton.setForeground(COLOR_TEXTO);
 		btnNewButton.setBorder(new LineBorder(COLOR_BORDE, 1));
+		btnNewButton.setFocusPainted(false);
 		btnNewButton.setBounds(150, 148, 153, 23);
 		panel_1.add(btnNewButton);
 		
@@ -146,6 +149,7 @@ public class VentanaMiPerfil extends JFrame {
 		btnVolver.setForeground(COLOR_TEXTO);
 		btnVolver.setBorder(new LineBorder(COLOR_BORDE, 1));
 		btnVolver.setBounds(729, 555, 110, 23);
+		btnVolver.setFocusPainted(false);
 		getContentPane().add(btnVolver);
 	}
 
