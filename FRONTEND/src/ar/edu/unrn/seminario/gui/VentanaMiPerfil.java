@@ -12,6 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.ImageIcon;
+import java.awt.Image;
 
 public class VentanaMiPerfil extends JFrame {
 	// Establecemos la paleta de colores
@@ -32,13 +34,17 @@ public class VentanaMiPerfil extends JFrame {
 		getContentPane().add(panel);
 		panel.setLayout(null);
 		
-		JLabel lblNewLabel_1 = new JLabel("");
+		JLabel lblNewLabel_1 = new JLabel("");		// Cargar y achicar la imagen a 120x120
+		ImageIcon iconoOriginal = new ImageIcon("C:\\Users\\Joaco\\Documents\\GitHub\\EmuSwing\\EmuSwing\\FRONTEND\\Recursos\\Foto de perfil EmuSwing.jpeg");
+		Image imagenEscalada = iconoOriginal.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+		lblNewLabel_1.setIcon(new ImageIcon(imagenEscalada));
+
 		lblNewLabel_1.setBorder(new LineBorder(COLOR_BORDE, 1));
 		lblNewLabel_1.setBounds(20, 20, 120, 120);
 		panel.add(lblNewLabel_1);
 		
 		JButton btnCambiarFoto = new JButton("Cambiar foto");
-		btnCambiarFoto.setFocusPainted(false);  // Para que no quede el JButoon marcado cuando lo seleccionan
+		btnCambiarFoto.setFocusPainted(false);  	// Para que no quede el JButoon marcado cuando lo seleccionan
 		btnCambiarFoto.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -50,7 +56,7 @@ public class VentanaMiPerfil extends JFrame {
 		btnCambiarFoto.setBounds(20, 151, 120, 23);
 		panel.add(btnCambiarFoto);
 		
-		JLabel lblNombreUsuario = new JLabel("Mendoza");
+		JLabel lblNombreUsuario = new JLabel("MendoAttack");
 		lblNombreUsuario.setForeground(COLOR_TEXTO);
 		lblNombreUsuario.setFont(new Font("Tahoma", Font.BOLD, 28));
 		lblNombreUsuario.setBounds(160, 40, 200, 40);
