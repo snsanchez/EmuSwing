@@ -21,7 +21,18 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.Font;
 
-public class IniciarSesion {
+public class IniciarSesion extends JFrame {
+
+    // ---------- PALETA DE COLORES
+
+    private static final Color COLOR_FONDO = new Color(24, 10, 32);
+    private static final Color COLOR_TARJETA = new Color(64, 30, 82);
+    private static final Color COLOR_ACENTO = new Color(191, 90, 224);
+    private static final Color COLOR_TEXTO = new Color(245, 240, 247);
+
+    // ---------- FONT
+
+    private static final Font FONT_TITULO = new Font("Segoe UI", Font.BOLD, 28);
 
     private JFrame frame;
     private JTextField textField;
@@ -58,29 +69,29 @@ public class IniciarSesion {
         // ----------- PANEL PRINCIPAL
         JPanel panelPrincipal = new JPanel();
         panelPrincipal.setLayout(new BorderLayout());
-        panelPrincipal.setBackground(new Color(35, 15, 45));
+        panelPrincipal.setBackground(COLOR_FONDO);
 
         frame.getContentPane().add(panelPrincipal, BorderLayout.CENTER);
-        frame.getContentPane().setBackground(new Color(35, 15, 45));
+        frame.getContentPane().setBackground(COLOR_FONDO);
 
         // -------- CENTRADOR
         JPanel panelCentrador = new JPanel();
         panelCentrador.setLayout(new GridBagLayout());
-        panelCentrador.setBackground(new Color(35, 15, 45));
+        panelCentrador.setBackground(COLOR_FONDO);
         panelPrincipal.add(panelCentrador, BorderLayout.CENTER);
 
         // ------- PANEL DE LOGIN
         JPanel panelLogin = new JPanel(new GridBagLayout());
 
         panelLogin.setPreferredSize(new Dimension(400, 300));
-        panelLogin.setBackground(new Color(74, 36, 92));
-        panelLogin.setBorder(new TitledBorder(new LineBorder(new Color(169, 65, 196), 2, true), "EmuSwing",
-                TitledBorder.LEADING, TitledBorder.TOP, null, new Color(245, 240, 247)));
+        panelLogin.setBackground(COLOR_TARJETA);
+        panelLogin.setBorder(new TitledBorder(new LineBorder(COLOR_ACENTO, 2, true), "EmuSwing",
+                TitledBorder.LEADING, TitledBorder.TOP, null, COLOR_TEXTO));
 
         JLabel lblTitulo = new JLabel("Iniciar Sesión");
-        lblTitulo.setFont(new Font("Dialog", Font.BOLD, 24));
+        lblTitulo.setFont(FONT_TITULO);
         lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
-        lblTitulo.setForeground(new Color(245, 240, 247));
+        lblTitulo.setForeground(COLOR_TEXTO);
 
         GridBagConstraints gbcTitulo = new GridBagConstraints();
 
@@ -95,7 +106,7 @@ public class IniciarSesion {
         panelLogin.add(lblTitulo, gbcTitulo);
 
         JLabel lblUsername = new JLabel("Nombre de usuario");
-        lblUsername.setForeground(new Color(245, 240, 247));
+        lblUsername.setForeground(COLOR_TEXTO);
 
         GridBagConstraints gbcUsername = new GridBagConstraints();
 
@@ -125,7 +136,7 @@ public class IniciarSesion {
 
         panelLogin.add(textField, gbcTextField);
         JLabel lblPassword = new JLabel("Contraseña");
-        lblPassword.setForeground(new Color(245, 240, 247));
+        lblPassword.setForeground(COLOR_TEXTO);
 
         GridBagConstraints gbcPassword = new GridBagConstraints();
 
@@ -158,7 +169,7 @@ public class IniciarSesion {
         JPanel panelBotones = new JPanel();
         panelBotones.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 5));
 
-        // panelBotones.setBackground(new Color(74, 36, 92));
+        // panelBotones.setBackground(COLOR_TARJETA);
         panelBotones.setOpaque(false);
         JButton btnIngresar = new JButton("Ingresar");
 
