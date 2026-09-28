@@ -67,13 +67,6 @@ public class Biblioteca {
 		table.setBounds(33, 12, 638, 239);
 		frame.getContentPane().add(table);
 		
-		JButton btnPlay = new JButton("Play");
-		btnPlay.setBounds(174, 420, 105, 27);
-		frame.getContentPane().add(btnPlay);
-		
-		JButton btnRemove = new JButton("Remove");
-		btnRemove.setBounds(424, 420, 105, 27);
-		frame.getContentPane().add(btnRemove);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(49, 392, 622, 18);

@@ -1,5 +1,6 @@
 package ar.edu.unrn.seminario.gui;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -19,6 +20,10 @@ public class RegistrarUsuario {
 	private JTextField textField_1;
 	private JTextField textField_2;
 	private JTextField textField_3;
+	Color FONDO_CLARO  = new Color(74, 36, 92);
+	Color FONDO_OSCURO = new Color(35, 15, 45);
+	Color BORDE        = new Color(169, 65, 196);
+	Color LETRAS       = new Color(245, 240, 247);
 
 	/**
 	 * Launch the application.
@@ -48,6 +53,8 @@ public class RegistrarUsuario {
 	 */
 	private void initialize() {
 		frame = new JFrame("Registrar usuario");
+		frame.setBackground(FONDO_CLARO);
+		frame.setForeground(LETRAS);
 		frame.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentHidden(ComponentEvent e) {
@@ -56,20 +63,25 @@ public class RegistrarUsuario {
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		frame.getContentPane().setBackground(FONDO_OSCURO);
 		
 		JLabel lblContrasea = new JLabel("Contraseña:");
+		lblContrasea.setForeground(LETRAS);
 		lblContrasea.setBounds(86, 22, 97, 17);
 		frame.getContentPane().add(lblContrasea);
 		
 		JLabel lblNombre = new JLabel("Nombre:");
+		lblNombre.setForeground(LETRAS);
 		lblNombre.setBounds(86, 54, 60, 17);
 		frame.getContentPane().add(lblNombre);
 		
 		JLabel lblMail = new JLabel("Mail:");
+		lblMail.setForeground(LETRAS);
 		lblMail.setBounds(86, 87, 60, 17);
 		frame.getContentPane().add(lblMail);
 		
 		JLabel lblRol = new JLabel("Rol:");
+		lblRol.setForeground(LETRAS);
 		lblRol.setBounds(86, 116, 60, 17);
 		frame.getContentPane().add(lblRol);
 		

@@ -1,17 +1,19 @@
 package ar.edu.unrn.seminario.gui;
 
 import java.awt.Color;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import java.awt.Panel;
+
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JPanel;
 
 public class Biblioteca2 {
 
@@ -49,25 +51,21 @@ public class Biblioteca2 {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
+		frame = new JFrame("Biblioteca");
+		frame.setForeground(LETRAS);
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setSize(700, 400);
-		frame.setBackground(FONDO_CLARO);
+		frame.setBackground(BORDE);
 		frame.getContentPane().setBackground(FONDO_OSCURO);
 		JButton button = new JButton("<-");
-		button.setBounds(120, 110, 45, 130);
+		button.setBounds(144, 110, 45, 130);
 		frame.getContentPane().add(button);
 		button.setBackground(LETRAS);
 		
-		Panel panel = new Panel();
-		panel.setBounds(221, 71, 210, 196);
-		frame.getContentPane().add(panel);
-		panel.setBackground(LETRAS);
-		
 		JButton button_1 = new JButton("->");
-		button_1.setBounds(482, 110, 45, 130);
+		button_1.setBounds(468, 110, 45, 130);
 		frame.getContentPane().add(button_1);
 		button_1.setBackground(LETRAS);
 		
@@ -82,9 +80,15 @@ public class Biblioteca2 {
 		btnPlay.setBackground(LETRAS);
 		
 		JButton btnRemove = new JButton("Remove");
+		btnRemove.setBackground(LETRAS);
 		btnRemove.setBounds(276, 38, 105, 27);
 		frame.getContentPane().add(btnRemove);
 		btnRemove.setBackground(LETRAS);
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBackground(LETRAS);
+		panel_1.setBounds(226, 77, 212, 192);
+		frame.getContentPane().add(panel_1);
 		
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
