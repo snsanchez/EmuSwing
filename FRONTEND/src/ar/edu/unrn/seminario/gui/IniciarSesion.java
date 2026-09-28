@@ -3,12 +3,15 @@ package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,6 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.Font;
@@ -25,14 +30,18 @@ public class IniciarSesion extends JFrame {
 
     // ---------- PALETA DE COLORES
 
-    private static final Color COLOR_FONDO = new Color(24, 10, 32);
+	private static final Color COLOR_FONDO = new Color(24, 10, 32);
+    private static final Color COLOR_CONTENIDO = new Color(50, 22, 66);
     private static final Color COLOR_TARJETA = new Color(64, 30, 82);
+    private static final Color COLOR_TARJETA_HOVER = new Color(82, 40, 104);
     private static final Color COLOR_ACENTO = new Color(191, 90, 224);
+    private static final Color COLOR_ACENTO_HOVER = new Color(206, 130, 235);
     private static final Color COLOR_TEXTO = new Color(245, 240, 247);
 
     // ---------- FONT
 
     private static final Font FONT_TITULO = new Font("Segoe UI", Font.BOLD, 28);
+    private static final Font FONT_BOTON = new Font("Segoe UI", Font.BOLD, 15);
 
     private JFrame frame;
     private JTextField textField;
@@ -171,9 +180,9 @@ public class IniciarSesion extends JFrame {
 
         // panelBotones.setBackground(COLOR_TARJETA);
         panelBotones.setOpaque(false);
-        JButton btnIngresar = new JButton("Ingresar");
+        JButton btnIngresar = crearBotonAccion("Ingresar", true);
 
-        JButton btnCancelar = new JButton("Cancelar");
+        JButton btnCancelar = crearBotonAccion("Cancelar", false);
 
         panelBotones.add(btnIngresar);
         panelBotones.add(btnCancelar);
@@ -199,4 +208,57 @@ public class IniciarSesion extends JFrame {
 
         panelCentrador.add(panelLogin, gbcLogin);
     }
+    
+    
+    private JButton crearBotonAccion(String texto, boolean relleno) {
+
+        final JButton boton = new JButton(texto);
+
+        boton.setFont(FONT_BOTON);
+        boton.setFocusPainted(false);
+        boton.setOpaque(true);
+
+        boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        final Color colorNormal;
+        final Color colorHover;
+
+        if (relleno) {
+
+            colorNormal = COLOR_ACENTO;
+            colorHover = COLOR_ACENTO_HOVER;
+
+            boton.setForeground(COLOR_FONDO);
+
+            boton.setBorder(new EmptyBorder(10, 28, 10, 28));
+
+        } else {
+
+            colorNormal = COLOR_CONTENIDO;
+            colorHover = COLOR_TARJETA_HOVER;
+
+            boton.setForeground(COLOR_TEXTO);
+
+            boton.setBorder(new CompoundBorder(new LineBorder(COLOR_ACENTO, 2, true), new EmptyBorder(8, 26, 8, 26)));
+        }
+
+        boton.setBackground(colorNormal);
+
+        boton.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                boton.setBackground(colorHover);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                boton.setBackground(colorNormal);
+            }
+        });
+
+        return boton;
+    }
+
+    
 }
