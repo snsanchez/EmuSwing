@@ -20,6 +20,10 @@ public class Biblioteca {
 
 	private JFrame frame;
 	private JTable table;
+	Color FONDO_CLARO  = new Color(74, 36, 92);
+	Color FONDO_OSCURO = new Color(35, 15, 45);
+	Color BORDE        = new Color(169, 65, 196);
+	Color LETRAS       = new Color(245, 240, 247);
 
 	/**
 	 * Launch the application.
@@ -53,10 +57,7 @@ public class Biblioteca {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setSize(700,400);
-		Color FONDO_CLARO = new Color(74, 36, 92);
-		Color FONDO_OSCURO = new Color(35, 15, 45);
-	    Color BORDE = new Color(169, 65, 196);
-	    Color LETRAS = new Color(245, 240, 247);
+		
 		frame.setBackground(FONDO_CLARO);
 		frame.getContentPane().setBackground(FONDO_OSCURO);
 	    
@@ -88,7 +89,7 @@ public class Biblioteca {
 		
 		scrollPane_1.setViewportView(scrollBar);
 		
-		JButton btnNewButton = new JButton("Select");
+		JButton btnNewButton = new JButton("Play");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -104,10 +105,14 @@ public class Biblioteca {
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
 		
+		JMenu mnOpt = new JMenu("Opt");
+		menuBar.add(mnOpt);
 		
-		JButton btnHome = new JButton("Home");
-		btnHome.setBackground(LETRAS);
-		menuBar.add(btnHome);
+		JMenuItem mntmHome = new JMenuItem("Home");
+		mnOpt.add(mntmHome);
+		
+		JMenuItem mntmVerDeA = new JMenuItem("Ver de a uno");
+		mnOpt.add(mntmVerDeA);
 		
 		JMenu mnOrder = new JMenu("order");
 		mnOrder.setBackground(LETRAS);
