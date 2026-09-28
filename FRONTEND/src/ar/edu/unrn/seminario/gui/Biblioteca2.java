@@ -1,32 +1,35 @@
 package ar.edu.unrn.seminario.gui;
 
 import java.awt.Color;
-
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.BorderFactory;
+import javax.swing.border.LineBorder;
 
 public class Biblioteca2 {
 
 	private JFrame frame;
-	Color FONDO_CLARO  = new Color(74, 36, 92);
-	Color FONDO_OSCURO = new Color(35, 15, 45);
-	Color BORDE        = new Color(169, 65, 196);
-	Color LETRAS       = new Color(245, 240, 247);
 
+	// Paleta de colores EmuSwing
+	private static final Color COLOR_FONDO_PRINCIPAL = new Color(20, 10, 28);
+	private static final Color COLOR_PANEL           = new Color(32, 16, 45);
+	private static final Color COLOR_TARJETA         = new Color(48, 24, 68);
+	private static final Color COLOR_BORDE           = new Color(153, 50, 204);
+	private static final Color COLOR_ACCENTO         = new Color(160, 40, 210);
+	private static final Color COLOR_TEXTO           = new Color(245, 240, 247);
+	private static final Color COLOR_TEXTO_MUTED     = new Color(180, 170, 195);
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -40,69 +43,141 @@ public class Biblioteca2 {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	public Biblioteca2() {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
-		frame = new JFrame("Biblioteca");
-		frame.setForeground(LETRAS);
-		frame.setBounds(100, 100, 450, 300);
+		frame = new JFrame("Biblioteca (Vista Detalle) - EmuSwing");
+		frame.setBounds(100, 100, 1280, 720);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
 		frame.getContentPane().setLayout(null);
-		frame.setSize(700, 400);
-		frame.setBackground(BORDE);
-		frame.getContentPane().setBackground(FONDO_OSCURO);
-		JButton button = new JButton("<-");
-		button.setBounds(144, 110, 45, 130);
-		frame.getContentPane().add(button);
-		button.setBackground(LETRAS);
-		
-		JButton button_1 = new JButton("->");
-		button_1.setBounds(468, 110, 45, 130);
-		frame.getContentPane().add(button_1);
-		button_1.setBackground(LETRAS);
-		
-		
-		JButton btnPlay = new JButton("Play");
+		frame.getContentPane().setBackground(COLOR_FONDO_PRINCIPAL);
+
+		// Barra de Menú
+		// JMenuBar centrado estilo Home
+				JMenuBar menuBar = new JMenuBar();
+				menuBar.setBackground(COLOR_FONDO_PRINCIPAL);
+				menuBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, COLOR_PANEL));
+
+				// Espaciador para centrar las opciones
+				menuBar.add(javax.swing.Box.createHorizontalGlue());
+
+				JMenu mnPerfil = new JMenu("Mi Perfil");
+				mnPerfil.setForeground(COLOR_TEXTO);
+				mnPerfil.setFont(new Font("SansSerif", Font.PLAIN, 13));
+				menuBar.add(mnPerfil);
+
+				JMenu mnBiblioteca = new JMenu("Biblioteca");
+				mnBiblioteca.setForeground(COLOR_TEXTO);
+				mnBiblioteca.setFont(new Font("SansSerif", Font.BOLD, 13));
+				menuBar.add(mnBiblioteca);
+
+				JMenu mnJuegos = new JMenu("Juegos");
+				mnJuegos.setForeground(COLOR_TEXTO);
+				mnJuegos.setFont(new Font("SansSerif", Font.PLAIN, 13));
+				menuBar.add(mnJuegos);
+
+				JMenu mnTienda = new JMenu("Tienda");
+				mnTienda.setForeground(COLOR_TEXTO);
+				mnTienda.setFont(new Font("SansSerif", Font.PLAIN, 13));
+				menuBar.add(mnTienda);
+
+				JMenu mnSoporte = new JMenu("Soporte");
+				mnSoporte.setForeground(COLOR_TEXTO);
+				mnSoporte.setFont(new Font("SansSerif", Font.PLAIN, 13));
+				menuBar.add(mnSoporte);
+
+				JMenu mnAjustes = new JMenu("Ajustes");
+				mnAjustes.setForeground(COLOR_TEXTO);
+				mnAjustes.setFont(new Font("SansSerif", Font.PLAIN, 13));
+				menuBar.add(mnAjustes);
+
+				// Espaciador derecho para empujar todo al centro
+				menuBar.add(javax.swing.Box.createHorizontalGlue());
+
+				frame.setJMenuBar(menuBar);			// Panel Principal
+		JPanel panelPrincipal = new JPanel();
+		panelPrincipal.setBounds(190, 40, 900, 580);
+		panelPrincipal.setBackground(COLOR_PANEL);
+		panelPrincipal.setBorder(new LineBorder(COLOR_BORDE, 1, true));
+		panelPrincipal.setLayout(null);
+		frame.getContentPane().add(panelPrincipal);
+
+		// Título de la vista
+		JLabel lblTitulo = new JLabel("Explorar Biblioteca");
+		lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 26));
+		lblTitulo.setForeground(COLOR_TEXTO);
+		lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTitulo.setBounds(0, 25, 900, 35);
+		panelPrincipal.add(lblTitulo);
+
+		// Botón Anterior (<-)
+		JButton btnPrev = new JButton("◄");
+		btnPrev.setFont(new Font("SansSerif", Font.BOLD, 20));
+		btnPrev.setBounds(120, 200, 60, 180);
+		btnPrev.setBackground(COLOR_TARJETA);
+		btnPrev.setForeground(COLOR_TEXTO);
+		btnPrev.setFocusPainted(false);
+		btnPrev.setBorder(new LineBorder(COLOR_BORDE, 1));
+		panelPrincipal.add(btnPrev);
+
+		// Card central del juego
+		JPanel panelCard = new JPanel();
+		panelCard.setBackground(COLOR_TARJETA);
+		panelCard.setBorder(new LineBorder(COLOR_BORDE, 1, true));
+		panelCard.setBounds(230, 90, 440, 380);
+		panelCard.setLayout(null);
+		panelPrincipal.add(panelCard);
+
+		JLabel lblNombreJuego = new JLabel("Super Mario World");
+		lblNombreJuego.setFont(new Font("SansSerif", Font.BOLD, 20));
+		lblNombreJuego.setForeground(COLOR_TEXTO);
+		lblNombreJuego.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNombreJuego.setBounds(20, 320, 400, 30);
+		panelCard.add(lblNombreJuego);
+
+		JLabel lblVistaPrevia = new JLabel("[ Imagen / Carátula ]");
+		lblVistaPrevia.setFont(new Font("SansSerif", Font.ITALIC, 14));
+		lblVistaPrevia.setForeground(COLOR_TEXTO_MUTED);
+		lblVistaPrevia.setHorizontalAlignment(SwingConstants.CENTER);
+		lblVistaPrevia.setBounds(20, 20, 400, 280);
+		lblVistaPrevia.setBorder(new LineBorder(COLOR_PANEL, 1));
+		panelCard.add(lblVistaPrevia);
+
+		// Botón Siguiente (->)
+		JButton btnNext = new JButton("►");
+		btnNext.setFont(new Font("SansSerif", Font.BOLD, 20));
+		btnNext.setBounds(720, 200, 60, 180);
+		btnNext.setBackground(COLOR_TARJETA);
+		btnNext.setForeground(COLOR_TEXTO);
+		btnNext.setFocusPainted(false);
+		btnNext.setBorder(new LineBorder(COLOR_BORDE, 1));
+		panelPrincipal.add(btnNext);
+
+		// Acciones inferiores
+		JButton btnPlay = new JButton("► Jugar");
+		btnPlay.setFont(new Font("SansSerif", Font.BOLD, 14));
+		btnPlay.setBounds(280, 500, 160, 42);
+		btnPlay.setBackground(COLOR_ACCENTO);
+		btnPlay.setForeground(COLOR_TEXTO);
+		btnPlay.setFocusPainted(false);
+		btnPlay.setBorder(BorderFactory.createEmptyBorder());
+		panelPrincipal.add(btnPlay);
+
+		JButton btnRemove = new JButton("Quitar");
+		btnRemove.setFont(new Font("SansSerif", Font.BOLD, 14));
+		btnRemove.setBounds(460, 500, 160, 42);
+		btnRemove.setBackground(COLOR_TARJETA);
+		btnRemove.setForeground(COLOR_TEXTO);
+		btnRemove.setFocusPainted(false);
+		btnRemove.setBorder(new LineBorder(COLOR_BORDE, 1));
+		panelPrincipal.add(btnRemove);
+
 		btnPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnPlay.setBounds(276, 281, 105, 27);
-		frame.getContentPane().add(btnPlay);
-		btnPlay.setBackground(LETRAS);
-		
-		JButton btnRemove = new JButton("Remove");
-		btnRemove.setBackground(LETRAS);
-		btnRemove.setBounds(276, 38, 105, 27);
-		frame.getContentPane().add(btnRemove);
-		btnRemove.setBackground(LETRAS);
-		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(LETRAS);
-		panel_1.setBounds(226, 77, 212, 192);
-		frame.getContentPane().add(panel_1);
-		
-		JMenuBar menuBar = new JMenuBar();
-		frame.setJMenuBar(menuBar);
-		menuBar.setBackground(LETRAS);
-		
-		JMenu mnOpt = new JMenu("opt");
-		menuBar.add(mnOpt);
-		mnOpt.setBackground(LETRAS);
-		
-		JMenuItem mntmMenu = new JMenuItem("Menu");
-		mnOpt.add(mntmMenu);
-		
-		
-		JMenuItem mntmVerTodos = new JMenuItem("Ver todos");
-		mnOpt.add(mntmVerTodos);
 	}
 }
