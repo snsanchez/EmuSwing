@@ -3,13 +3,13 @@
 
 package ar.edu.unrn.seminario.gui;
 
+import ar.edu.unrn.seminario.helpers.UIHelper;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -34,37 +34,6 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.api.MemoryApi;
 
 public class VentanaPrincipal extends JFrame {
-
-    // ---------- PALETA DE COLORES
-
-    private static final Color COLOR_FONDO = new Color(24, 10, 32);
-    private static final Color COLOR_CONTENIDO = new Color(50, 22, 66);
-    private static final Color COLOR_TARJETA = new Color(64, 30, 82);
-    private static final Color COLOR_TARJETA_HOVER = new Color(82, 40, 104);
-    private static final Color COLOR_ACENTO = new Color(191, 90, 224);
-    private static final Color COLOR_ACENTO_HOVER = new Color(206, 130, 235);
-    private static final Color COLOR_TEXTO = new Color(245, 240, 247);
-    private static final Color COLOR_TEXTO_SECUNDARIO = new Color(196, 180, 206);
-
-    // ---------- FONT
-
-    private static final Font FONT_TITULO = new Font("Segoe UI", Font.BOLD, 28);
-    private static final Font FONT_SUBTITULO = new Font("Segoe UI", Font.PLAIN, 13);
-    private static final Font FONT_SECCION = new Font("Segoe UI", Font.BOLD, 14);
-    private static final Font FONT_MENU = new Font("Segoe UI", Font.PLAIN, 14);
-    private static final Font FONT_TARJETA = new Font("Segoe UI", Font.BOLD, 13);
-    private static final Font FONT_BOTON = new Font("Segoe UI", Font.BOLD, 15);
-
-    // ---------- DIMENSIONES
-    // Si se quiere agrandar o achicar las portadas de los juegos ajustar aca
-    private static final int ANCHO_PORTADA = 150;
-    private static final int ALTO_PORTADA = 180;
-
-    private static final int ANCHO_TARJETA = 180;
-    private static final int ALTO_TARJETA = 220;
-
-    private static final int ANCHO_CONTENIDO = 980;
-    private static final int ALTO_CONTENIDO = 470;
 
     private JPanel contentPane;
     // usamos collections
@@ -98,7 +67,7 @@ public class VentanaPrincipal extends JFrame {
         setResizable(false);
 
         contentPane = new JPanel(new BorderLayout());
-        contentPane.setBackground(COLOR_FONDO);
+        contentPane.setBackground(UIHelper.COLOR_FONDO);
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
         setContentPane(contentPane);
@@ -107,7 +76,7 @@ public class VentanaPrincipal extends JFrame {
 
         JMenuBar menuBar = new JMenuBar();
 
-        menuBar.setBackground(COLOR_FONDO);
+        menuBar.setBackground(UIHelper.COLOR_FONDO);
         menuBar.setBorder(new EmptyBorder(4, 0, 4, 0));
 
         contentPane.add(menuBar, BorderLayout.NORTH);
@@ -130,7 +99,7 @@ public class VentanaPrincipal extends JFrame {
         // ---------- PANEL PRINCIPAL
 
         JPanel panelPrincipal = new JPanel(new GridBagLayout());
-        panelPrincipal.setBackground(COLOR_FONDO);
+        panelPrincipal.setBackground(UIHelper.COLOR_FONDO);
 
         contentPane.add(panelPrincipal, BorderLayout.CENTER);
 
@@ -160,8 +129,8 @@ public class VentanaPrincipal extends JFrame {
 
         } else {
             JLabel lblLogo = new JLabel("EmuSwing");
-            lblLogo.setFont(FONT_TITULO);
-            lblLogo.setForeground(COLOR_TEXTO);
+            lblLogo.setFont(UIHelper.FONT_TITULO);
+            lblLogo.setForeground(UIHelper.COLOR_TEXTO);
             panelLogo.add(lblLogo);
             System.out.println("No se encontró la imagen: /img/esw-logo.png");
         }
@@ -171,10 +140,11 @@ public class VentanaPrincipal extends JFrame {
         // ---------- CONTENIDO CENTRAL
 
         JPanel panelContenido = new JPanel(new BorderLayout(0, 15));
-        panelContenido.setPreferredSize(new Dimension(ANCHO_CONTENIDO, ALTO_CONTENIDO));
-        panelContenido.setBackground(COLOR_CONTENIDO);
+        panelContenido.setPreferredSize(new Dimension(UIHelper.ANCHO_CONTENIDO, UIHelper.ALTO_CONTENIDO));
+        panelContenido.setBackground(UIHelper.COLOR_CONTENIDO);
         panelContenido
-                .setBorder(new CompoundBorder(new LineBorder(COLOR_ACENTO, 2, true), new EmptyBorder(10, 20, 15, 20)));
+                .setBorder(new CompoundBorder(new LineBorder(UIHelper.COLOR_ACENTO, 2, true),
+                        new EmptyBorder(10, 20, 15, 20)));
         panelHome.add(panelContenido, BorderLayout.CENTER);
 
         // ---------- BIENVENIDA
@@ -182,11 +152,11 @@ public class VentanaPrincipal extends JFrame {
         JPanel panelBienvenida = new JPanel(new BorderLayout(0, 4));
         panelBienvenida.setOpaque(false);
         JLabel lblBienvenida = new JLabel("Bienvenido a EmuSwing", SwingConstants.CENTER);
-        lblBienvenida.setFont(FONT_TITULO);
-        lblBienvenida.setForeground(COLOR_TEXTO);
+        lblBienvenida.setFont(UIHelper.FONT_TITULO);
+        lblBienvenida.setForeground(UIHelper.COLOR_TEXTO);
         JLabel lblSubtitulo = new JLabel("Retomá donde lo dejaste.", SwingConstants.CENTER);
-        lblSubtitulo.setFont(FONT_SUBTITULO);
-        lblSubtitulo.setForeground(COLOR_TEXTO_SECUNDARIO);
+        lblSubtitulo.setFont(UIHelper.FONT_SUBTITULO);
+        lblSubtitulo.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
         panelBienvenida.add(lblBienvenida, BorderLayout.NORTH);
         panelBienvenida.add(lblSubtitulo, BorderLayout.SOUTH);
         panelContenido.add(panelBienvenida, BorderLayout.NORTH);
@@ -196,8 +166,8 @@ public class VentanaPrincipal extends JFrame {
         JPanel panelUltimosJuegos = new JPanel(new BorderLayout(0, 8));
         panelUltimosJuegos.setOpaque(false);
         JLabel lblUltimoJuegoJugado = new JLabel("Tus últimos juegos");
-        lblUltimoJuegoJugado.setFont(FONT_SECCION);
-        lblUltimoJuegoJugado.setForeground(COLOR_ACENTO);
+        lblUltimoJuegoJugado.setFont(UIHelper.FONT_SECCION);
+        lblUltimoJuegoJugado.setForeground(UIHelper.COLOR_ACENTO);
         panelUltimosJuegos.add(lblUltimoJuegoJugado, BorderLayout.NORTH);
 
         // estos son solo datos de prueba, despues habria que cargarlos desde IApi
@@ -244,8 +214,8 @@ public class VentanaPrincipal extends JFrame {
 
         final JButton boton = new JButton(texto);
 
-        boton.setFont(FONT_MENU);
-        boton.setForeground(COLOR_TEXTO);
+        boton.setFont(UIHelper.FONT_MENU);
+        boton.setForeground(UIHelper.COLOR_TEXTO);
 
         boton.setFocusPainted(false);
         boton.setContentAreaFilled(false);
@@ -262,13 +232,13 @@ public class VentanaPrincipal extends JFrame {
             // es para hacer el efecto del hover, cuando paso el mouse por arriba cambia el
             // color
             public void mouseEntered(MouseEvent e) {
-                boton.setForeground(COLOR_ACENTO);
+                boton.setForeground(UIHelper.COLOR_ACENTO);
             }
 
             @Override
             // para que cuando salga de la seleccion ponga el borde normal
             public void mouseExited(MouseEvent e) {
-                boton.setForeground(COLOR_TEXTO);
+                boton.setForeground(UIHelper.COLOR_TEXTO);
             }
         });
 
@@ -279,7 +249,7 @@ public class VentanaPrincipal extends JFrame {
 
         final JButton boton = new JButton(texto);
 
-        boton.setFont(FONT_BOTON);
+        boton.setFont(UIHelper.FONT_BOTON);
         boton.setFocusPainted(false);
         boton.setOpaque(true);
 
@@ -290,21 +260,22 @@ public class VentanaPrincipal extends JFrame {
 
         if (relleno) {
 
-            colorNormal = COLOR_ACENTO;
-            colorHover = COLOR_ACENTO_HOVER;
+            colorNormal = UIHelper.COLOR_ACENTO;
+            colorHover = UIHelper.COLOR_ACENTO_HOVER;
 
-            boton.setForeground(COLOR_FONDO);
+            boton.setForeground(UIHelper.COLOR_FONDO);
 
             boton.setBorder(new EmptyBorder(10, 28, 10, 28));
 
         } else {
 
-            colorNormal = COLOR_CONTENIDO;
-            colorHover = COLOR_TARJETA_HOVER;
+            colorNormal = UIHelper.COLOR_CONTENIDO;
+            colorHover = UIHelper.COLOR_TARJETA_HOVER;
 
-            boton.setForeground(COLOR_TEXTO);
+            boton.setForeground(UIHelper.COLOR_TEXTO);
 
-            boton.setBorder(new CompoundBorder(new LineBorder(COLOR_ACENTO, 2, true), new EmptyBorder(8, 26, 8, 26)));
+            boton.setBorder(
+                    new CompoundBorder(new LineBorder(UIHelper.COLOR_ACENTO, 2, true), new EmptyBorder(8, 26, 8, 26)));
         }
 
         boton.setBackground(colorNormal);
@@ -334,11 +305,11 @@ public class VentanaPrincipal extends JFrame {
 
         final JPanel tarjeta = new JPanel(new BorderLayout(0, 8));
 
-        tarjeta.setPreferredSize(new Dimension(ANCHO_TARJETA, ALTO_TARJETA));
+        tarjeta.setPreferredSize(new Dimension(UIHelper.ANCHO_TARJETA, UIHelper.ALTO_TARJETA));
 
-        tarjeta.setBackground(COLOR_TARJETA);
+        tarjeta.setBackground(UIHelper.COLOR_TARJETA);
 
-        tarjeta.setBorder(bordeTarjeta(COLOR_TARJETA));
+        tarjeta.setBorder(bordeTarjeta(UIHelper.COLOR_TARJETA));
 
         tarjeta.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
@@ -350,7 +321,7 @@ public class VentanaPrincipal extends JFrame {
 
         lblPortada.setVerticalAlignment(SwingConstants.CENTER);
 
-        lblPortada.setPreferredSize(new Dimension(ANCHO_PORTADA, ALTO_PORTADA));
+        lblPortada.setPreferredSize(new Dimension(UIHelper.ANCHO_PORTADA, UIHelper.ALTO_PORTADA));
 
         URL urlImagen = getClass().getResource(rutaImagen);
 
@@ -368,7 +339,8 @@ public class VentanaPrincipal extends JFrame {
             // deformarla y sin recortar partes de la portada.
             // Tambien podriamos recortarla fisicamente manteniendo la relacion de aspecto.
             // 3:4?
-            double escala = Math.min((double) ANCHO_PORTADA / anchoOriginal, (double) ALTO_PORTADA / altoOriginal);
+            double escala = Math.min((double) UIHelper.ANCHO_PORTADA / anchoOriginal,
+                    (double) UIHelper.ALTO_PORTADA / altoOriginal);
 
             int anchoEscalado = (int) (anchoOriginal * escala);
 
@@ -382,7 +354,7 @@ public class VentanaPrincipal extends JFrame {
 
             lblPortada.setText("Sin imagen");
 
-            lblPortada.setForeground(COLOR_TEXTO_SECUNDARIO);
+            lblPortada.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
 
             System.out.println("No se encontró la imagen: " + rutaImagen);
         }
@@ -393,8 +365,8 @@ public class VentanaPrincipal extends JFrame {
 
         lblNombre.setHorizontalAlignment(SwingConstants.CENTER);
 
-        lblNombre.setFont(FONT_TARJETA);
-        lblNombre.setForeground(COLOR_TEXTO);
+        lblNombre.setFont(UIHelper.FONT_TARJETA);
+        lblNombre.setForeground(UIHelper.COLOR_TEXTO);
 
         tarjeta.add(lblPortada, BorderLayout.CENTER);
 
@@ -415,7 +387,7 @@ public class VentanaPrincipal extends JFrame {
 
                 if (!nombreJuego.equals(juegoSeleccionado)) {
 
-                    tarjeta.setBorder(bordeTarjeta(COLOR_TARJETA_HOVER));
+                    tarjeta.setBorder(bordeTarjeta(UIHelper.COLOR_TARJETA_HOVER));
                 }
             }
 
@@ -424,7 +396,7 @@ public class VentanaPrincipal extends JFrame {
 
                 if (!nombreJuego.equals(juegoSeleccionado)) {
 
-                    tarjeta.setBorder(bordeTarjeta(COLOR_TARJETA));
+                    tarjeta.setBorder(bordeTarjeta(UIHelper.COLOR_TARJETA));
                 }
             }
         };
@@ -442,11 +414,11 @@ public class VentanaPrincipal extends JFrame {
 
             if (tarjeta == tarjetaElegida) {
 
-                tarjeta.setBorder(bordeTarjeta(COLOR_ACENTO));
+                tarjeta.setBorder(bordeTarjeta(UIHelper.COLOR_ACENTO));
 
             } else {
 
-                tarjeta.setBorder(bordeTarjeta(COLOR_TARJETA));
+                tarjeta.setBorder(bordeTarjeta(UIHelper.COLOR_TARJETA));
             }
         }
 
