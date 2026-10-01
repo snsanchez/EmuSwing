@@ -6,12 +6,12 @@ import java.awt.Font;
 /*
 --- Como usar el helper en el frontend
 1. Mirar si FRONTEND tenga configurado Java Build Path para que conozca a COMMONS
-2. import ar.edu.unrn.util.semanario.ValidadorUtil;
+2. import ar.edu.unrn.seminario.helpers.UIHelper;
 3. usar sus funciones de clase
 
 ejemplo de uso:
-    panel.setBackground(TemaUI.COLOR_FONDO);
-    lblTitulo.setFont(TemaUI.FONT_TITULO);
+    panel.setBackground(UIHelper.COLOR_FONDO);
+    lblTitulo.setFont(UIHelper.FONT_TITULO);
 */
 public class UIHelper {
 
@@ -31,6 +31,7 @@ public class UIHelper {
     public static final Font FONT_SUBTITULO = new Font("Segoe UI", Font.PLAIN, 13);
     public static final Font FONT_SECCION = new Font("Segoe UI", Font.BOLD, 14);
     public static final Font FONT_MENU = new Font("Segoe UI", Font.PLAIN, 14);
+    public static final Font FONT_TARJETA = new Font("Segoe UI", Font.BOLD, 13);
 
     //
     // DIMENSIONES (en px) -- si se quiere agrandar o achicar las portadas de los
