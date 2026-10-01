@@ -1,6 +1,7 @@
 // by: Santiago Sánchez
 package ar.edu.unrn.seminario.gui;
 
+import ar.edu.unrn.seminario.helpers.UIHelper;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -24,24 +25,8 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
-import java.awt.Font;
 
 public class IniciarSesion extends JFrame {
-
-    // ---------- PALETA DE COLORES
-
-	private static final Color COLOR_FONDO = new Color(24, 10, 32);
-    private static final Color COLOR_CONTENIDO = new Color(50, 22, 66);
-    private static final Color COLOR_TARJETA = new Color(64, 30, 82);
-    private static final Color COLOR_TARJETA_HOVER = new Color(82, 40, 104);
-    private static final Color COLOR_ACENTO = new Color(191, 90, 224);
-    private static final Color COLOR_ACENTO_HOVER = new Color(206, 130, 235);
-    private static final Color COLOR_TEXTO = new Color(245, 240, 247);
-
-    // ---------- FONT
-
-    private static final Font FONT_TITULO = new Font("Segoe UI", Font.BOLD, 28);
-    private static final Font FONT_BOTON = new Font("Segoe UI", Font.BOLD, 15);
 
     private JFrame frame;
     private JTextField textField;
@@ -78,29 +63,29 @@ public class IniciarSesion extends JFrame {
         // ----------- PANEL PRINCIPAL
         JPanel panelPrincipal = new JPanel();
         panelPrincipal.setLayout(new BorderLayout());
-        panelPrincipal.setBackground(COLOR_FONDO);
+        panelPrincipal.setBackground(UIHelper.COLOR_FONDO);
 
         frame.getContentPane().add(panelPrincipal, BorderLayout.CENTER);
-        frame.getContentPane().setBackground(COLOR_FONDO);
+        frame.getContentPane().setBackground(UIHelper.COLOR_FONDO);
 
         // -------- CENTRADOR
         JPanel panelCentrador = new JPanel();
         panelCentrador.setLayout(new GridBagLayout());
-        panelCentrador.setBackground(COLOR_FONDO);
+        panelCentrador.setBackground(UIHelper.COLOR_FONDO);
         panelPrincipal.add(panelCentrador, BorderLayout.CENTER);
 
         // ------- PANEL DE LOGIN
         JPanel panelLogin = new JPanel(new GridBagLayout());
 
         panelLogin.setPreferredSize(new Dimension(400, 300));
-        panelLogin.setBackground(COLOR_TARJETA);
-        panelLogin.setBorder(new TitledBorder(new LineBorder(COLOR_ACENTO, 2, true), "EmuSwing",
-                TitledBorder.LEADING, TitledBorder.TOP, null, COLOR_TEXTO));
+        panelLogin.setBackground(UIHelper.COLOR_TARJETA);
+        panelLogin.setBorder(new TitledBorder(new LineBorder(UIHelper.COLOR_ACENTO, 2, true), "EmuSwing",
+                TitledBorder.LEADING, TitledBorder.TOP, null, UIHelper.COLOR_TEXTO));
 
         JLabel lblTitulo = new JLabel("Iniciar Sesión");
-        lblTitulo.setFont(FONT_TITULO);
+        lblTitulo.setFont(UIHelper.FONT_TITULO);
         lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
-        lblTitulo.setForeground(COLOR_TEXTO);
+        lblTitulo.setForeground(UIHelper.COLOR_TEXTO);
 
         GridBagConstraints gbcTitulo = new GridBagConstraints();
 
@@ -115,7 +100,7 @@ public class IniciarSesion extends JFrame {
         panelLogin.add(lblTitulo, gbcTitulo);
 
         JLabel lblUsername = new JLabel("Nombre de usuario");
-        lblUsername.setForeground(COLOR_TEXTO);
+        lblUsername.setForeground(UIHelper.COLOR_TEXTO);
 
         GridBagConstraints gbcUsername = new GridBagConstraints();
 
@@ -145,7 +130,7 @@ public class IniciarSesion extends JFrame {
 
         panelLogin.add(textField, gbcTextField);
         JLabel lblPassword = new JLabel("Contraseña");
-        lblPassword.setForeground(COLOR_TEXTO);
+        lblPassword.setForeground(UIHelper.COLOR_TEXTO);
 
         GridBagConstraints gbcPassword = new GridBagConstraints();
 
@@ -208,13 +193,12 @@ public class IniciarSesion extends JFrame {
 
         panelCentrador.add(panelLogin, gbcLogin);
     }
-    
-    
+
     private JButton crearBotonAccion(String texto, boolean relleno) {
 
         final JButton boton = new JButton(texto);
 
-        boton.setFont(FONT_BOTON);
+        boton.setFont(UIHelper.FONT_BOTON);
         boton.setFocusPainted(false);
         boton.setOpaque(true);
 
@@ -225,21 +209,22 @@ public class IniciarSesion extends JFrame {
 
         if (relleno) {
 
-            colorNormal = COLOR_ACENTO;
-            colorHover = COLOR_ACENTO_HOVER;
+            colorNormal = UIHelper.COLOR_ACENTO;
+            colorHover = UIHelper.COLOR_ACENTO_HOVER;
 
-            boton.setForeground(COLOR_FONDO);
+            boton.setForeground(UIHelper.COLOR_FONDO);
 
             boton.setBorder(new EmptyBorder(10, 28, 10, 28));
 
         } else {
 
-            colorNormal = COLOR_CONTENIDO;
-            colorHover = COLOR_TARJETA_HOVER;
+            colorNormal = UIHelper.COLOR_CONTENIDO;
+            colorHover = UIHelper.COLOR_TARJETA_HOVER;
 
-            boton.setForeground(COLOR_TEXTO);
+            boton.setForeground(UIHelper.COLOR_TEXTO);
 
-            boton.setBorder(new CompoundBorder(new LineBorder(COLOR_ACENTO, 2, true), new EmptyBorder(8, 26, 8, 26)));
+            boton.setBorder(
+                    new CompoundBorder(new LineBorder(UIHelper.COLOR_ACENTO, 2, true), new EmptyBorder(8, 26, 8, 26)));
         }
 
         boton.setBackground(colorNormal);
@@ -260,5 +245,4 @@ public class IniciarSesion extends JFrame {
         return boton;
     }
 
-    
 }
