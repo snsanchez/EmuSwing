@@ -19,21 +19,20 @@ public class VentanaJuego extends JFrame {
         JPanel panelSuperior = new JPanel(new BorderLayout());
         panelSuperior.setBackground(PaletaRetro.COLOR_FONDO); 
         
-        // Flecha para volver atras
         JLabel lblAtras = new JLabel();
         lblAtras.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
-        lblAtras.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 0));
+        lblAtras.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
         
-        try {
-            ImageIcon iconFlecha = new ImageIcon("flecha.png");
+        java.io.File imgFileAtras = new java.io.File("flecha.png");
+        if (imgFileAtras.exists()) {
+            ImageIcon iconFlecha = new ImageIcon(imgFileAtras.getAbsolutePath());
             Image imgFlecha = iconFlecha.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
             lblAtras.setIcon(new ImageIcon(imgFlecha));
-        } catch (Exception e) {
-            lblAtras.setText("<- VOLVER");
+        } else {
+            lblAtras.setText("◀ VOLVER");
             lblAtras.setForeground(PaletaRetro.COLOR_TEXTO);
             lblAtras.setFont(PaletaRetro.FONT_SECCION);
         }
-        
         panelSuperior.add(lblAtras, BorderLayout.WEST);
 
         JPanel panelNavegacion = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 15));
@@ -42,21 +41,46 @@ public class VentanaJuego extends JFrame {
         String[] menuItems = {"Mi Perfil", "Biblioteca", "Juegos", "Tienda", "Soporte", "Ajustes"};
         for (String texto : menuItems) {
             JLabel lblMenu = new JLabel(texto);
-            lblMenu.setForeground(PaletaRetro.COLOR_TEXTO_SECUNDARIO);
-            lblMenu.setFont(PaletaRetro.FONT_MENU);
+            if(texto.equals("Juegos")) {
+                lblMenu.setForeground(PaletaRetro.COLOR_TEXTO);
+                lblMenu.setFont(PaletaRetro.FONT_SECCION); 
+            } else {
+                lblMenu.setForeground(PaletaRetro.COLOR_TEXTO_SECUNDARIO);
+                lblMenu.setFont(PaletaRetro.FONT_MENU);
+            }
             lblMenu.setCursor(new Cursor(Cursor.HAND_CURSOR));
             panelNavegacion.add(lblMenu);
         }
         panelSuperior.add(panelNavegacion, BorderLayout.CENTER);
-
+       
         JLabel contrapeso = new JLabel();
-        contrapeso.setPreferredSize(new Dimension(50, 30)); 
+        contrapeso.setPreferredSize(new Dimension(100, 30)); 
         panelSuperior.add(contrapeso, BorderLayout.EAST);
 
         contentPane.add(panelSuperior, BorderLayout.NORTH);
 
-        // ZONA DE JUEGO
-        JPanel panelJuego = new JPanel();
+        JPanel panelJuego = new JPanel() {
+            private Image bgImage;
+            
+            {
+                try {
+                    java.io.File imgFondo = new java.io.File("juego_fondo.png");
+                    if (imgFondo.exists()) {
+                        bgImage = new ImageIcon(imgFondo.getAbsolutePath()).getImage();
+                    }
+                } catch (Exception e) {
+                    System.out.println("No se encontró la imagen del juego.");
+                }
+            }
+
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (bgImage != null) {
+                    g.drawImage(bgImage, 0, 0, getWidth(), getHeight(), this);
+                }
+            }
+        };
+        
         panelJuego.setBackground(Color.BLACK);
         contentPane.add(panelJuego, BorderLayout.CENTER);
     }
