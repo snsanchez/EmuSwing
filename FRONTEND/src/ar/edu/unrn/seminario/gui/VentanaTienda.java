@@ -146,8 +146,7 @@ public class VentanaTienda extends JFrame {
     private JPanel crearSeccionTienda(String tituloSeccion, List<Articulo> items) {
         JPanel panelSeccion = new JPanel(new BorderLayout(0, 15));
         panelSeccion.setBackground(PaletaRetro.COLOR_FONDO);
-        
-        // CERRADO CON CANDADO: Prohibimos que Swing aplaste esta sección bajo ninguna circunstancia
+
         panelSeccion.setPreferredSize(new Dimension(800, 330));
         panelSeccion.setMaximumSize(new Dimension(Integer.MAX_VALUE, 330));
         panelSeccion.setMinimumSize(new Dimension(400, 330)); 
@@ -167,7 +166,6 @@ public class VentanaTienda extends JFrame {
 
         panelSeccion.add(panelTitulo, BorderLayout.NORTH);
 
-        // Volvemos a BoxLayout.X_AXIS (Fila pura) que es el único que respeta el ancho total de las tarjetas
         JPanel panelFila = new JPanel();
         panelFila.setLayout(new BoxLayout(panelFila, BoxLayout.X_AXIS));
         panelFila.setBackground(PaletaRetro.COLOR_FONDO);
@@ -185,7 +183,6 @@ public class VentanaTienda extends JFrame {
         scrollHorizontal.getViewport().setBackground(PaletaRetro.COLOR_FONDO);
         scrollHorizontal.getHorizontalScrollBar().setUnitIncrement(20);
         
-        // ELIMINAMOS la personalización del color de la barra para que Windows la dibuje correctamente y no desaparezca la pestaña
 
         panelSeccion.add(scrollHorizontal, BorderLayout.CENTER);
         return panelSeccion;
@@ -197,7 +194,6 @@ public class VentanaTienda extends JFrame {
         tarjeta.setBorder(BorderFactory.createLineBorder(PaletaRetro.COLOR_CONTENIDO, 2));
         tarjeta.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
-        // Medidas bloqueadas de la tarjeta
         tarjeta.setPreferredSize(new Dimension(170, 240));
         tarjeta.setMaximumSize(new Dimension(170, 240));
         tarjeta.setMinimumSize(new Dimension(170, 240));
