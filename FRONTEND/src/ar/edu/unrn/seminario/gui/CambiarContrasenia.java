@@ -90,7 +90,7 @@ public class CambiarContrasenia {
 		// Panel central
 		JPanel panelCentral = new JPanel();
 		panelCentral.setBackground(COLOR_FONDO_MAIN);
-		panelCentral.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
+		panelCentral.setBorder(BorderFactory.createEmptyBorder(200, 40, 20, 40));
 		frame.getContentPane().add(panelCentral, BorderLayout.CENTER);
 		panelCentral.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 
