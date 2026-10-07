@@ -14,6 +14,7 @@ import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -29,7 +30,7 @@ import javax.swing.border.TitledBorder;
 public class IniciarSesion extends JFrame {
 
     private JFrame frame;
-    private JTextField textField;
+    private JTextField userField;
     private JPasswordField passwordField;
 
     public static void main(String[] args) {
@@ -80,7 +81,7 @@ public class IniciarSesion extends JFrame {
         panelLogin.setPreferredSize(new Dimension(400, 300));
         panelLogin.setBackground(UIHelper.COLOR_TARJETA);
         panelLogin.setBorder(new TitledBorder(new LineBorder(UIHelper.COLOR_ACENTO, 2, true), "EmuSwing",
-                TitledBorder.LEADING, TitledBorder.TOP, null, UIHelper.COLOR_TEXTO));
+                TitledBorder.LEADING, TitledBorder.TOP, UIHelper.FONT_SUBTITULO, UIHelper.COLOR_TEXTO));
 
         JLabel lblTitulo = new JLabel("Iniciar Sesión");
         lblTitulo.setFont(UIHelper.FONT_TITULO);
@@ -100,6 +101,7 @@ public class IniciarSesion extends JFrame {
         panelLogin.add(lblTitulo, gbcTitulo);
 
         JLabel lblUsername = new JLabel("Nombre de usuario");
+        lblUsername.setFont(UIHelper.FONT_LABEL);
         lblUsername.setForeground(UIHelper.COLOR_TEXTO);
 
         GridBagConstraints gbcUsername = new GridBagConstraints();
@@ -114,24 +116,34 @@ public class IniciarSesion extends JFrame {
 
         panelLogin.add(lblUsername, gbcUsername);
 
-        textField = new JTextField();
+        userField = new JTextField();
+        /*
+        userField.setBackground(UIHelper.COLOR_TARJETA);
+        userField.setForeground(UIHelper.COLOR_TEXTO);
+        userField.setCaretColor(UIHelper.COLOR_TEXTO);
+        userField.setFont(UIHelper.FONT_TEXTFIELDS);
+        userField.setBorder(BorderFactory.createCompoundBorder(
+				new LineBorder(UIHelper.COLOR_BORDE, 1),
+				BorderFactory.createEmptyBorder(0, 10, 0, 10)));
+        */
 
-        GridBagConstraints gbcTextField = new GridBagConstraints();
+        
+        GridBagConstraints gbc_userField = new GridBagConstraints();
 
-        gbcTextField.gridx = 0;
-        gbcTextField.gridy = 2;
-        gbcTextField.gridwidth = 2;
+        gbc_userField.gridx = 0;
+        gbc_userField.gridy = 2;
+        gbc_userField.gridwidth = 2;
 
-        gbcTextField.fill = GridBagConstraints.HORIZONTAL;
+        gbc_userField.fill = GridBagConstraints.HORIZONTAL;
 
-        gbcTextField.weightx = 1.0;
+        gbc_userField.weightx = 1.0;
 
-        gbcTextField.insets = new Insets(0, 25, 10, 25);
+        gbc_userField.insets = new Insets(0, 25, 10, 25);
 
-        panelLogin.add(textField, gbcTextField);
+        panelLogin.add(userField, gbc_userField);
         JLabel lblPassword = new JLabel("Contraseña");
         lblPassword.setForeground(UIHelper.COLOR_TEXTO);
-
+        lblPassword.setFont(UIHelper.FONT_LABEL);
         GridBagConstraints gbcPassword = new GridBagConstraints();
 
         gbcPassword.gridx = 0;
