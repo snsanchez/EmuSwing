@@ -26,6 +26,8 @@ public class UIHelper {
     public static final Color COLOR_TEXTO = new Color(245, 240, 247);
     public static final Color COLOR_TEXTO_SECUNDARIO = new Color(196, 180, 206);
 	public static final Color COLOR_BORDE = new Color(153, 50, 204);
+	public static final Color COLOR_PUNTOS = new Color(255, 255, 0); 
+	public static final Color COLOR_EXITO = new Color (50, 205, 50);	
 
 
     // FUENTES
@@ -37,6 +39,7 @@ public class UIHelper {
     public static final Font FONT_SECCION = cargarFuente("/fonts/PublicPixel.ttf", 14);
     public static final Font FONT_MENU = cargarFuente("/fonts/PublicPixel.ttf", 14);
     public static final Font FONT_TARJETA = cargarFuente("/fonts/PublicPixel.ttf", 10);
+ 
 
     //
     // DIMENSIONES (en px) -- si se quiere agrandar o achicar las portadas de los

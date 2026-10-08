@@ -22,6 +22,9 @@ import javax.swing.SwingConstants;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+
+import ar.edu.unrn.seminario.helpers.UIHelper;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Image;
@@ -30,15 +33,6 @@ import java.net.URL;
 public class CatalogoLogrosView extends JFrame {
 
     private JPanel contentPane;
-
-    // Colores definidos para EmuSwing
-    private final Color COLOR_FONDO_MAIN = new Color(24, 10, 32); 
-    private final Color COLOR_PANEL_BOX  = new Color(50, 22, 66);   
-    private final Color COLOR_BORDE_NEON = new Color(169, 65, 196);   
-    private final Color COLOR_LETRAS = new Color(245, 240, 247);     
-
-    // Fuente usada para EmuSwing
-    private Font fuentePublicPixel;
     
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
@@ -54,7 +48,6 @@ public class CatalogoLogrosView extends JFrame {
     }
 
     public CatalogoLogrosView() {
-    	cargarFuentePersonalizada();
     	
     	setForeground(new Color(255, 255, 255));
         setTitle("Catálogo de Logros - EmuSwing");
@@ -63,15 +56,15 @@ public class CatalogoLogrosView extends JFrame {
         setLocationRelativeTo(null);
 
         contentPane = new JPanel();
-        contentPane.setBackground(COLOR_FONDO_MAIN);
+        contentPane.setBackground(UIHelper.COLOR_FONDO);
         contentPane.setLayout(new BorderLayout(0, 0));
         setContentPane(contentPane);
 
         // ==========================================
-        // 1. BARRA DE NAVEGACIÓN SUPERIOR (CLARA) 
+        // 1. BARRA DE NAVEGACIÓN SUPERIOR 
         // ==========================================
         JPanel panelNavBar = new JPanel();
-        panelNavBar.setBackground(COLOR_FONDO_MAIN);
+        panelNavBar.setBackground(UIHelper.COLOR_FONDO);
         panelNavBar.setBorder(new EmptyBorder(10, 10, 10, 10));
         
         // Botones del home
@@ -82,9 +75,9 @@ public class CatalogoLogrosView extends JFrame {
             btnHome.setCursor(new Cursor(Cursor.HAND_CURSOR));
            
             // ESTILO DE BOTONES IGUAL QUE EL FONDO 
-            btnHome.setBackground(COLOR_FONDO_MAIN);
-            btnHome.setForeground(COLOR_LETRAS);
-            btnHome.setFont(new Font("Public Pixel", Font.PLAIN, 14));
+            btnHome.setBackground(UIHelper.COLOR_FONDO);
+            btnHome.setForeground(UIHelper.COLOR_TEXTO);
+            btnHome.setFont(UIHelper.FONT_MENU);
             
             
             // Configuracion de bordes y estructura de los botones del home
@@ -100,15 +93,15 @@ public class CatalogoLogrosView extends JFrame {
         // 2. PANEL CENTRAL (GRIDBAG LAYOUT PARA CENTRAR)
         // ==========================================
         JPanel panelCentro = new JPanel();
-        panelCentro.setBackground(COLOR_FONDO_MAIN);
+        panelCentro.setBackground(UIHelper.COLOR_FONDO);
         panelCentro.setLayout(new GridBagLayout()); // Alinea la caja perfectamente al centro
         contentPane.add(panelCentro, BorderLayout.CENTER);
 
         // CAJA CENTRADA (MENÚ DE CATÁLOGOS)
         JPanel cajaMenu = new JPanel();
-        cajaMenu.setBackground(COLOR_PANEL_BOX);
+        cajaMenu.setBackground(UIHelper.COLOR_CONTENIDO);
         cajaMenu.setBorder(new CompoundBorder(
-        		new LineBorder(COLOR_BORDE_NEON, 3, true), 
+        		new LineBorder(UIHelper.COLOR_BORDE, 3, true), 
         		new EmptyBorder(15, 20, 15, 20)
         ));
         cajaMenu.setLayout(new GridLayout(3, 1, 10, 15));
@@ -116,8 +109,8 @@ public class CatalogoLogrosView extends JFrame {
 
         // Título del Menú
         JLabel lblTitulo = new JLabel("Catálogos de Logros");
-        lblTitulo.setFont(fuentePublicPixel.deriveFont(Font.BOLD, 15));
-        lblTitulo.setForeground(COLOR_LETRAS);
+        lblTitulo.setFont(UIHelper.FONT_MENU);
+        lblTitulo.setForeground(UIHelper.COLOR_TEXTO);
         lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
         cajaMenu.add(lblTitulo);
 
@@ -131,13 +124,13 @@ public class CatalogoLogrosView extends JFrame {
         };
         
         JComboBox<String> comboCatalogos = new JComboBox<>(catalogosDisponibles);
-        comboCatalogos.setFont(new Font("Public Pixel", Font.PLAIN, 16));
+        comboCatalogos.setFont(UIHelper.FONT_MENU);
         comboCatalogos.setCursor(new Cursor(Cursor.HAND_CURSOR));
         cajaMenu.add(comboCatalogos);
 
         // Boton de ver Logros y Evento 
         JButton btnVerLogros = new JButton("Ver Logros");
-        btnVerLogros.setFont(new Font("Public Pixel", Font.BOLD, 12));
+        btnVerLogros.setFont(UIHelper.FONT_BOTON);
         btnVerLogros.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
         btnVerLogros.addActionListener(new ActionListener() {
@@ -206,38 +199,13 @@ public class CatalogoLogrosView extends JFrame {
 		if (imgURL != null) {
 
 			ImageIcon iconOriginal = new ImageIcon(imgURL);
-
 			Image imagenEscalada = iconOriginal.getImage().getScaledInstance(200, 158, java.awt.Image.SCALE_SMOOTH);
-
 			JLabel lbLogo = new JLabel(new ImageIcon(imagenEscalada));
-
 			panelLogo.add(lbLogo);
-}
-    }
+		}
+   }
     
-  // Forma para poder cargar una fuente externa a Windows/Linux
-    private void cargarFuentePersonalizada() {
-        try {
-            // Busca el archivo en tu carpeta interna
-            java.io.InputStream is = getClass().getResourceAsStream("/fonts/PublicPixel.ttf");
-            
-            if (is != null) {
-                // Si lo encuentra, lo convierte en una fuente de Java
-                Font baseFont = Font.createFont(Font.TRUETYPE_FONT, is);
-                java.awt.GraphicsEnvironment ge = java.awt.GraphicsEnvironment.getLocalGraphicsEnvironment();
-                ge.registerFont(baseFont);
-                
-                // La guarda en tu variable global con tamaño 12 por defecto
-                fuentePublicPixel = baseFont.deriveFont(Font.PLAIN, 12f);
-            } else {
-                // Si falla (por ej. si escribiste mal el nombre), usa Monospaced para que no se rompa el programa
-                System.err.println("Aviso: No se encontró PublicPixel.ttf");
-                fuentePublicPixel = new Font(Font.MONOSPACED, Font.PLAIN, 12);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            fuentePublicPixel = new Font(Font.MONOSPACED, Font.PLAIN, 12);
-        }
-    }
 }
+        
+  
 
