@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+import ar.edu.unrn.seminario.helpers.UIHelper;
+
 public class VentanaSeleccionarAvatar extends JFrame {
     private JPanel contentPane;
 
@@ -14,22 +16,22 @@ public class VentanaSeleccionarAvatar extends JFrame {
         setLocationRelativeTo(null); 
 
         contentPane = new JPanel(new BorderLayout());
-        contentPane.setBackground(PaletaRetro.COLOR_FONDO);
+        contentPane.setBackground(UIHelper.COLOR_FONDO);
         setContentPane(contentPane);
 
         JPanel panelCabecera = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panelCabecera.setBackground(PaletaRetro.COLOR_FONDO);
+        panelCabecera.setBackground(UIHelper.COLOR_FONDO);
         panelCabecera.setBorder(new EmptyBorder(20, 0, 10, 0));
         
         JLabel lblTitulo = new JLabel("AVATARES PREDETERMINADOS");
-        lblTitulo.setForeground(PaletaRetro.COLOR_TEXTO);
-        lblTitulo.setFont(PaletaRetro.FONT_TITULO);
+        lblTitulo.setForeground(UIHelper.COLOR_TEXTO);
+        lblTitulo.setFont(UIHelper.FONT_TITULO);
         panelCabecera.add(lblTitulo);
         
         contentPane.add(panelCabecera, BorderLayout.NORTH);
 
         JPanel panelGrilla = new JPanel(new GridLayout(2, 5, 20, 20));
-        panelGrilla.setBackground(PaletaRetro.COLOR_FONDO);
+        panelGrilla.setBackground(UIHelper.COLOR_FONDO);
         panelGrilla.setBorder(new EmptyBorder(20, 40, 20, 40));
 
 
@@ -46,24 +48,24 @@ public class VentanaSeleccionarAvatar extends JFrame {
         contentPane.add(panelGrilla, BorderLayout.CENTER);
 
         JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 0));
-        panelInferior.setBackground(PaletaRetro.COLOR_FONDO);
+        panelInferior.setBackground(UIHelper.COLOR_FONDO);
         panelInferior.setBorder(new EmptyBorder(10, 20, 20, 40));
 
         JButton btnCancelar = new JButton("Cancelar");
-        btnCancelar.setBackground(PaletaRetro.COLOR_FONDO.darker());
-        btnCancelar.setForeground(PaletaRetro.COLOR_TEXTO);
-        btnCancelar.setFont(PaletaRetro.FONT_MENU);
-        btnCancelar.setBorder(BorderFactory.createLineBorder(PaletaRetro.COLOR_TEXTO_SECUNDARIO, 1));
+        btnCancelar.setBackground(UIHelper.COLOR_FONDO.darker());
+        btnCancelar.setForeground(UIHelper.COLOR_TEXTO);
+        btnCancelar.setFont(UIHelper.FONT_MENU);
+        btnCancelar.setBorder(BorderFactory.createLineBorder(UIHelper.COLOR_TEXTO_SECUNDARIO, 1));
         btnCancelar.setFocusPainted(false);
         btnCancelar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnCancelar.setPreferredSize(new Dimension(100, 30));
         btnCancelar.addActionListener(e -> dispose()); 
 
         JButton btnSeleccionar = new JButton("Seleccionar");
-        btnSeleccionar.setBackground(PaletaRetro.COLOR_FONDO.darker());
-        btnSeleccionar.setForeground(PaletaRetro.COLOR_TEXTO);
-        btnSeleccionar.setFont(PaletaRetro.FONT_MENU);
-        btnSeleccionar.setBorder(BorderFactory.createLineBorder(PaletaRetro.COLOR_ACENTO, 1));
+        btnSeleccionar.setBackground(UIHelper.COLOR_FONDO.darker());
+        btnSeleccionar.setForeground(UIHelper.COLOR_TEXTO);
+        btnSeleccionar.setFont(UIHelper.FONT_MENU);
+        btnSeleccionar.setBorder(BorderFactory.createLineBorder(UIHelper.COLOR_ACENTO, 1));
         btnSeleccionar.setFocusPainted(false);
         btnSeleccionar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnSeleccionar.setPreferredSize(new Dimension(120, 30)); 
@@ -101,14 +103,14 @@ public class VentanaSeleccionarAvatar extends JFrame {
             }
         };
         
-        panelCuadro.setBackground(PaletaRetro.COLOR_CONTENIDO); 
-        panelCuadro.setBorder(BorderFactory.createLineBorder(PaletaRetro.COLOR_ACENTO, 2));
+        panelCuadro.setBackground(UIHelper.COLOR_CONTENIDO); 
+        panelCuadro.setBorder(BorderFactory.createLineBorder(UIHelper.COLOR_ACENTO, 2));
         panelCuadro.setCursor(new Cursor(Cursor.HAND_CURSOR));
         java.io.File checkFile = new java.io.File(rutaImagen);
         if (!checkFile.exists()) {
             JLabel lblError = new JLabel("?", SwingConstants.CENTER);
-            lblError.setFont(new Font(PaletaRetro.FONT_MENU.getName(), Font.BOLD, 36));
-            lblError.setForeground(PaletaRetro.COLOR_TEXTO_SECUNDARIO);
+            lblError.setFont(new Font(UIHelper.FONT_MENU.getName(), Font.BOLD, 36));
+            lblError.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
             panelCuadro.add(lblError, BorderLayout.CENTER);
         }
 

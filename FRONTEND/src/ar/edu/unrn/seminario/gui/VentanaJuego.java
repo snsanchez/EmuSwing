@@ -3,6 +3,8 @@ package ar.edu.unrn.seminario.gui;
 import javax.swing.*;
 import java.awt.*;
 
+import ar.edu.unrn.seminario.helpers.UIHelper;
+
 public class VentanaJuego extends JFrame {
     private JPanel contentPane;
 
@@ -17,7 +19,7 @@ public class VentanaJuego extends JFrame {
         setContentPane(contentPane);
 
         JPanel panelSuperior = new JPanel(new BorderLayout());
-        panelSuperior.setBackground(PaletaRetro.COLOR_FONDO); 
+        panelSuperior.setBackground(UIHelper.COLOR_FONDO); 
         
         JLabel lblAtras = new JLabel();
         lblAtras.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
@@ -30,23 +32,23 @@ public class VentanaJuego extends JFrame {
             lblAtras.setIcon(new ImageIcon(imgFlecha));
         } else {
             lblAtras.setText("◀ VOLVER");
-            lblAtras.setForeground(PaletaRetro.COLOR_TEXTO);
-            lblAtras.setFont(PaletaRetro.FONT_SECCION);
+            lblAtras.setForeground(UIHelper.COLOR_TEXTO);
+            lblAtras.setFont(UIHelper.FONT_SECCION);
         }
         panelSuperior.add(lblAtras, BorderLayout.WEST);
 
         JPanel panelNavegacion = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 15));
-        panelNavegacion.setBackground(PaletaRetro.COLOR_FONDO);
+        panelNavegacion.setBackground(UIHelper.COLOR_FONDO);
         
         String[] menuItems = {"Mi Perfil", "Biblioteca", "Juegos", "Tienda", "Soporte", "Ajustes"};
         for (String texto : menuItems) {
             JLabel lblMenu = new JLabel(texto);
             if(texto.equals("Juegos")) {
-                lblMenu.setForeground(PaletaRetro.COLOR_TEXTO);
-                lblMenu.setFont(PaletaRetro.FONT_SECCION); 
+                lblMenu.setForeground(UIHelper.COLOR_TEXTO);
+                lblMenu.setFont(UIHelper.FONT_SECCION); 
             } else {
-                lblMenu.setForeground(PaletaRetro.COLOR_TEXTO_SECUNDARIO);
-                lblMenu.setFont(PaletaRetro.FONT_MENU);
+                lblMenu.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
+                lblMenu.setFont(UIHelper.FONT_MENU);
             }
             lblMenu.setCursor(new Cursor(Cursor.HAND_CURSOR));
             panelNavegacion.add(lblMenu);

@@ -6,6 +6,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.edu.unrn.seminario.helpers.UIHelper;
+
 public class VentanaTienda extends JFrame {
     private JPanel contentPane;
 
@@ -35,25 +37,25 @@ public class VentanaTienda extends JFrame {
         setLocationRelativeTo(null);
 
         contentPane = new JPanel(new BorderLayout());
-        contentPane.setBackground(PaletaRetro.COLOR_FONDO);
+        contentPane.setBackground(UIHelper.COLOR_FONDO);
         setContentPane(contentPane);
 
         // --- PANEL SUPERIOR ---
         JPanel panelSuperior = new JPanel(new BorderLayout());
-        panelSuperior.setBackground(PaletaRetro.COLOR_FONDO);
+        panelSuperior.setBackground(UIHelper.COLOR_FONDO);
 
         JPanel panelNavegacion = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 15));
-        panelNavegacion.setBackground(PaletaRetro.COLOR_FONDO);
+        panelNavegacion.setBackground(UIHelper.COLOR_FONDO);
         
         String[] menuItems = {"Mi Perfil", "Biblioteca", "Juegos", "Tienda", "Soporte", "Ajustes"};
         for (String texto : menuItems) {
             JLabel lblMenu = new JLabel(texto);
             if(texto.equals("Tienda")) {
-                lblMenu.setForeground(PaletaRetro.COLOR_TEXTO);
-                lblMenu.setFont(PaletaRetro.FONT_SECCION); 
+                lblMenu.setForeground(UIHelper.COLOR_TEXTO);
+                lblMenu.setFont(UIHelper.FONT_SECCION); 
             } else {
-                lblMenu.setForeground(PaletaRetro.COLOR_TEXTO_SECUNDARIO);
-                lblMenu.setFont(PaletaRetro.FONT_MENU);
+                lblMenu.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
+                lblMenu.setFont(UIHelper.FONT_MENU);
             }
             lblMenu.setCursor(new Cursor(Cursor.HAND_CURSOR));
             panelNavegacion.add(lblMenu);
@@ -61,28 +63,28 @@ public class VentanaTienda extends JFrame {
         panelSuperior.add(panelNavegacion, BorderLayout.NORTH);
 
         JPanel panelCabecera = new JPanel(new BorderLayout());
-        panelCabecera.setBackground(PaletaRetro.COLOR_FONDO);
+        panelCabecera.setBackground(UIHelper.COLOR_FONDO);
         panelCabecera.setBorder(new EmptyBorder(10, 20, 20, 20));
 
         JLabel lblTitulo = new JLabel("TIENDA DE PUNTOS", SwingConstants.CENTER);
-        lblTitulo.setForeground(PaletaRetro.COLOR_TEXTO);
-        lblTitulo.setFont(PaletaRetro.FONT_TITULO);
+        lblTitulo.setForeground(UIHelper.COLOR_TEXTO);
+        lblTitulo.setFont(UIHelper.FONT_TITULO);
         lblTitulo.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(PaletaRetro.COLOR_ACENTO, 2),
+                BorderFactory.createLineBorder(UIHelper.COLOR_ACENTO, 2),
                 BorderFactory.createEmptyBorder(10, 30, 10, 30) 
         ));
 
         JPanel panelContenedorTitulo = new JPanel(new GridBagLayout());
-        panelContenedorTitulo.setBackground(PaletaRetro.COLOR_FONDO);
+        panelContenedorTitulo.setBackground(UIHelper.COLOR_FONDO);
         panelContenedorTitulo.add(lblTitulo);
         panelCabecera.add(panelContenedorTitulo, BorderLayout.CENTER);
 
         JLabel lblPuntos = new JLabel("Mis Puntos: 2.500 \u25CF"); 
-        lblPuntos.setForeground(PaletaRetro.COLOR_ACENTO);
-        lblPuntos.setFont(PaletaRetro.FONT_SECCION);
+        lblPuntos.setForeground(UIHelper.COLOR_ACENTO);
+        lblPuntos.setFont(UIHelper.FONT_SECCION);
         
         JPanel panelPuntos = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 15));
-        panelPuntos.setBackground(PaletaRetro.COLOR_FONDO);
+        panelPuntos.setBackground(UIHelper.COLOR_FONDO);
         panelPuntos.add(lblPuntos);
         panelCabecera.add(panelPuntos, BorderLayout.EAST);
 
@@ -96,7 +98,7 @@ public class VentanaTienda extends JFrame {
         // --- CONTENIDO DE LA TIENDA ---
         JPanel panelContenido = new JPanel();
         panelContenido.setLayout(new BoxLayout(panelContenido, BoxLayout.Y_AXIS));
-        panelContenido.setBackground(PaletaRetro.COLOR_FONDO);
+        panelContenido.setBackground(UIHelper.COLOR_FONDO);
         panelContenido.setBorder(new EmptyBorder(0, 40, 20, 40));
 
         // LISTA 1: MARCOS
@@ -136,7 +138,7 @@ public class VentanaTienda extends JFrame {
         
         JScrollPane scrollVertical = new JScrollPane(panelContenido);
         scrollVertical.setBorder(null);
-        scrollVertical.getViewport().setBackground(PaletaRetro.COLOR_FONDO);
+        scrollVertical.getViewport().setBackground(UIHelper.COLOR_FONDO);
         scrollVertical.getVerticalScrollBar().setUnitIncrement(16);
         scrollVertical.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -145,30 +147,30 @@ public class VentanaTienda extends JFrame {
 
     private JPanel crearSeccionTienda(String tituloSeccion, List<Articulo> items) {
         JPanel panelSeccion = new JPanel(new BorderLayout(0, 15));
-        panelSeccion.setBackground(PaletaRetro.COLOR_FONDO);
+        panelSeccion.setBackground(UIHelper.COLOR_FONDO);
 
         panelSeccion.setPreferredSize(new Dimension(800, 330));
         panelSeccion.setMaximumSize(new Dimension(Integer.MAX_VALUE, 330));
         panelSeccion.setMinimumSize(new Dimension(400, 330)); 
 
         JPanel panelTitulo = new JPanel(new BorderLayout());
-        panelTitulo.setBackground(PaletaRetro.COLOR_FONDO);
+        panelTitulo.setBackground(UIHelper.COLOR_FONDO);
         
         JLabel lblTitulo = new JLabel(tituloSeccion);
-        lblTitulo.setForeground(PaletaRetro.COLOR_TEXTO_SECUNDARIO);
-        lblTitulo.setFont(PaletaRetro.FONT_SECCION);
+        lblTitulo.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
+        lblTitulo.setFont(UIHelper.FONT_SECCION);
         panelTitulo.add(lblTitulo, BorderLayout.WEST);
 
         JSeparator separador = new JSeparator();
-        separador.setBackground(PaletaRetro.COLOR_CONTENIDO);
-        separador.setForeground(PaletaRetro.COLOR_CONTENIDO);
+        separador.setBackground(UIHelper.COLOR_CONTENIDO);
+        separador.setForeground(UIHelper.COLOR_CONTENIDO);
         panelTitulo.add(separador, BorderLayout.SOUTH);
 
         panelSeccion.add(panelTitulo, BorderLayout.NORTH);
 
         JPanel panelFila = new JPanel();
         panelFila.setLayout(new BoxLayout(panelFila, BoxLayout.X_AXIS));
-        panelFila.setBackground(PaletaRetro.COLOR_FONDO);
+        panelFila.setBackground(UIHelper.COLOR_FONDO);
         panelFila.setBorder(new EmptyBorder(5, 5, 5, 5));
 
         for (Articulo item : items) {
@@ -180,7 +182,7 @@ public class VentanaTienda extends JFrame {
         scrollHorizontal.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         scrollHorizontal.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollHorizontal.setBorder(null);
-        scrollHorizontal.getViewport().setBackground(PaletaRetro.COLOR_FONDO);
+        scrollHorizontal.getViewport().setBackground(UIHelper.COLOR_FONDO);
         scrollHorizontal.getHorizontalScrollBar().setUnitIncrement(20);
         
 
@@ -190,8 +192,8 @@ public class VentanaTienda extends JFrame {
 
     private JPanel crearTarjetaItem(String nombre, String tipo, String precio, String archivoImg) {
         JPanel tarjeta = new JPanel(new BorderLayout());
-        tarjeta.setBackground(PaletaRetro.COLOR_CONTENIDO);
-        tarjeta.setBorder(BorderFactory.createLineBorder(PaletaRetro.COLOR_CONTENIDO, 2));
+        tarjeta.setBackground(UIHelper.COLOR_CONTENIDO);
+        tarjeta.setBorder(BorderFactory.createLineBorder(UIHelper.COLOR_CONTENIDO, 2));
         tarjeta.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
         tarjeta.setPreferredSize(new Dimension(170, 240));
@@ -199,7 +201,7 @@ public class VentanaTienda extends JFrame {
         tarjeta.setMinimumSize(new Dimension(170, 240));
         
         JPanel imgPlaceholder = new JPanel(new BorderLayout());
-        imgPlaceholder.setBackground(PaletaRetro.COLOR_FONDO.darker());
+        imgPlaceholder.setBackground(UIHelper.COLOR_FONDO.darker());
         imgPlaceholder.setPreferredSize(new Dimension(150, 150)); 
         
         try {
@@ -219,28 +221,28 @@ public class VentanaTienda extends JFrame {
 
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-        infoPanel.setBackground(PaletaRetro.COLOR_CONTENIDO);
+        infoPanel.setBackground(UIHelper.COLOR_CONTENIDO);
         infoPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         JLabel lblNombre = new JLabel(nombre.toUpperCase());
-        lblNombre.setForeground(PaletaRetro.COLOR_TEXTO);
-        lblNombre.setFont(new Font(PaletaRetro.FONT_MENU.getName(), Font.BOLD, 12));
+        lblNombre.setForeground(UIHelper.COLOR_TEXTO);
+        lblNombre.setFont(new Font(UIHelper.FONT_MENU.getName(), Font.BOLD, 12));
         infoPanel.add(lblNombre);
         
         infoPanel.add(Box.createRigidArea(new Dimension(0, 5)));
 
         JLabel lblTipo = new JLabel("\u25A4 " + tipo); 
-        lblTipo.setForeground(PaletaRetro.COLOR_TEXTO_SECUNDARIO);
-        lblTipo.setFont(new Font(PaletaRetro.FONT_MENU.getName(), Font.PLAIN, 11));
+        lblTipo.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
+        lblTipo.setFont(new Font(UIHelper.FONT_MENU.getName(), Font.PLAIN, 11));
         infoPanel.add(lblTipo);
 
         infoPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
         JPanel precioPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-        precioPanel.setBackground(PaletaRetro.COLOR_CONTENIDO);
+        precioPanel.setBackground(UIHelper.COLOR_CONTENIDO);
         JLabel lblPrecio = new JLabel("\u2714 " + precio); 
-        lblPrecio.setForeground(PaletaRetro.COLOR_TEXTO);
-        lblPrecio.setFont(new Font(PaletaRetro.FONT_MENU.getName(), Font.BOLD, 12));
+        lblPrecio.setForeground(UIHelper.COLOR_TEXTO);
+        lblPrecio.setFont(new Font(UIHelper.FONT_MENU.getName(), Font.BOLD, 12));
         precioPanel.add(lblPrecio);
 
         infoPanel.add(precioPanel);

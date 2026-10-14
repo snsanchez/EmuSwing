@@ -4,6 +4,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
+import ar.edu.unrn.seminario.helpers.UIHelper;
+
 public class VentanaRanking extends JFrame {
     private JPanel contentPane;
     private JTable tablaRanking;
@@ -16,61 +18,63 @@ public class VentanaRanking extends JFrame {
         setLocationRelativeTo(null); 
 
         contentPane = new JPanel(new BorderLayout(10, 10));
-        contentPane.setBackground(PaletaRetro.COLOR_FONDO);
+        contentPane.setBackground(UIHelper.COLOR_FONDO);
         contentPane.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0)); 
         setContentPane(contentPane);
 
         JPanel panelSuperior = new JPanel(new BorderLayout());
-        panelSuperior.setBackground(PaletaRetro.COLOR_FONDO);
+        panelSuperior.setBackground(UIHelper.COLOR_FONDO);
 
         JPanel panelNavegacion = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 15));
-        panelNavegacion.setBackground(PaletaRetro.COLOR_FONDO); 
+        panelNavegacion.setBackground(UIHelper.COLOR_FONDO); 
         String[] menuItems = {"Mi Perfil", "Biblioteca", "Juegos", "Tienda", "Soporte", "Ajustes"};
         for (String texto : menuItems) {
             JLabel lblMenu = new JLabel(texto);
-            lblMenu.setForeground(PaletaRetro.COLOR_TEXTO_SECUNDARIO);
-            lblMenu.setFont(PaletaRetro.FONT_MENU);
+            lblMenu.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
+            lblMenu.setFont(UIHelper.FONT_MENU);
             lblMenu.setCursor(new Cursor(Cursor.HAND_CURSOR));
             panelNavegacion.add(lblMenu);
         }
         panelSuperior.add(panelNavegacion, BorderLayout.NORTH);
 
 
+        // ---------- TÍTULO Y LOGO ----------
         JPanel panelTituloYLogo = new JPanel(new BorderLayout());
-        panelTituloYLogo.setBackground(PaletaRetro.COLOR_FONDO);
+        panelTituloYLogo.setBackground(UIHelper.COLOR_FONDO);
         panelTituloYLogo.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20)); 
 
-        JLabel lblTitulo = new JLabel("RANKING SEMANAL", SwingConstants.CENTER);
-        lblTitulo.setForeground(PaletaRetro.COLOR_TEXTO);
-        lblTitulo.setFont(PaletaRetro.FONT_TITULO); 
-        
+        JLabel contrapeso = new JLabel();
+        contrapeso.setPreferredSize(new Dimension(260, 205)); 
+        panelTituloYLogo.add(contrapeso, BorderLayout.WEST);
 
+        JLabel lblTitulo = new JLabel("RANKING SEMANAL", SwingConstants.CENTER);
+        lblTitulo.setForeground(UIHelper.COLOR_TEXTO);
+        lblTitulo.setFont(UIHelper.FONT_TITULO); 
+        
         lblTitulo.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(PaletaRetro.COLOR_ACENTO, 2),
+                BorderFactory.createLineBorder(UIHelper.COLOR_ACENTO, 2),
                 BorderFactory.createEmptyBorder(10, 30, 10, 30) 
         ));
 
-
         JPanel panelContenedorTitulo = new JPanel(new GridBagLayout());
-        panelContenedorTitulo.setBackground(PaletaRetro.COLOR_FONDO);
+        panelContenedorTitulo.setBackground(UIHelper.COLOR_FONDO);
         panelContenedorTitulo.add(lblTitulo);
         
         panelTituloYLogo.add(panelContenedorTitulo, BorderLayout.CENTER);
 
-
         try {
-            ImageIcon iconOriginal = new ImageIcon("logo.jpg"); 
-            Image imagenEscalada = iconOriginal.getImage().getScaledInstance(-1, 130, Image.SCALE_SMOOTH);
-            JLabel lblLogo = new JLabel(new ImageIcon(imagenEscalada));
-            panelTituloYLogo.add(lblLogo, BorderLayout.EAST);
+            java.net.URL imgURL = getClass().getResource("/img/esw-logo.png");
             
-
-            JLabel contrapeso = new JLabel();
-            contrapeso.setPreferredSize(new Dimension(lblLogo.getPreferredSize().width, 130));
-            panelTituloYLogo.add(contrapeso, BorderLayout.WEST);
-            
+            if (imgURL != null) {
+                ImageIcon iconOriginal = new ImageIcon(imgURL);
+                Image imagenEscalada = iconOriginal.getImage().getScaledInstance(260, 205, Image.SCALE_SMOOTH);
+                JLabel lblLogo = new JLabel(new ImageIcon(imagenEscalada));
+                panelTituloYLogo.add(lblLogo, BorderLayout.EAST);
+            } else {
+                System.out.println("Error: No se encontró el logo en /img/esw-logo.png");
+            }
         } catch (Exception e) {
-            System.out.println("No se encontró la imagen del logo.");
+            e.printStackTrace();
         }
 
         panelSuperior.add(panelTituloYLogo, BorderLayout.SOUTH);
@@ -81,23 +85,23 @@ public class VentanaRanking extends JFrame {
         modelo = new DefaultTableModel(columnas, 0); 
         tablaRanking = new JTable(modelo);
         
-        tablaRanking.setBackground(PaletaRetro.COLOR_CONTENIDO);
-        tablaRanking.setForeground(PaletaRetro.COLOR_TEXTO);
-        tablaRanking.setGridColor(PaletaRetro.COLOR_ACENTO);
-        tablaRanking.setFont(PaletaRetro.FONT_SECCION);
+        tablaRanking.setBackground(UIHelper.COLOR_CONTENIDO);
+        tablaRanking.setForeground(UIHelper.COLOR_TEXTO);
+        tablaRanking.setGridColor(UIHelper.COLOR_ACENTO);
+        tablaRanking.setFont(UIHelper.FONT_SECCION);
         tablaRanking.setRowHeight(30);
         
-        tablaRanking.getTableHeader().setBackground(PaletaRetro.COLOR_FONDO);
-        tablaRanking.getTableHeader().setForeground(PaletaRetro.COLOR_ACENTO);
-        tablaRanking.getTableHeader().setFont(PaletaRetro.FONT_SECCION);
-        tablaRanking.getTableHeader().setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, PaletaRetro.COLOR_ACENTO));
+        tablaRanking.getTableHeader().setBackground(UIHelper.COLOR_FONDO);
+        tablaRanking.getTableHeader().setForeground(UIHelper.COLOR_ACENTO);
+        tablaRanking.getTableHeader().setFont(UIHelper.FONT_SECCION);
+        tablaRanking.getTableHeader().setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, UIHelper.COLOR_ACENTO));
 
         JScrollPane scrollPane = new JScrollPane(tablaRanking);
-        scrollPane.getViewport().setBackground(PaletaRetro.COLOR_FONDO);
-        scrollPane.setBorder(BorderFactory.createLineBorder(PaletaRetro.COLOR_ACENTO, 1));
+        scrollPane.getViewport().setBackground(UIHelper.COLOR_FONDO);
+        scrollPane.setBorder(BorderFactory.createLineBorder(UIHelper.COLOR_ACENTO, 1));
         
         JPanel panelCentro = new JPanel(new BorderLayout());
-        panelCentro.setBackground(PaletaRetro.COLOR_FONDO);
+        panelCentro.setBackground(UIHelper.COLOR_FONDO);
         panelCentro.setBorder(BorderFactory.createEmptyBorder(10, 40, 0, 40));
         panelCentro.add(scrollPane, BorderLayout.CENTER);
         
