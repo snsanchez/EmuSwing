@@ -6,7 +6,11 @@ public class Usuario {
 	private String nombre;
 	private String email;
 	private Rol rol;
+	// rol es necesario?
 	private boolean activo;
+	// activo es necesario?
+	private Boolean estadoSuscripcion;
+	// agregar UserStats
 
 	public Usuario(String usuario, String contrasena, String nombre, String email, Rol rol) {
 
