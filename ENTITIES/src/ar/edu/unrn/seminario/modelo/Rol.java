@@ -49,32 +49,17 @@ public class Rol {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
-		return result;
+		return codigo;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Rol other = (Rol) obj;
-		if (codigo == null) {
-			if (other.codigo != null)
-				return false;
-		} else if (!codigo.equals(other.codigo))
-			return false;
-		return true;
+	public boolean equals(Rol ) {
+
 	}
 
 	@Override
 	public String toString() {
-		return "Rol [codigo=" + codigo + ", nombre=" + nombre + ", activo=" + activo + "]";
+		return "Rol: " + nombre;
 	}
 
 }
