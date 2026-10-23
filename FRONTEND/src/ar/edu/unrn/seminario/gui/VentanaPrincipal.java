@@ -123,7 +123,7 @@ public class VentanaPrincipal extends JFrame {
 
             ImageIcon iconOriginal = new ImageIcon(imgURL);
             // escalar la imagen para que no se vea gigante
-            Image imagenEscalada = iconOriginal.getImage().getScaledInstance(170, 134, Image.SCALE_SMOOTH);
+            Image imagenEscalada = iconOriginal.getImage().getScaledInstance(260, 205, Image.SCALE_SMOOTH);
             JLabel lblLogo = new JLabel(new ImageIcon(imagenEscalada));
             panelLogo.add(lblLogo);
 
