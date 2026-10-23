@@ -74,14 +74,29 @@ public class MemoryApi implements IApi {
 
 	@Override
 	public UsuarioDTO obtenerUsuario(String username) {
-		// TODO Auto-generated method stub
-		return null;
+	    return this.usuarios
+					.stream()
+					.filter(u->u.getNombre().equals(username))
+					.map(u->new UsuarioDTO(
+					    u.getUsuario(), u.getContrasena(),
+						u.getNombre(), u.getEmail(),
+						u.getRol().getNombre(),
+						u.isActivo(), u.obtenerEstado())
+					.findFirst()
+					.orElse(null);
 	}
 
 	@Override
 	public void eliminarUsuario(String username) {
-		// TODO Auto-generated method stub
-
+	    Iterator<Usuario> iterator = this.usuarios.iterator();
+    	boolean encontrado = false;
+    	while (iterator.hasNext() && !encontrado) {
+            Usuario u = iterator.next();
+            	if (u.getUsuario().equals(username)) {
+                	iterator.remove();
+                    encontrado = true;
+                }
+       	    }
 	}
 
 	@Override
@@ -153,14 +168,6 @@ public class MemoryApi implements IApi {
 		for (Rol rol : roles) {
 			if (rol.getCodigo().equals(codigo))
 				return rol;
-		}
-		return null;
-	}
-
-	private Usuario buscarUsuario(String usuario) {
-		for (Usuario user : usuarios) {
-			if (user.getUsuario().equals(usuario))
-				return user;
 		}
 		return null;
 	}
