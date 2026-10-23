@@ -36,7 +36,7 @@ public class MemoryApi implements IApi {
 		this.juegos.add(new Juego(1, "Super Street Fighter II", "Lucha", "Capcom", "SNES", 1993));
 		this.juegos.add(new Juego(2, "DOOM", "FPS", "id Software", "MS-DOS", 1993));
 		this.juegos.add(new Juego(3, "Castlevania IV USA", "Plataformas", "Konami", "NES", 1993));
-		
+
 		// agrego links a los juegos (se pueden agregar varios links por juego)
 		this.juegosLinks.put(1, new ArrayList<>(List.of(
 				"https://archive.org/embed/Super_Street_Fighter_II_USA.md")));
@@ -124,8 +124,18 @@ public class MemoryApi implements IApi {
 
 	@Override
 	public void desactivarRol(Integer codigo) {
-		// TODO Auto-generated method stub
+	//Se busca el rol mediante el codigo recibido.
+		    for (Rol rol : roles) {
 
+		        if (rol.getCodigo().equals(codigo)) {
+
+		        	//Invocacion al metodo "desactivar" de la clase rol, la cual se encarga del proceso.
+		            rol.desactivar();
+
+		            //Una vez encontrado y modificado se deja de recorrer el ArrayList.
+		            break;
+		        }
+		    }
 	}
 
 	@Override
@@ -136,7 +146,7 @@ public class MemoryApi implements IApi {
 
 	@Override
 	public void desactivarUsuario(String usuario) {
-		// TODO: desactivar usuario
+	    this.buscarUsuario(usuario).desactivar();
 	}
 
 	private Rol buscarRol(Integer codigo) {
