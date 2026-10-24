@@ -9,7 +9,7 @@ public class Usuario {
 	// rol es necesario?
 	private boolean activo;
 	// activo es necesario?
-	private Boolean estadoSuscripcion;
+	private boolean estadoSuscripcion;
 	// agregar UserStats
 
 	public Usuario(String usuario, String contrasena, String nombre, String email, Rol rol) {
@@ -102,6 +102,10 @@ public class Usuario {
 		} else if (!usuario.equals(other.usuario))
 			return false;
 		return true;
+	}
+
+	public Boolean getEstadoSuscripcion(){
+	    return estadoSuscripcion;
 	}
 
 }
