@@ -30,4 +30,20 @@ public interface IApi {
 	void activarUsuario(String username); // recuperar el objeto Usuario, implementar el comportamiento de estado.
 
 	void desactivarUsuario(String username); // recuperar el objeto Usuario, implementar el comportamiento de estado.
+
+
+// para la gestion de la biblioteca falta una instancia de juego o otra forma de manejar los favoritos
+
+	void agregarFavorito(DTOJuego j);
+
+	void quitarFavorito(DTOJuego j);
+
+	List<Juego> obtenerFavoritos();
+
+	Juego getFavorito(String nombre_juego);
+
+	int contarFavoritos();
+	
+	
+
 }

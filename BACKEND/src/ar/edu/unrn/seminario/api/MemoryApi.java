@@ -2,7 +2,7 @@ package ar.edu.unrn.seminario.api;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import ar.edu.unrn.seminario.JuegoMapper;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.modelo.Rol;
@@ -12,6 +12,8 @@ public class MemoryApi implements IApi {
 
 	private ArrayList<Rol> roles = new ArrayList();
 	private ArrayList<Usuario> usuarios = new ArrayList<>();
+
+	private static Map<Juego> favoritos = new Map<>();
 
 	public MemoryApi() {
 
@@ -115,6 +117,8 @@ public class MemoryApi implements IApi {
         this.buscarUsuario(usuario).desactivar();
 	}
 
+
+	@Override
 	private Rol buscarRol(Integer codigo) {
 		for (Rol rol : roles) {
 			if (rol.getCodigo().equals(codigo))
@@ -123,11 +127,45 @@ public class MemoryApi implements IApi {
 		return null;
 	}
 
+
+	@Override
 	private Usuario buscarUsuario(String usuario) {
 		for (Usuario user : usuarios) {
 			if (user.getUsuario().equals(usuario))
 				return user;
 		}
 		return null;
+	}
+
+
+	@Override
+	void agregarFavorito(DTOJuego j){
+	    Juego nuevoFavorito = JuegoMapper.transform(j)
+	    favoritos.add(nuevoFavorito);
+	}
+
+
+	@Override
+	void quitarFavorito(DTOJuego j){
+    	Juego favoritoAQuitar = JuegoMapper.transform(j);
+    	favoritos.delete(favoritoAQuitar);
+	}
+
+
+	@Override
+	Map<Juego> obtenerFavoritos(){
+	    return favoritos;
+	}
+
+
+	@Override
+	Juego getFavorito(String nombre_juego){
+	    return favoritos.get(nombre_juego);
+	}
+
+
+	@Override
+	int contarFavoritos(){
+	    return favoritos.length;
 	}
 }
