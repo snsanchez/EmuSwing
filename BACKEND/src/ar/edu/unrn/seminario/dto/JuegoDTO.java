@@ -80,4 +80,16 @@ public class JuegoDto {
                 ", año=" + año +
                 '}';
     }
-}
+
+    @Override
+        public int hashCode() {
+            return Integer.hashCode(id);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+            JuegoDto juegoDto = (JuegoDto) obj;
+            return id == juegoDto.id;
+        }

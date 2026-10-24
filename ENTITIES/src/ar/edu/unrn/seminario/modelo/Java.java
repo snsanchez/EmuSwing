@@ -85,15 +85,12 @@ public class Juego {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Juego juego = (Juego) o;
-        return id == juego.id;
+    public boolean equals(Juego j) {
+        return this.id == j.getId();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return id;
     }
 }

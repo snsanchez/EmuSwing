@@ -43,7 +43,7 @@ public interface IApi {
 	Juego getFavorito(String nombre_juego);
 
 	int contarFavoritos();
-	
-	
+
+
 
 }
