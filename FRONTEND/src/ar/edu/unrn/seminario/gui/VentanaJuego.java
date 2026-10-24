@@ -35,12 +35,9 @@ public class VentanaJuego extends JFrame {
                 lblAtras.setText(" VOLVER");
                 lblAtras.setForeground(UIHelper.COLOR_TEXTO);
                 lblAtras.setFont(UIHelper.FONT_SECCION);
-            } else {
-                lblAtras.setText("\u25C0 VOLVER");
-                lblAtras.setForeground(UIHelper.COLOR_TEXTO);
-                lblAtras.setFont(UIHelper.FONT_SECCION);
+            } else {	
             }
-        } catch (Exception e) {
+        }catch (Exception e) {
             lblAtras.setText("\u25C0 VOLVER");
             lblAtras.setForeground(UIHelper.COLOR_TEXTO);
             lblAtras.setFont(UIHelper.FONT_SECCION);
