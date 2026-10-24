@@ -2,11 +2,12 @@ package ar.edu.unrn.seminario.gui;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
+import ar.edu.unrn.seminario.helpers.UIHelper;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import ar.edu.unrn.seminario.helpers.UIHelper;
 
 public class VentanaTienda extends JFrame {
     private JPanel contentPane;
@@ -46,13 +47,13 @@ public class VentanaTienda extends JFrame {
 
         JPanel panelNavegacion = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 15));
         panelNavegacion.setBackground(UIHelper.COLOR_FONDO);
-        
+
         String[] menuItems = {"Mi Perfil", "Biblioteca", "Juegos", "Tienda", "Soporte", "Ajustes"};
         for (String texto : menuItems) {
             JLabel lblMenu = new JLabel(texto);
             if(texto.equals("Tienda")) {
                 lblMenu.setForeground(UIHelper.COLOR_TEXTO);
-                lblMenu.setFont(UIHelper.FONT_SECCION); 
+                lblMenu.setFont(UIHelper.FONT_SECCION);
             } else {
                 lblMenu.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
                 lblMenu.setFont(UIHelper.FONT_MENU);
@@ -71,7 +72,7 @@ public class VentanaTienda extends JFrame {
         lblTitulo.setFont(UIHelper.FONT_TITULO);
         lblTitulo.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(UIHelper.COLOR_ACENTO, 2),
-                BorderFactory.createEmptyBorder(10, 30, 10, 30) 
+                BorderFactory.createEmptyBorder(10, 30, 10, 30)
         ));
 
         JPanel panelContenedorTitulo = new JPanel(new GridBagLayout());
@@ -79,17 +80,17 @@ public class VentanaTienda extends JFrame {
         panelContenedorTitulo.add(lblTitulo);
         panelCabecera.add(panelContenedorTitulo, BorderLayout.CENTER);
 
-        JLabel lblPuntos = new JLabel("Mis Puntos: 2.500 \u25CF"); 
+        JLabel lblPuntos = new JLabel("Mis Puntos: 2.500 \u25CF");
         lblPuntos.setForeground(UIHelper.COLOR_ACENTO);
         lblPuntos.setFont(UIHelper.FONT_SECCION);
-        
+
         JPanel panelPuntos = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 15));
         panelPuntos.setBackground(UIHelper.COLOR_FONDO);
         panelPuntos.add(lblPuntos);
         panelCabecera.add(panelPuntos, BorderLayout.EAST);
 
         JLabel contrapeso = new JLabel();
-        contrapeso.setPreferredSize(new Dimension(170, 30)); 
+        contrapeso.setPreferredSize(new Dimension(170, 30));
         panelCabecera.add(contrapeso, BorderLayout.WEST);
 
         panelSuperior.add(panelCabecera, BorderLayout.SOUTH);
@@ -100,42 +101,38 @@ public class VentanaTienda extends JFrame {
         panelContenido.setLayout(new BoxLayout(panelContenido, BoxLayout.Y_AXIS));
         panelContenido.setBackground(UIHelper.COLOR_FONDO);
         panelContenido.setBorder(new EmptyBorder(0, 40, 20, 40));
-
-        // LISTA 1: MARCOS
+        
         List<Articulo> listaMarcos = new ArrayList<>();
-        listaMarcos.add(new Articulo("Marco Dorado", "Marco de avatar", "2.000", "DORADO.png"));
-        listaMarcos.add(new Articulo("Consola CMD", "Marco de avatar", "500", "ConsolaCmd.png"));
-        listaMarcos.add(new Articulo("HUD Doom", "Marco de avatar", "1.500", "Doom.png"));
-        listaMarcos.add(new Articulo("EVD Saver", "Marco de avatar", "500", "EVD.png"));
-        listaMarcos.add(new Articulo("Espada Pixel", "Marco de avatar", "1.000", "Espada.png"));
-        listaMarcos.add(new Articulo("Ventana 95", "Marco de avatar", "500", "Ventana 95.png"));
-        listaMarcos.add(new Articulo("Ventana XP", "Marco de avatar", "1.000", "Ventana XP.png"));
-        listaMarcos.add(new Articulo("MS Paint", "Marco de avatar", "1.500", "MS Paint.png"));
-        listaMarcos.add(new Articulo("TV CRT", "Marco de avatar", "1.000", "TV CRT.png"));
-        
-        panelContenido.add(crearSeccionTienda("MARCOS DE AVATAR", listaMarcos));
-        
-        panelContenido.add(Box.createRigidArea(new Dimension(0, 30))); 
+        listaMarcos.add(new Articulo("Marco Dorado", "Marco de avatar", "2.000", "/img/DORADO.png"));
+        listaMarcos.add(new Articulo("Consola CMD", "Marco de avatar", "500", "/img/ConsolaCmd.png"));
+        listaMarcos.add(new Articulo("HUD Doom", "Marco de avatar", "1.500", "/img/Doom.png"));
+        listaMarcos.add(new Articulo("EVD Saver", "Marco de avatar", "500", "/img/EVD.png"));
+        listaMarcos.add(new Articulo("Espada Pixel", "Marco de avatar", "1.000", "/img/Espada.png"));
+        listaMarcos.add(new Articulo("Ventana 95", "Marco de avatar", "500", "/img/Ventana 95.png"));
+        listaMarcos.add(new Articulo("Ventana XP", "Marco de avatar", "1.000", "/img/Ventana XP.png"));
+        listaMarcos.add(new Articulo("MS Paint", "Marco de avatar", "1.500", "/img/MS Paint.png"));
+        listaMarcos.add(new Articulo("TV CRT", "Marco de avatar", "1.000", "/img/TV CRT.png"));
 
-        // LISTA 2: AVATARES 
+        panelContenido.add(crearSeccionTienda("MARCOS DE AVATAR", listaMarcos));
+        panelContenido.add(Box.createRigidArea(new Dimension(0, 30)));
+
         List<Articulo> listaAvatares = new ArrayList<>();
-        listaAvatares.add(new Articulo("Caballero", "Avatar", "1.000", "AvatarCaballero.png"));
-        listaAvatares.add(new Articulo("Cofre", "Avatar", "500", "AvatarCofre.png"));
-        listaAvatares.add(new Articulo("Cueva", "Avatar", "500", "AvatarCueva.png"));
-        listaAvatares.add(new Articulo("Dragón", "Avatar", "1.500", "AvatarDragon.png"));
-        listaAvatares.add(new Articulo("Fantasma", "Avatar", "1.000", "AvatarFantasma.png"));
-        listaAvatares.add(new Articulo("Futuro", "Avatar", "1.500", "AvatarFuturo.png"));
-        listaAvatares.add(new Articulo("Gameboy", "Avatar", "1.000", "AvatarGameboy.png"));
-        listaAvatares.add(new Articulo("Hacha", "Avatar", "500", "AvatarHacha.png"));
-        listaAvatares.add(new Articulo("Libro", "Avatar", "500", "AvatarLibro.png"));
-        listaAvatares.add(new Articulo("Nave", "Avatar", "1.000", "AvatarNave.png"));
-        listaAvatares.add(new Articulo("Robot", "Avatar", "1.500", "AvatarRobot.png"));
-        listaAvatares.add(new Articulo("Zorro", "Avatar", "1.000", "AvatarZorro.png"));
+        listaAvatares.add(new Articulo("Caballero", "Avatar", "1.000", "/img/AvatarCaballero.png"));
+        listaAvatares.add(new Articulo("Cofre", "Avatar", "500", "/img/AvatarCofre.png"));
+        listaAvatares.add(new Articulo("Cueva", "Avatar", "500", "/img/AvatarCueva.png"));
+        listaAvatares.add(new Articulo("Dragón", "Avatar", "1.500", "/img/AvatarDragon.png"));
+        listaAvatares.add(new Articulo("Fantasma", "Avatar", "1.000", "/img/AvatarFantasma.png"));
+        listaAvatares.add(new Articulo("Futuro", "Avatar", "1.500", "/img/AvatarFuturo.png"));
+        listaAvatares.add(new Articulo("Gameboy", "Avatar", "1.000", "/img/AvatarGameboy.png"));
+        listaAvatares.add(new Articulo("Hacha", "Avatar", "500", "/img/AvatarHacha.png"));
+        listaAvatares.add(new Articulo("Libro", "Avatar", "500", "/img/AvatarLibro.png"));
+        listaAvatares.add(new Articulo("Nave", "Avatar", "1.000", "/img/AvatarNave.png"));
+        listaAvatares.add(new Articulo("Robot", "Avatar", "1.500", "/img/AvatarRobot.png"));
+        listaAvatares.add(new Articulo("Zorro", "Avatar", "1.000", "/img/AvatarZorro.png"));
 
         panelContenido.add(crearSeccionTienda("AVATARES", listaAvatares));
-
         panelContenido.add(Box.createVerticalGlue());
-        
+
         JScrollPane scrollVertical = new JScrollPane(panelContenido);
         scrollVertical.setBorder(null);
         scrollVertical.getViewport().setBackground(UIHelper.COLOR_FONDO);
@@ -148,14 +145,13 @@ public class VentanaTienda extends JFrame {
     private JPanel crearSeccionTienda(String tituloSeccion, List<Articulo> items) {
         JPanel panelSeccion = new JPanel(new BorderLayout(0, 15));
         panelSeccion.setBackground(UIHelper.COLOR_FONDO);
-
         panelSeccion.setPreferredSize(new Dimension(800, 330));
         panelSeccion.setMaximumSize(new Dimension(Integer.MAX_VALUE, 330));
-        panelSeccion.setMinimumSize(new Dimension(400, 330)); 
+        panelSeccion.setMinimumSize(new Dimension(400, 330));
 
         JPanel panelTitulo = new JPanel(new BorderLayout());
         panelTitulo.setBackground(UIHelper.COLOR_FONDO);
-        
+
         JLabel lblTitulo = new JLabel(tituloSeccion);
         lblTitulo.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
         lblTitulo.setFont(UIHelper.FONT_SECCION);
@@ -175,7 +171,7 @@ public class VentanaTienda extends JFrame {
 
         for (Articulo item : items) {
             panelFila.add(crearTarjetaItem(item.getNombre(), item.getTipo(), item.getPrecio(), item.getArchivoImg()));
-            panelFila.add(Box.createRigidArea(new Dimension(20, 0))); 
+            panelFila.add(Box.createRigidArea(new Dimension(20, 0)));
         }
 
         JScrollPane scrollHorizontal = new JScrollPane(panelFila);
@@ -184,7 +180,6 @@ public class VentanaTienda extends JFrame {
         scrollHorizontal.setBorder(null);
         scrollHorizontal.getViewport().setBackground(UIHelper.COLOR_FONDO);
         scrollHorizontal.getHorizontalScrollBar().setUnitIncrement(20);
-        
 
         panelSeccion.add(scrollHorizontal, BorderLayout.CENTER);
         return panelSeccion;
@@ -195,28 +190,30 @@ public class VentanaTienda extends JFrame {
         tarjeta.setBackground(UIHelper.COLOR_CONTENIDO);
         tarjeta.setBorder(BorderFactory.createLineBorder(UIHelper.COLOR_CONTENIDO, 2));
         tarjeta.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
+
         tarjeta.setPreferredSize(new Dimension(170, 240));
         tarjeta.setMaximumSize(new Dimension(170, 240));
         tarjeta.setMinimumSize(new Dimension(170, 240));
-        
+
         JPanel imgPlaceholder = new JPanel(new BorderLayout());
         imgPlaceholder.setBackground(UIHelper.COLOR_FONDO.darker());
-        imgPlaceholder.setPreferredSize(new Dimension(150, 150)); 
-        
+        imgPlaceholder.setPreferredSize(new Dimension(150, 150));
+
         try {
-            java.io.File imgFile = new java.io.File(archivoImg);
-            if (imgFile.exists()) {
-                ImageIcon iconOriginal = new ImageIcon(imgFile.getAbsolutePath());
+            java.net.URL imgUrl = getClass().getResource(archivoImg);
+            if (imgUrl != null) {
+                ImageIcon iconOriginal = new ImageIcon(imgUrl);
                 Image imgEscalada = iconOriginal.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
                 JLabel lblImg = new JLabel(new ImageIcon(imgEscalada));
                 lblImg.setHorizontalAlignment(SwingConstants.CENTER);
                 imgPlaceholder.add(lblImg, BorderLayout.CENTER);
+            } else {
+                System.out.println("No se encontró la imagen en el classpath: " + archivoImg);
             }
         } catch (Exception e) {
-            System.out.println("No se pudo cargar: " + archivoImg);
+            System.out.println("Error crítico al cargar: " + archivoImg);
         }
-        
+
         tarjeta.add(imgPlaceholder, BorderLayout.NORTH);
 
         JPanel infoPanel = new JPanel();
@@ -228,10 +225,10 @@ public class VentanaTienda extends JFrame {
         lblNombre.setForeground(UIHelper.COLOR_TEXTO);
         lblNombre.setFont(new Font(UIHelper.FONT_MENU.getName(), Font.BOLD, 12));
         infoPanel.add(lblNombre);
-        
+
         infoPanel.add(Box.createRigidArea(new Dimension(0, 5)));
 
-        JLabel lblTipo = new JLabel("\u25A4 " + tipo); 
+        JLabel lblTipo = new JLabel("\u25A4 " + tipo);
         lblTipo.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
         lblTipo.setFont(new Font(UIHelper.FONT_MENU.getName(), Font.PLAIN, 11));
         infoPanel.add(lblTipo);
@@ -240,7 +237,7 @@ public class VentanaTienda extends JFrame {
 
         JPanel precioPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
         precioPanel.setBackground(UIHelper.COLOR_CONTENIDO);
-        JLabel lblPrecio = new JLabel("\u2714 " + precio); 
+        JLabel lblPrecio = new JLabel("\u2714 " + precio);
         lblPrecio.setForeground(UIHelper.COLOR_TEXTO);
         lblPrecio.setFont(new Font(UIHelper.FONT_MENU.getName(), Font.BOLD, 12));
         precioPanel.add(lblPrecio);
