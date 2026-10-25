@@ -42,6 +42,7 @@ public class VentanaJuego extends JFrame {
             }
         });
     }
+
     private void construirPanelSuperior() {
         JPanel panelSuperior = new JPanel(new BorderLayout());
         panelSuperior.setBackground(UIHelper.COLOR_FONDO);
@@ -71,7 +72,7 @@ public class VentanaJuego extends JFrame {
         JPanel panelNavegacion = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 15));
         panelNavegacion.setBackground(UIHelper.COLOR_FONDO);
 
-        String[] menuItems = { "Mi Perfil", "Biblioteca", "Juegos", "Tienda", "Soporte", "Ajustes" };
+        String[] menuItems = { "Mi Perfil", "Biblioteca", "Juegos", "Historia", "Controles", "Tienda", "Soporte", "Ajustes" };
 
         for (String texto : menuItems) {
             JLabel lblMenu = new JLabel(texto);
@@ -86,6 +87,21 @@ public class VentanaJuego extends JFrame {
             }
 
             lblMenu.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+            if (texto.equals("Controles")) {
+                lblMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+                    @Override
+                    public void mouseClicked(java.awt.event.MouseEvent e) {
+                        JOptionPane.showMessageDialog(
+                            VentanaJuego.this,
+                            "Controles Básicos:\n\nMovimiento: Flechas\nAcción 1: Z\nAcción 2: X\nStart: Enter",
+                            "Controles del Juego",
+                            JOptionPane.INFORMATION_MESSAGE
+                        );
+                    }
+                });
+            }
+
             panelNavegacion.add(lblMenu);
         }
         panelSuperior.add(panelNavegacion, BorderLayout.CENTER);
