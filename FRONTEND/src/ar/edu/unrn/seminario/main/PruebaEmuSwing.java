@@ -1,5 +1,6 @@
-
+/*
 package ar.edu.unrn.seminario.main;
+import ar.edu.unrn.seminario.gui.EmuladorWeb;
 
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
@@ -8,8 +9,6 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
-
-import ar.edu.unrn.seminario.emulador.EmuladorWeb;
 
 public class PruebaEmuSwing {
 
@@ -48,6 +47,39 @@ public class PruebaEmuSwing {
                 );
 
                 ventana.dispose();
+            }
+        });
+    }
+}
+*/
+
+package ar.edu.unrn.seminario.main;
+
+import javax.swing.SwingUtilities;
+import javax.swing.JOptionPane;
+
+import ar.edu.unrn.seminario.gui.VentanaJuego;
+
+public class PruebaEmuSwing {
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            try {
+                VentanaJuego ventana = new VentanaJuego(
+                    "https://archive.org/embed/Super_Street_Fighter_II_USA.md"
+                );
+
+                ventana.setVisible(true);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+
+                JOptionPane.showMessageDialog(
+                    null,
+                    "Error al iniciar el juego:\n" + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+                );
             }
         });
     }

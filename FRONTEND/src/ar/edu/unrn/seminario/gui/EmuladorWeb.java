@@ -1,5 +1,4 @@
 
-package ar.edu.unrn.seminario.emulador;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -12,6 +11,8 @@ import me.friwi.jcefmaven.CefAppBuilder;
 import org.cef.CefApp;
 import org.cef.CefClient;
 import org.cef.browser.CefBrowser;
+import ar.edu.unrn.seminario.gui.EmuladorWeb;
+
 
 public class EmuladorWeb extends JPanel {
 
