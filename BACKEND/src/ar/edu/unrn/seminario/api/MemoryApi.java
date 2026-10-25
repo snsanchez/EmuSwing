@@ -3,6 +3,7 @@ package ar.edu.unrn.seminario.api;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -20,7 +21,7 @@ public class MemoryApi implements IApi {
 	private ArrayList<Usuario> usuarios = new ArrayList<>();
 
 	private Set<Juego> juegos = new HashSet<>();
-	private Map<Integer, List<String>> juegosLinks = new HashMap<>();
+	private Map<Integer, String> juegosLinks = new HashMap<>();
 
 	public MemoryApi() {
 
@@ -37,13 +38,10 @@ public class MemoryApi implements IApi {
 		this.juegos.add(new Juego(2, "DOOM", "FPS", "id Software", "MS-DOS", 1993));
 		this.juegos.add(new Juego(3, "Castlevania IV USA", "Plataformas", "Konami", "NES", 1993));
 
-		// agrego links a los juegos (se pueden agregar varios links por juego)
-		this.juegosLinks.put(1, new ArrayList<>(List.of(
-				"https://archive.org/embed/Super_Street_Fighter_II_USA.md")));
-		this.juegosLinks.put(2, new ArrayList<>(List.of(
-				"https://archive.org/embed/msdos_DOOM_1993")));
-		this.juegosLinks.put(3, new ArrayList<>(List.of(
-				"https://archive.org/embed/super-castlevania-iv-usa_202301")));
+		// agrego un link a cada juego
+		this.juegosLinks.put(1, "https://archive.org/embed/Super_Street_Fighter_II_USA.md");
+		this.juegosLinks.put(2, "https://archive.org/embed/msdos_DOOM_1993");
+		this.juegosLinks.put(3, "https://archive.org/embed/super-castlevania-iv-usa_202301");
 	}
 
 	private void inicializarUsuarios() {
@@ -76,12 +74,12 @@ public class MemoryApi implements IApi {
 	public UsuarioDTO obtenerUsuario(String username) {
 	    return this.usuarios
 					.stream()
-					.filter(u->u.getNombre().equals(username))
+					.filter(u -> u.getUsuario().equals(username))
 					.map(u->new UsuarioDTO(
 					    u.getUsuario(), u.getContrasena(),
 						u.getNombre(), u.getEmail(),
 						u.getRol().getNombre(),
-						u.isActivo(), u.obtenerEstado())
+						u.isActivo(), u.obtenerEstado()))
 					.findFirst()
 					.orElse(null);
 	}
