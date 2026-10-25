@@ -65,8 +65,8 @@ public class Usuario {
 		return activo;
 	}
 
-	public String obtenerEstado() {
-		return isActivo() ? "ACTIVO" : "INACTIVO";
+	public boolean obtenerEstado() {
+		return isActivo();
 	}
 
 	public void activar() {
