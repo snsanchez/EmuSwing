@@ -1,13 +1,20 @@
+/*
+IMPORTANTE
+- tener configurado java 8 en eclipse. Ver run -> run configurations -> JREs
 
+Agrego
+- builder.addJcefArgs("--disable-gpu");
+- browser = client.createBrowser(urlJuego, true, false);
+- builder.getCefSettings().windowless_rendering_enabled = true;
 
+porque sino la pantalla se queda en negro
+*/
+package ar.edu.unrn.seminario.gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.io.File;
-
 import javax.swing.JPanel;
-
 import me.friwi.jcefmaven.CefAppBuilder;
-
 import org.cef.CefApp;
 import org.cef.CefClient;
 import org.cef.browser.CefBrowser;
@@ -38,6 +45,8 @@ public class EmuladorWeb extends JPanel {
     private void inicializarNavegador(String urlJuego) throws Exception {
         CefAppBuilder builder = new CefAppBuilder();
 
+        builder.addJcefArgs("--disable-gpu");
+
         File cacheDir = new File(
             System.getProperty("user.home"),
             ".emuswing/cef-cache"
@@ -52,12 +61,13 @@ public class EmuladorWeb extends JPanel {
         builder.getCefSettings().root_cache_path =
             cacheDir.getAbsolutePath();
 
-        builder.getCefSettings().windowless_rendering_enabled = false;
+        builder.getCefSettings().windowless_rendering_enabled = true;
 
         cefApp = builder.build();
         client = cefApp.createClient();
 
-        browser = client.createBrowser(urlJuego, false, false);
+        browser = client.createBrowser(urlJuego, true, false);
+        // El primer true solicita renderizado sin ventana nativa para ese navegador; el segundo false mantiene desactivada la transparencia
 
         add(browser.getUIComponent(), BorderLayout.CENTER);
     }
