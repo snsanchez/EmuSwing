@@ -14,8 +14,5 @@ tmp/**/*
 *.iml
 .idea/
 .zed/
-<<<<<<< HEAD
 # binarios de la lib externa JCEF
-=======
->>>>>>> origin/testing
 jcef-bundle/
