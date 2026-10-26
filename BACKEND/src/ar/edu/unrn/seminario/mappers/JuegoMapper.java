@@ -1,11 +1,11 @@
 public class JuegoMapper {
 
     // Transforma una Entidad de Dominio a un DTO (para enviar hacia la interfaz/vista)
-    public static JuegoDto transform(Juego juego) {
+    public static JuegoDto transform(RegistroJuego juego) {
         if (juego == null) {
             return null;
         }
-        return new JuegoDto(
+        return new RegistroJuegoDTO(
                     juego.getId(),
                     juego.getTitulo(),
                     juego.getGenero(),
@@ -16,11 +16,11 @@ public class JuegoMapper {
     }
 
     // Transforma un DTO a una Entidad de Dominio (cuando ingresan datos nuevos)
-    public static Juego transform(JuegoDto juegoDto) {
+    public static Juego transform(RegistroJuegoDTO juegoDto) {
         if (juegoDto == null) {
             return null;
         }
-        return new Juego(
+        return new RegistroJuego(
                     dto.getId(),
                     dto.getTitulo(),
                     dto.getGenero(),

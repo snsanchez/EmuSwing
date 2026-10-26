@@ -34,15 +34,17 @@ public interface IApi {
 
 // para la gestion de la biblioteca falta una instancia de juego o otra forma de manejar los favoritos
 
-	void agregarFavorito(DTOJuego j);
+	void agregarFavorito(RegistrarJuegoDTO j);
 
-	void quitarFavorito(DTOJuego j);
+	void quitarFavorito(RegistrarJuegoDTO j);
 
-	List<Juego> obtenerFavoritos();
+	List<RegistrarJuegoDTO> obtenerFavoritos();
 
-	Juego getFavorito(String nombre_juego);
+	RegistrarJuegoDTO getFavorito(String nombre_juego);
 
 	int contarFavoritos();
+
+	RegistrarJuegoDTO verInfoJuego(JuegoDTO j);
 
 
 
