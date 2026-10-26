@@ -186,7 +186,7 @@ public class MemoryApi implements IApi {
 	@Override
 	public List<JuegoDTO> obtenerJuegos() throws CatalogoVacioException {
 		if (this.juegos.isEmpty()){
-			throw new CatalogException("No hay juegos registrados en el catálogo en este momento.");
+			throw new CatalogoVacioException("No hay juegos registrados en el catálogo en este momento.");
 			
 		}
 		
