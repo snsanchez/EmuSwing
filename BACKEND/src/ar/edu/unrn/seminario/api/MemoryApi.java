@@ -13,7 +13,7 @@ public class MemoryApi implements IApi {
 	private ArrayList<Rol> roles = new ArrayList();
 	private ArrayList<Usuario> usuarios = new ArrayList<>();
 
-	private static Map<Juego> favoritos = new Map<>();
+	private static Set<DTOJuego> favoritos = new HashSeet<>();
 
 	public MemoryApi() {
 
@@ -153,13 +153,13 @@ public class MemoryApi implements IApi {
 
 
 	@Override
-	Map<Juego> obtenerFavoritos(){
+	Map<DTOJuego> obtenerFavoritos(){
 	    return favoritos;
 	}
 
 
 	@Override
-	Juego getFavorito(String nombre_juego){
+	DTOJuego getFavorito(String nombre_juego){
 	    return favoritos.get(nombre_juego);
 	}
 
