@@ -102,6 +102,20 @@ public class VentanaJuego extends JFrame {
                 });
             }
 
+            if (texto.equals("Historia")) {
+                lblMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+                    @Override
+                    public void mouseClicked(java.awt.event.MouseEvent e) {
+                        JOptionPane.showMessageDialog(
+                            VentanaJuego.this,
+                            "En el año 2145, fuiste enviado a una instalación en Marte...\nTu misión: sobrevivir a la invasión y encontrar la salida.",
+                            "Historia del Juego",
+                            JOptionPane.INFORMATION_MESSAGE
+                        );
+                    }
+                });
+            }
+
             panelNavegacion.add(lblMenu);
         }
         panelSuperior.add(panelNavegacion, BorderLayout.CENTER);
