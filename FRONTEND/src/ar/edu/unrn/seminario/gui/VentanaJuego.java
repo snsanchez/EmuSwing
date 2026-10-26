@@ -94,7 +94,7 @@ public class VentanaJuego extends JFrame {
                     public void mouseClicked(java.awt.event.MouseEvent e) {
                         JOptionPane.showMessageDialog(
                             VentanaJuego.this,
-                            "Controles Básicos:\n\nMovimiento: Flechas\nAcción 1: Z\nAcción 2: X\nStart: Enter",
+                            "Controles Básicos:\nPresiona el 1 para empezar.\n Usa las flechas para moverte.\n Hay 3 botones: A, B y C, los cuales son CONTROL, ALT/OPTION y ESPACIO.",
                             "Controles del Juego",
                             JOptionPane.INFORMATION_MESSAGE
                         );
@@ -108,7 +108,7 @@ public class VentanaJuego extends JFrame {
                     public void mouseClicked(java.awt.event.MouseEvent e) {
                         JOptionPane.showMessageDialog(
                             VentanaJuego.this,
-                            "En el año 2145, fuiste enviado a una instalación en Marte...\nTu misión: sobrevivir a la invasión y encontrar la salida.",
+                            "El World Warrior Tournament sigue en pie, pero la paz es frágil:\n cuatro jefes malignos aún controlan el submundo del combate.\n Nuevos retadores llegan para desafiar al orden, y tú eres uno de ellos.\n Tu misión: derrotar a Balrog, Vega, Sagat y M. Bison, y reclamar el trono.",
                             "Historia del Juego",
                             JOptionPane.INFORMATION_MESSAGE
                         );
