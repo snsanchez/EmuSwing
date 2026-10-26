@@ -43,7 +43,11 @@ public class EmuladorWeb extends JPanel {
     }
 
     private void inicializarNavegador(String urlJuego) throws Exception {
+        String sistema = System.getProperty("os.name").toLowerCase();
+        boolean usarOSR = !sistema.contains("win");
+
         CefAppBuilder builder = new CefAppBuilder();
+        builder.getCefSettings().windowless_rendering_enabled = usarOSR;
 
         builder.addJcefArgs("--disable-gpu");
 
@@ -61,14 +65,12 @@ public class EmuladorWeb extends JPanel {
         builder.getCefSettings().root_cache_path =
             cacheDir.getAbsolutePath();
 
-        builder.getCefSettings().windowless_rendering_enabled = true;
 
         cefApp = builder.build();
         client = cefApp.createClient();
 
-        browser = client.createBrowser(urlJuego, true, false);
+        browser = client.createBrowser(urlJuego, usarOSR, false);
         // El primer true solicita renderizado sin ventana nativa para ese navegador; el segundo false mantiene desactivada la transparencia
-
         add(browser.getUIComponent(), BorderLayout.CENTER);
     }
 
