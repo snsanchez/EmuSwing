@@ -8,11 +8,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.catalog.CatalogException;
+
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.modelo.Juego;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
+import ar.edu.unrn.seminario.dto.JuegoDTO;
+import ar.edu.unrn.seminario.exception.CatalogoVacioException;
 
 public class MemoryApi implements IApi {
 
@@ -177,6 +181,27 @@ public class MemoryApi implements IApi {
 				.findFirst()
 				.map(Juego::getId)
 				.orElse(null);
+	}
+	
+	@Override
+	public List<JuegoDTO> obtenerJuegos() throws CatalogoVacioException {
+		if (this.juegos.isEmpty()){
+			throw new CatalogException("No hay juegos registrados en el catálogo en este momento.");
+			
+		}
+		
+		List<JuegoDTO> dtos = new ArrayList<>();
+		for (Juego j : this.juegos) {
+			dtos.add(new JuegoDTO(
+				j.getId(),
+				j.getTitulo(), 
+				j.getGenero(), 
+				j.getDesarrollador(), 
+				j.getConsola(), 
+				j.getAño()
+			));
+		}
+		return dtos;
 	}
 
 }
