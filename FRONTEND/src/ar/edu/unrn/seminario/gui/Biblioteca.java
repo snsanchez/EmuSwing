@@ -5,7 +5,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import javax.swing.JTextField;   // Clase del campo de texto
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -25,7 +25,7 @@ public class Biblioteca {
 
 	private JFrame frame;
 	private JTable table;
-
+	private JTextField txtBuscar;
 	// Paleta de colores EmuSwing
 
 
@@ -148,13 +148,19 @@ public class Biblioteca {
 		table.getTableHeader().setForeground(UIHelper.COLOR_TEXTO);
 		table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 14));
 
+
+
+
+
+
+
 		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
 		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
 		table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
 		table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
 
 		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setBounds(80, 105, 740, 350);
+		scrollPane.setBounds(80, 135, 740, 320);
 		scrollPane.setBorder(new LineBorder(UIHelper.COLOR_BORDE, 1));
 		scrollPane.getViewport().setBackground(new Color(25, 12, 35));
 		panel.add(scrollPane);
@@ -181,6 +187,14 @@ public class Biblioteca {
 		btnPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
+		txtBuscar = new JTextField();                                          // Crea el campo de texto vacío (sin "JTextField" adelante porque ya lo declaramos arriba)
+		txtBuscar.setBounds(80, 95, 740, 30);                                  // Posición (x, y) y tamaño (ancho, alto) dentro del panel
+		txtBuscar.setFont(new Font("SansSerif", Font.PLAIN, 14));              // Misma tipografía que la tabla
+		txtBuscar.setBackground(new Color(25, 12, 35));                        // Mismo fondo oscuro que la tabla
+		txtBuscar.setForeground(UIHelper.COLOR_TEXTO);                         // Color del texto que escribe el usuario
+		txtBuscar.setCaretColor(UIHelper.COLOR_TEXTO);                         // Color del cursor parpadeante (sobre fondo oscuro no se vería)
+		txtBuscar.setBorder(new LineBorder(UIHelper.COLOR_BORDE, 1, true));    // Borde redondeado igual al de los botones
+		panel.add(txtBuscar);
 		});
 	}
 }
