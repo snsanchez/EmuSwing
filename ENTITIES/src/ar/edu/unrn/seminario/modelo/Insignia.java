@@ -3,19 +3,25 @@ package ar.edu.unrn.seminario.modelo;
 import java.util.Objects;
 
 public class Insignia {
-	private String nombre;
-	private Integer cantLogrosReq;
+	//nombre de la insignia
+	private String nombre;  
 	
-	public Insignia(String nombre, Integer cantLogrosReq) {
-		this.nombre = nombre;
+	//Cantidad de logros requeridos para la insignia. 
+	private Integer cantLogrosReq; 
+	
+	//Constructor
+	public Insignia(String nombre, Integer cantLogrosReq) { 
+		this.nombre = nombre; 
 		this.cantLogrosReq = cantLogrosReq;
 	}
 	
+	//toString
 	@Override
 	public String toString() {
 		return "Insignia: " + nombre + " -Logros requeridos: " + cantLogrosReq;
 	}
 
+	//hashCode and equals
 	@Override
 	public int hashCode() {
 		return Objects.hash(cantLogrosReq, nombre);
@@ -33,6 +39,7 @@ public class Insignia {
 		return Objects.equals(cantLogrosReq, other.cantLogrosReq) && Objects.equals(nombre, other.nombre);
 	}
 
+	//getters and setters
 	public String getNombre() {
 		return nombre;
 	}
@@ -48,8 +55,6 @@ public class Insignia {
 	public void setCantLogrosReq(Integer cantLogrosReq) {
 		this.cantLogrosReq = cantLogrosReq;
 	}
-	
-	
 }
 
 
