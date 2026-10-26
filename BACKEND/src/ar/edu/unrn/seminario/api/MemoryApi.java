@@ -13,7 +13,7 @@ public class MemoryApi implements IApi {
 	private ArrayList<Rol> roles = new ArrayList();
 	private ArrayList<Usuario> usuarios = new ArrayList<>();
 
-	private static Set<DTOJuego> favoritos = new HashSeet<>();
+	private static Set<RegistroJuegoDTO> favoritos = new HashSeet<RegistroJuegoDTO>();
 
 	public MemoryApi() {
 
@@ -139,27 +139,25 @@ public class MemoryApi implements IApi {
 
 
 	@Override
-	void agregarFavorito(DTOJuego j){
-	    Juego nuevoFavorito = JuegoMapper.transform(j)
-	    favoritos.add(nuevoFavorito);
+	void agregarFavorito(RegistroJuegoDTO j){
+	    favoritos.add(j);
 	}
 
 
 	@Override
-	void quitarFavorito(DTOJuego j){
-    	Juego favoritoAQuitar = JuegoMapper.transform(j);
-    	favoritos.delete(favoritoAQuitar);
+	void quitarFavorito(RegistroJuegoDTO j){
+	    favoritos.remove(j);
 	}
 
 
 	@Override
-	Map<DTOJuego> obtenerFavoritos(){
+	Map<RegistroJuegoDTO> obtenerFavoritos(){
 	    return favoritos;
 	}
 
 
 	@Override
-	DTOJuego getFavorito(String nombre_juego){
+	RegistroJuegoDTO getFavorito(String nombre_juego){
 	    return favoritos.get(nombre_juego);
 	}
 

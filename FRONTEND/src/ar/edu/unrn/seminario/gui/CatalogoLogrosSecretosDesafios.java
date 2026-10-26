@@ -17,16 +17,11 @@ import javax.swing.JScrollPane;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
+import ar.edu.unrn.seminario.helpers.UIHelper;
+
 public class CatalogoLogrosSecretosDesafios extends JFrame {
 
 	private JPanel contentPane;
-
-	// Colores definidos EmuSwing
-	 private final Color COLOR_FONDO_MAIN = new Color(24, 10, 32);   
-	 private final Color COLOR_PANEL_BOX  = new Color(50, 22, 66);   
-	 private final Color COLOR_BORDE_NEON = new Color(169, 65, 196);   
-	 private final Color COLOR_LETRAS = new Color(245, 240, 247);     
-	 private final Color COLOR_PUNTOS = new Color(255, 255, 0); 
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -48,7 +43,7 @@ public class CatalogoLogrosSecretosDesafios extends JFrame {
 		setLocationRelativeTo(null);
 
 		contentPane = new JPanel();
-		contentPane.setBackground(COLOR_FONDO_MAIN);
+		contentPane.setBackground(UIHelper.COLOR_FONDO);
 		contentPane.setBorder(new EmptyBorder(20, 20, 20, 20));
 		contentPane.setLayout(new BorderLayout(0, 15));
 		setContentPane(contentPane);
@@ -59,13 +54,13 @@ public class CatalogoLogrosSecretosDesafios extends JFrame {
 		panelHeader.setLayout(new BoxLayout(panelHeader, BoxLayout.Y_AXIS));
 
 		JLabel lblTitulo = new JLabel("CATÁLOGO DE LOGROS");
-		lblTitulo.setFont(new Font("Public Pixel", Font.PLAIN, 40)); 
-		lblTitulo.setForeground(COLOR_LETRAS);
+		lblTitulo.setFont(UIHelper.FONT_TITULO.deriveFont(40f)); 
+		lblTitulo.setForeground(UIHelper.COLOR_TEXTO);
 		lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		JLabel lblSubtitulo = new JLabel("Secretos y Desafíos");
-		lblSubtitulo.setFont(new Font("Public Pixel", Font.PLAIN, 20)); 
-		lblSubtitulo.setForeground(COLOR_BORDE_NEON);
+		lblSubtitulo.setFont(UIHelper.FONT_TITULO);
+		lblSubtitulo.setForeground(UIHelper.COLOR_BORDE);
 		lblSubtitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		panelHeader.add(lblTitulo);
@@ -75,7 +70,7 @@ public class CatalogoLogrosSecretosDesafios extends JFrame {
 
 		// 2. CONTENEDOR PRINCIPAL CON SCROLL
 		JPanel panelListaLogros = new JPanel();
-		panelListaLogros.setBackground(COLOR_FONDO_MAIN);
+		panelListaLogros.setBackground(UIHelper.COLOR_FONDO);
 		panelListaLogros.setLayout(new BoxLayout(panelListaLogros, BoxLayout.Y_AXIS));
 		
 		// Corre los logros 100 pixeles hacia abajo (queda mejor visualmente)
@@ -86,9 +81,9 @@ public class CatalogoLogrosSecretosDesafios extends JFrame {
 		// ==========================================
 		
 		JLabel lblTituloDesafios = new JLabel("DESAFIOS DE PROGRESO");
-		lblTituloDesafios.setFont(new Font("Public Pixel", Font.PLAIN, 20));
-		lblTituloDesafios.setForeground(COLOR_BORDE_NEON);
-		lblTituloDesafios.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, COLOR_BORDE_NEON));
+		lblTituloDesafios.setFont(UIHelper.FONT_TITULO);
+		lblTituloDesafios.setForeground(UIHelper.COLOR_BORDE);
+		lblTituloDesafios.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, UIHelper.COLOR_BORDE));
 		lblTituloDesafios.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblTituloDesafios.setMaximumSize(new Dimension(800, 30));
 		panelListaLogros.add(lblTituloDesafios);
@@ -97,24 +92,24 @@ public class CatalogoLogrosSecretosDesafios extends JFrame {
 
 		// --- TARJETA: TOMANDO RITMO ---
 		JPanel panelLogroRitmo = new JPanel(new BorderLayout(5, 5));
-		panelLogroRitmo.setBackground(COLOR_PANEL_BOX);
-		panelLogroRitmo.setBorder(new CompoundBorder(BorderFactory.createLineBorder(COLOR_BORDE_NEON, 1), new EmptyBorder(10, 15, 10, 15)));
+		panelLogroRitmo.setBackground(UIHelper.COLOR_CONTENIDO);
+		panelLogroRitmo.setBorder(new CompoundBorder(BorderFactory.createLineBorder(UIHelper.COLOR_BORDE, 1), new EmptyBorder(10, 15, 10, 15)));
 		panelLogroRitmo.setMaximumSize(new Dimension(800, 70));
 		panelLogroRitmo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		JPanel panelSupRitmo = new JPanel(new BorderLayout());
 		panelSupRitmo.setOpaque(false);
 		JLabel lblTitRitmo = new JLabel("Tomando Ritmo");
-		lblTitRitmo.setFont(new Font("Public Pixel", Font.PLAIN, 18));
-		lblTitRitmo.setForeground(COLOR_LETRAS);
+		lblTitRitmo.setFont(UIHelper.FONT_MENU.deriveFont(18f)); 
+		lblTitRitmo.setForeground(UIHelper.COLOR_TEXTO);
 		panelSupRitmo.add(lblTitRitmo, BorderLayout.WEST);
 		JLabel lblPtsRitmo = new JLabel("25 PTS");
-		lblPtsRitmo.setFont(new Font("Public Pixel", Font.PLAIN, 12));
-		lblPtsRitmo.setForeground(COLOR_PUNTOS);
+		lblPtsRitmo.setFont(UIHelper.FONT_TEXTFIELDS);
+		lblPtsRitmo.setForeground(UIHelper.COLOR_PUNTOS);
 		panelSupRitmo.add(lblPtsRitmo, BorderLayout.EAST);
 		JLabel lblDescRitmo = new JLabel("Ingresar 3 días seguidos al emulador.");
-		lblDescRitmo.setFont(new Font("Public Pixel", Font.PLAIN, 12));
-		lblDescRitmo.setForeground(new Color(200, 190, 210));
+		lblDescRitmo.setFont(UIHelper.FONT_TEXTFIELDS);
+		lblDescRitmo.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
 		
 		panelLogroRitmo.add(panelSupRitmo, BorderLayout.NORTH);
 		panelLogroRitmo.add(lblDescRitmo, BorderLayout.CENTER);
@@ -123,24 +118,24 @@ public class CatalogoLogrosSecretosDesafios extends JFrame {
 
 		// --- TARJETA: SEMANA PERFECTA ---
 		JPanel panelLogroSemana = new JPanel(new BorderLayout(5, 5));
-		panelLogroSemana.setBackground(COLOR_PANEL_BOX);
-		panelLogroSemana.setBorder(new CompoundBorder(BorderFactory.createLineBorder(COLOR_BORDE_NEON, 1), new EmptyBorder(10, 15, 10, 15)));
+		panelLogroSemana.setBackground(UIHelper.COLOR_CONTENIDO);
+		panelLogroSemana.setBorder(new CompoundBorder(BorderFactory.createLineBorder(UIHelper.COLOR_BORDE, 1), new EmptyBorder(10, 15, 10, 15)));
 		panelLogroSemana.setMaximumSize(new Dimension(800, 70));
 		panelLogroSemana.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		JPanel panelSupSemana = new JPanel(new BorderLayout());
 		panelSupSemana.setOpaque(false);
 		JLabel lblTitSemana = new JLabel("Semana Perfecta");
-		lblTitSemana.setFont(new Font("Public Pixel", Font.PLAIN, 18));
-		lblTitSemana.setForeground(COLOR_LETRAS);
+		lblTitSemana.setFont(UIHelper.FONT_MENU.deriveFont(18f)); 
+		lblTitSemana.setForeground(UIHelper.COLOR_TEXTO);
 		panelSupSemana.add(lblTitSemana, BorderLayout.WEST);
 		JLabel lblPtsSemana = new JLabel("50 PTS");
-		lblPtsSemana.setFont(new Font("Public Pixel", Font.PLAIN, 12));
-		lblPtsSemana.setForeground(COLOR_PUNTOS);
+		lblPtsSemana.setFont(UIHelper.FONT_TEXTFIELDS);
+		lblPtsSemana.setForeground(UIHelper.COLOR_PUNTOS);
 		panelSupSemana.add(lblPtsSemana, BorderLayout.EAST);
 		JLabel lblDescSemana = new JLabel("Ingresar 7 días seguidos al emulador.");
-		lblDescSemana.setFont(new Font("Public Pixel", Font.PLAIN, 12));
-		lblDescSemana.setForeground(new Color(200, 190, 210));
+		lblDescSemana.setFont(UIHelper.FONT_TEXTFIELDS);
+		lblDescSemana.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
 		
 		panelLogroSemana.add(panelSupSemana, BorderLayout.NORTH);
 		panelLogroSemana.add(lblDescSemana, BorderLayout.CENTER);
@@ -149,24 +144,24 @@ public class CatalogoLogrosSecretosDesafios extends JFrame {
 
 		// --- TARJETA: LEYENDA LOCAL ---
 		JPanel panelLogroLeyendaLocal = new JPanel(new BorderLayout(5, 5));
-		panelLogroLeyendaLocal.setBackground(COLOR_PANEL_BOX);
-		panelLogroLeyendaLocal.setBorder(new CompoundBorder(BorderFactory.createLineBorder(COLOR_BORDE_NEON, 1), new EmptyBorder(10, 15, 10, 15)));
+		panelLogroLeyendaLocal.setBackground(UIHelper.COLOR_CONTENIDO);
+		panelLogroLeyendaLocal.setBorder(new CompoundBorder(BorderFactory.createLineBorder(UIHelper.COLOR_BORDE, 1), new EmptyBorder(10, 15, 10, 15)));
 		panelLogroLeyendaLocal.setMaximumSize(new Dimension(800, 70));
 		panelLogroLeyendaLocal.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		JPanel panelSupLeyendaLocal = new JPanel(new BorderLayout());
 		panelSupLeyendaLocal.setOpaque(false);
 		JLabel lblTitLeyendaLocal = new JLabel("Leyenda Local");
-		lblTitLeyendaLocal.setFont(new Font("Public Pixel", Font.PLAIN, 18));
-		lblTitLeyendaLocal.setForeground(COLOR_LETRAS);
+		lblTitLeyendaLocal.setFont(UIHelper.FONT_MENU.deriveFont(18f)); 
+		lblTitLeyendaLocal.setForeground(UIHelper.COLOR_TEXTO);
 		panelSupLeyendaLocal.add(lblTitLeyendaLocal, BorderLayout.WEST);
 		JLabel lblPtsLeyendaLocal = new JLabel("100 PTS");
-		lblPtsLeyendaLocal.setFont(new Font("Public Pixel", Font.PLAIN, 12));
-		lblPtsLeyendaLocal.setForeground(COLOR_PUNTOS);
+		lblPtsLeyendaLocal.setFont(UIHelper.FONT_TEXTFIELDS);
+		lblPtsLeyendaLocal.setForeground(UIHelper.COLOR_PUNTOS);
 		panelSupLeyendaLocal.add(lblPtsLeyendaLocal, BorderLayout.EAST);
 		JLabel lblDescLeyendaLocal = new JLabel("Usar el emulador durante 30 días.");
-		lblDescLeyendaLocal.setFont(new Font("Public Pixel", Font.PLAIN, 12));
-		lblDescLeyendaLocal.setForeground(new Color(200, 190, 210));
+		lblDescLeyendaLocal.setFont(UIHelper.FONT_TEXTFIELDS);
+		lblDescLeyendaLocal.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
 		
 		panelLogroLeyendaLocal.add(panelSupLeyendaLocal, BorderLayout.NORTH);
 		panelLogroLeyendaLocal.add(lblDescLeyendaLocal, BorderLayout.CENTER);
@@ -178,9 +173,9 @@ public class CatalogoLogrosSecretosDesafios extends JFrame {
 		// ==========================================
 		
 		JLabel lblTituloSecretos = new JLabel("EASTER EGGS");
-		lblTituloSecretos.setFont(new Font("Public Pixel", Font.PLAIN, 20));
-		lblTituloSecretos.setForeground(COLOR_BORDE_NEON);
-		lblTituloSecretos.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, COLOR_BORDE_NEON));
+		lblTituloSecretos.setFont(UIHelper.FONT_TITULO);
+		lblTituloSecretos.setForeground(UIHelper.COLOR_BORDE);
+		lblTituloSecretos.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, UIHelper.COLOR_BORDE));
 		lblTituloSecretos.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblTituloSecretos.setMaximumSize(new Dimension(800, 30));
 		panelListaLogros.add(lblTituloSecretos);
@@ -189,24 +184,24 @@ public class CatalogoLogrosSecretosDesafios extends JFrame {
 
 		// --- TARJETA: EL GALLO EMULADOR ---
 		JPanel panelLogroGallo = new JPanel(new BorderLayout(5, 5));
-		panelLogroGallo.setBackground(COLOR_PANEL_BOX);
-		panelLogroGallo.setBorder(new CompoundBorder(BorderFactory.createLineBorder(COLOR_BORDE_NEON, 1), new EmptyBorder(10, 15, 10, 15)));
+		panelLogroGallo.setBackground(UIHelper.COLOR_CONTENIDO);
+		panelLogroGallo.setBorder(new CompoundBorder(BorderFactory.createLineBorder(UIHelper.COLOR_BORDE, 1), new EmptyBorder(10, 15, 10, 15)));
 		panelLogroGallo.setMaximumSize(new Dimension(800, 70));
 		panelLogroGallo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		JPanel panelSupGallo = new JPanel(new BorderLayout());
 		panelSupGallo.setOpaque(false);
 		JLabel lblTitGallo = new JLabel("El Gallo Emulador");
-		lblTitGallo.setFont(new Font("Public Pixel", Font.PLAIN, 18));
-		lblTitGallo.setForeground(COLOR_LETRAS);
+		lblTitGallo.setFont(UIHelper.FONT_MENU.deriveFont(18f)); 
+		lblTitGallo.setForeground(UIHelper.COLOR_TEXTO);
 		panelSupGallo.add(lblTitGallo, BorderLayout.WEST);
 		JLabel lblPtsGallo = new JLabel("20 PTS");
-		lblPtsGallo.setFont(new Font("Public Pixel", Font.PLAIN, 12));
-		lblPtsGallo.setForeground(COLOR_PUNTOS);
+		lblPtsGallo.setFont(UIHelper.FONT_TEXTFIELDS);
+		lblPtsGallo.setForeground(UIHelper.COLOR_PUNTOS);
 		panelSupGallo.add(lblPtsGallo, BorderLayout.EAST);
 		JLabel lblDescGallo = new JLabel("???");
-		lblDescGallo.setFont(new Font("Public Pixel", Font.PLAIN, 12));
-		lblDescGallo.setForeground(new Color(150, 150, 150));
+		lblDescGallo.setFont(UIHelper.FONT_TEXTFIELDS);
+		lblDescGallo.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
 		
 		panelLogroGallo.add(panelSupGallo, BorderLayout.NORTH);
 		panelLogroGallo.add(lblDescGallo, BorderLayout.CENTER);
@@ -215,24 +210,24 @@ public class CatalogoLogrosSecretosDesafios extends JFrame {
 
 		// --- TARJETA: TURNO NOCTURNO ---
 		JPanel panelLogroNocturno = new JPanel(new BorderLayout(5, 5));
-		panelLogroNocturno.setBackground(COLOR_PANEL_BOX);
-		panelLogroNocturno.setBorder(new CompoundBorder(BorderFactory.createLineBorder(COLOR_BORDE_NEON, 1), new EmptyBorder(10, 15, 10, 15)));
+		panelLogroNocturno.setBackground(UIHelper.COLOR_CONTENIDO);
+		panelLogroNocturno.setBorder(new CompoundBorder(BorderFactory.createLineBorder(UIHelper.COLOR_BORDE, 1), new EmptyBorder(10, 15, 10, 15)));
 		panelLogroNocturno.setMaximumSize(new Dimension(800, 70));
 		panelLogroNocturno.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		JPanel panelSupNocturno = new JPanel(new BorderLayout());
 		panelSupNocturno.setOpaque(false);
 		JLabel lblTitNocturno = new JLabel("Turno Nocturno");
-		lblTitNocturno.setFont(new Font("Public Pixel", Font.PLAIN, 18));
-		lblTitNocturno.setForeground(COLOR_LETRAS);
+		lblTitNocturno.setFont(UIHelper.FONT_MENU.deriveFont(18f)); 
+		lblTitNocturno.setForeground(UIHelper.COLOR_TEXTO);
 		panelSupNocturno.add(lblTitNocturno, BorderLayout.WEST);
 		JLabel lblPtsNocturno = new JLabel("20 PTS");
-		lblPtsNocturno.setFont(new Font("Public Pixel", Font.PLAIN, 12));
-		lblPtsNocturno.setForeground(COLOR_PUNTOS);
+		lblPtsNocturno.setFont(UIHelper.FONT_TEXTFIELDS);
+		lblPtsNocturno.setForeground(UIHelper.COLOR_PUNTOS);
 		panelSupNocturno.add(lblPtsNocturno, BorderLayout.EAST);
 		JLabel lblDescNocturno = new JLabel("???");
-		lblDescNocturno.setFont(new Font("Public Pixel", Font.PLAIN, 12));
-		lblDescNocturno.setForeground(new Color(150, 150, 150));
+		lblDescNocturno.setFont(UIHelper.FONT_TEXTFIELDS);
+		lblDescNocturno.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
 		
 		panelLogroNocturno.add(panelSupNocturno, BorderLayout.NORTH);
 		panelLogroNocturno.add(lblDescNocturno, BorderLayout.CENTER);
@@ -241,24 +236,24 @@ public class CatalogoLogrosSecretosDesafios extends JFrame {
 
 		// --- TARJETA: TIEMPO BIEN INVERTIDO ---
 		JPanel panelLogroTiempo = new JPanel(new BorderLayout(5, 5));
-		panelLogroTiempo.setBackground(COLOR_PANEL_BOX);
-		panelLogroTiempo.setBorder(new CompoundBorder(BorderFactory.createLineBorder(COLOR_BORDE_NEON, 1), new EmptyBorder(10, 15, 10, 15)));
+		panelLogroTiempo.setBackground(UIHelper.COLOR_CONTENIDO);
+		panelLogroTiempo.setBorder(new CompoundBorder(BorderFactory.createLineBorder(UIHelper.COLOR_BORDE, 1), new EmptyBorder(10, 15, 10, 15)));
 		panelLogroTiempo.setMaximumSize(new Dimension(800, 70));
 		panelLogroTiempo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		JPanel panelSupTiempo = new JPanel(new BorderLayout());
 		panelSupTiempo.setOpaque(false);
 		JLabel lblTitTiempo = new JLabel("Tiempo Bien Invertido");
-		lblTitTiempo.setFont(new Font("Public Pixel", Font.PLAIN, 12));
-		lblTitTiempo.setForeground(COLOR_LETRAS);
+		lblTitTiempo.setFont(UIHelper.FONT_MENU.deriveFont(18f)); 
+		lblTitTiempo.setForeground(UIHelper.COLOR_TEXTO);
 		panelSupTiempo.add(lblTitTiempo, BorderLayout.WEST);
 		JLabel lblPtsTiempo = new JLabel("30 PTS");
-		lblPtsTiempo.setFont(new Font("Public Pixel", Font.PLAIN, 12));
-		lblPtsTiempo.setForeground(COLOR_PUNTOS);
+		lblPtsTiempo.setFont(UIHelper.FONT_TEXTFIELDS);
+		lblPtsTiempo.setForeground(UIHelper.COLOR_PUNTOS);
 		panelSupTiempo.add(lblPtsTiempo, BorderLayout.EAST);
 		JLabel lblDescTiempo = new JLabel("???");
-		lblDescTiempo.setFont(new Font("Public Pixel", Font.PLAIN, 12));
-		lblDescTiempo.setForeground(new Color(150, 150, 150));
+		lblDescTiempo.setFont(UIHelper.FONT_TEXTFIELDS);
+		lblDescTiempo.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
 		
 		panelLogroTiempo.add(panelSupTiempo, BorderLayout.NORTH);
 		panelLogroTiempo.add(lblDescTiempo, BorderLayout.CENTER);
