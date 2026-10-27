@@ -107,8 +107,7 @@ public class ListadoJuegos extends JFrame {
 		} else if (juego.getId() == 2) {
 			nombreArchivo = "doom_1993_cover_720x1080.jpg"; 
 		} else if (juego.getId() == 3) {
-			// cargar la imagen de "Castlevania IV USA", "Plataformas", "Konami", "NES", 1993, en img.
-			nombreArchivo = "Super-Mario-Word_1990_cover_474x332.jpg"; 
+			nombreArchivo = "Wolfenstein 3D (PC Version).jpg"; 
 		}
 
 		String ruta = "/img/" + nombreArchivo;
