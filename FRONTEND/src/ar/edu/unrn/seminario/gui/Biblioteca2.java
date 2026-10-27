@@ -46,13 +46,13 @@ public class Biblioteca2 {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.getContentPane().setLayout(null);
-		frame.getContentPane().setBackground(UIHelper.COLOR_FONDO_PRINCIPAL);
+		//frame.getContentPane().setBackground(UIHelper.COLOR_FONDO_PRINCIPAL);
 
 		// Barra de Menú
 		// JMenuBar centrado estilo Home
 				JMenuBar menuBar = new JMenuBar();
-				menuBar.setBackground(UIHelper.COLOR_FONDO_PRINCIPAL);
-				menuBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, UIHelper.COLOR_PANEL));
+				//menuBar.setBackground(UIHelper.COLOR_FONDO_PRINCIPAL);
+				//menuBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, UIHelper.COLOR_PANEL));
 
 				// Espaciador para centrar las opciones
 				menuBar.add(javax.swing.Box.createHorizontalGlue());
@@ -93,7 +93,7 @@ public class Biblioteca2 {
 				frame.setJMenuBar(menuBar);			// Panel Principal
 		JPanel panelPrincipal = new JPanel();
 		panelPrincipal.setBounds(190, 40, 900, 580);
-		panelPrincipal.setBackground(UIHelper.COLOR_PANEL);
+		//panelPrincipal.setBackground(UIHelper.COLOR_PANEL);
 		panelPrincipal.setBorder(new LineBorder(UIHelper.COLOR_BORDE, 1, true));
 		panelPrincipal.setLayout(null);
 		frame.getContentPane().add(panelPrincipal);
@@ -133,10 +133,10 @@ public class Biblioteca2 {
 
 		JLabel lblVistaPrevia = new JLabel("[ Imagen / Carátula ]");
 		lblVistaPrevia.setFont(new Font("SansSerif", Font.ITALIC, 14));
-		lblVistaPrevia.setForeground(UIHelper.COLOR_TEXTO_MUTED);
+		//lblVistaPrevia.setForeground(UIHelper.COLOR_TEXTO_MUTED);
 		lblVistaPrevia.setHorizontalAlignment(SwingConstants.CENTER);
 		lblVistaPrevia.setBounds(20, 20, 400, 280);
-		lblVistaPrevia.setBorder(new LineBorder(UIHelper.COLOR_PANEL, 1));
+		//lblVistaPrevia.setBorder(new LineBorder(UIHelper.COLOR_PANEL, 1));
 		panelCard.add(lblVistaPrevia);
 
 		// Botón Siguiente (->)
@@ -153,7 +153,7 @@ public class Biblioteca2 {
 		JButton btnPlay = new JButton("► Jugar");
 		btnPlay.setFont(new Font("SansSerif", Font.BOLD, 14));
 		btnPlay.setBounds(280, 500, 160, 42);
-		btnPlay.setBackground(UIHelper.COLOR_ACCENTO);
+		//btnPlay.setBackground(UIHelper.COLOR_ACCENTO);
 		btnPlay.setForeground(UIHelper.COLOR_TEXTO);
 		btnPlay.setFocusPainted(false);
 		btnPlay.setBorder(BorderFactory.createEmptyBorder());

@@ -58,13 +58,13 @@ public class RegistrarUsuario {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.getContentPane().setLayout(null);
-		frame.getContentPane().setBackground(UIHelper.COLOR_FONDO_PRINCIPAL);
+		//frame.getContentPane().setBackground(UIHelper.COLOR_FONDO_PRINCIPAL);
 
 
 		// JMenuBar centrado estilo Home
 				JMenuBar menuBar = new JMenuBar();
-				menuBar.setBackground(UIHelper.COLOR_FONDO_PRINCIPAL);
-				menuBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, UIHelper.COLOR_PANEL));
+				//menuBar.setBackground(UIHelper.COLOR_FONDO_PRINCIPAL);
+				//menuBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, UIHelper.COLOR_PANEL));
 				menuBar.add(javax.swing.Box.createHorizontalGlue());
 				// Espaciador para centrar las opciones
 				menuBar.add(javax.swing.Box.createHorizontalGlue());
@@ -97,8 +97,8 @@ public class RegistrarUsuario {
 				JMenu mnAjustes = new JMenu("Ajustes");
 				//mnAjustes.// JMenuBar centrado estilo Home
 				JMenuBar menuBar1 = new JMenuBar();
-				menuBar1.setBackground(UIHelper.COLOR_FONDO_PRINCIPAL);
-				menuBar1.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, UIHelper.COLOR_PANEL));
+				//menuBar1.setBackground(UIHelper.COLOR_FONDO_PRINCIPAL);
+				//menuBar1.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, UIHelper.COLOR_PANEL));
 
 				// Espaciador para centrar las opciones
 				menuBar1.add(javax.swing.Box.createHorizontalGlue());
@@ -148,7 +148,7 @@ public class RegistrarUsuario {
 
 		// Panel Central de Formulario
 		JPanel panel = new JPanel();
-		panel.setBackground(UIHelper.COLOR_PANEL);
+		//panel.setBackground(UIHelper.COLOR_PANEL);
 		panel.setBorder(new LineBorder(UIHelper.COLOR_BORDE, 1, true));
 		panel.setBounds(390, 90, 500, 480);
 		panel.setLayout(null);
@@ -164,8 +164,8 @@ public class RegistrarUsuario {
 
 		JLabel lblSubtitulo = new JLabel("Ingresa los datos para registrar un usuario");
 		lblSubtitulo.setFont(new Font("SansSerif", Font.PLAIN, 12));
-		lblSubtitulo.setForeground(UIHelper.COLOR_TEXTO_MUTED);
-		lblSubtitulo.setHorizontalAlignment(SwingConstants.CENTER);
+		//lblSubtitulo.setForeground(UIHelper.COLOR_TEXTO_MUTED);
+		//lblSubtitulo.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSubtitulo.setBounds(0, 65, 500, 20);
 		panel.add(lblSubtitulo);
 
@@ -245,7 +245,7 @@ public class RegistrarUsuario {
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.setFont(new Font("SansSerif", Font.BOLD, 13));
 		btnAceptar.setBounds(80, 395, 160, 38);
-		btnAceptar.setBackground(UIHelper.COLOR_ACCENTO);
+		//btnAceptar.setBackground(UIHelper.COLOR_ACCENTO);
 		btnAceptar.setForeground(UIHelper.COLOR_TEXTO);
 		btnAceptar.setFocusPainted(false);
 		btnAceptar.setBorder(BorderFactory.createEmptyBorder());

@@ -124,7 +124,7 @@ public class Biblioteca {
 		JLabel lblSubtitulo = new JLabel("Listado general de juegos guardados.");
 		lblSubtitulo.setHorizontalAlignment(SwingConstants.CENTER);
 		lblSubtitulo.setFont(new Font("SansSerif", Font.PLAIN, 13));
-		lblSubtitulo.setForeground(UIHelper.COLOR_TEXTO_MUTED);
+		//lblSubtitulo.setForeground(UIHelper.COLOR_TEXTO_MUTED);
 		lblSubtitulo.setBounds(50, 62, 800, 20);
 		panel.add(lblSubtitulo);
 
@@ -144,7 +144,7 @@ public class Biblioteca {
 		table.setGridColor(UIHelper.COLOR_BORDE);
 		table.setRowHeight(30);
 		table.setFont(new Font("SansSerif", Font.PLAIN, 14));
-		table.getTableHeader().setBackground(UIHelper.COLOR_BOTON_SECUNDARIO);
+			//table.getTableHeader().setBackground(UIHelper.COLOR_BOTON_SECUNDARIO);
 		table.getTableHeader().setForeground(UIHelper.COLOR_TEXTO);
 		table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 14));
 
@@ -163,7 +163,7 @@ public class Biblioteca {
 		JButton btnPlay = new JButton("▶ Jugar");
 		btnPlay.setFont(new Font("SansSerif", Font.BOLD, 14));
 		btnPlay.setBounds(300, 480, 130, 40);
-		btnPlay.setBackground(UIHelper.COLOR_BOTON_PRIMARIO);
+		//btnPlay.setBackground(UIHelper.COLOR_BOTON_PRIMARIO);
 		btnPlay.setForeground(UIHelper.COLOR_TEXTO);
 		btnPlay.setFocusPainted(false);
 		btnPlay.setBorder(new LineBorder(UIHelper.COLOR_BORDE, 1, true));
@@ -172,7 +172,7 @@ public class Biblioteca {
 		JButton btnRemove = new JButton("Quitar");
 		btnRemove.setFont(new Font("SansSerif", Font.BOLD, 14));
 		btnRemove.setBounds(470, 480, 130, 40);
-		btnRemove.setBackground(UIHelper.COLOR_BOTON_SECUNDARIO);
+		//btnRemove.setBackground(UIHelper.COLOR_BOTON_SECUNDARIO);
 		btnRemove.setForeground(UIHelper.COLOR_TEXTO);
 		btnRemove.setFocusPainted(false);
 		btnRemove.setBorder(new LineBorder(UIHelper.COLOR_BORDE, 1, true));
