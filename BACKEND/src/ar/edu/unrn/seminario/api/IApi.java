@@ -1,9 +1,11 @@
 package ar.edu.unrn.seminario.api;
+import ar.edu.unrn.seminario.exception.CatalogoVacioException;
 
 import java.util.List;
 
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
+import ar.edu.unrn.seminario.dto.JuegoDTO;
 
 public interface IApi {
 
@@ -30,6 +32,7 @@ public interface IApi {
 	void activarUsuario(String username); // recuperar el objeto Usuario, implementar el comportamiento de estado.
 
 	void desactivarUsuario(String username); // recuperar el objeto Usuario, implementar el comportamiento de estado.
+<<<<<<< HEAD
 
 	// el requerimiento cargarJuego 
 	
@@ -42,4 +45,8 @@ public interface IApi {
 	public String getUrlJuegoByTitulo(String titulo);
 
 
+=======
+	
+	List<JuegoDTO> obtenerJuegos() throws CatalogoVacioException;
+>>>>>>> 65fb74350166abac84893875b7595242514312b3
 }

@@ -8,11 +8,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.catalog.CatalogException;
+
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.modelo.Juego;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
+import ar.edu.unrn.seminario.dto.JuegoDTO;
+import ar.edu.unrn.seminario.exception.CatalogoVacioException;
 
 public class MemoryApi implements IApi {
 
@@ -36,12 +40,12 @@ public class MemoryApi implements IApi {
 	private void inicializarJuegos() {
 		this.juegos.add(new Juego(1, "Super Street Fighter II", "Lucha", "Capcom", "SNES", 1993));
 		this.juegos.add(new Juego(2, "DOOM", "FPS", "id Software", "MS-DOS", 1993));
-		this.juegos.add(new Juego(3, "Castlevania IV USA", "Plataformas", "Konami", "NES", 1993));
-
+		this.juegos.add(new Juego(3, "Wolfenstein 3D", "FPS", "id Software", "MS-DOS", 1992));
+		
 		// agrego un link a cada juego
 		this.juegosLinks.put(1, "https://archive.org/embed/Super_Street_Fighter_II_USA.md");
 		this.juegosLinks.put(2, "https://archive.org/embed/msdos_DOOM_1993");
-		this.juegosLinks.put(3, "https://archive.org/embed/super-castlevania-iv-usa_202301");
+		this.juegosLinks.put(3, "https://archive.org/embed/Wolfenstein3d");
 	}
 
 	private void inicializarUsuarios() {
@@ -177,6 +181,27 @@ public class MemoryApi implements IApi {
 				.findFirst()
 				.map(Juego::getId)
 				.orElse(null);
+	}
+	
+	@Override
+	public List<JuegoDTO> obtenerJuegos() throws CatalogoVacioException {
+		if (this.juegos.isEmpty()){
+			throw new CatalogoVacioException("No hay juegos registrados en el catálogo en este momento.");
+			
+		}
+		
+		List<JuegoDTO> dtos = new ArrayList<>();
+		for (Juego j : this.juegos) {
+			dtos.add(new JuegoDTO(
+				j.getId(),
+				j.getTitulo(), 
+				j.getGenero(), 
+				j.getDesarrollador(), 
+				j.getConsola(), 
+				j.getAño()
+			));
+		}
+		return dtos;
 	}
 
 	public String getUrlJuegoById(Integer idJuego){
