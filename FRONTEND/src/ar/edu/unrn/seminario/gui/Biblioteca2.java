@@ -1,5 +1,6 @@
 package ar.edu.unrn.seminario.gui;
 
+import ar.edu.unrn.seminario.dto.RegistroJuegoDTO;
 import ar.edu.unrn.seminario.helpers.UIHelper;
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -19,12 +20,16 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.border.LineBorder;
 
 public class Biblioteca2 {
 
 	private JFrame frame;
 	private JTextField txtBuscarRapido;
+	
+	// Referencia a la API de memoria / gestión
+	private Object memoryApi; 
 	
 	// Índice y títulos de los juegos de ejemplo provisionales
 	private int indiceJuegoActual = 0;
@@ -51,7 +56,15 @@ public class Biblioteca2 {
 		});
 	}
 
+	// 1. Constructor por defecto (sin parámetros) para que el main funcione sin errores
 	public Biblioteca2() {
+		this.memoryApi = null;
+		initialize();
+	}
+
+	// 2. Constructor con parámetros por si se inyecta desde otra clase
+	public Biblioteca2(Object memoryApi) {
+		this.memoryApi = memoryApi;
 		initialize();
 	}
 
@@ -200,43 +213,93 @@ public class Biblioteca2 {
 		});
 
 		// Acciones inferiores
-		JButton btnPlay = new JButton("► Jugar");
+		JButton btnPlay = new JButton("Jugar");
 		btnPlay.setFont(UIHelper.FONT_BOTON);
-		btnPlay.setBounds(280, 500, 160, 42);
+		btnPlay.setBounds(369, 500, 160, 42);
 		btnPlay.setBackground(UIHelper.COLOR_ACENTO);
 		btnPlay.setForeground(UIHelper.COLOR_TEXTO);
 		btnPlay.setFocusPainted(false);
 		btnPlay.setBorder(BorderFactory.createEmptyBorder());
 		panelPrincipal.add(btnPlay);
+		
+		btnPlay.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RegistroJuegoDTO juegoActual = obtenerJuegoActualEnVista();
+				if (juegoActual != null) {
+					JOptionPane.showMessageDialog(frame, 
+						"¡Iniciando el juego exitosamente!\n" + juegoActual.getTitulo(), 
+						"Jugar", 
+						JOptionPane.INFORMATION_MESSAGE
+					);
+				}
+			}
+		});
 
 		JButton btnRemove = new JButton("Quitar");
 		btnRemove.setFont(UIHelper.FONT_BOTON);
-		btnRemove.setBounds(460, 500, 160, 42);
+		btnRemove.setBounds(553, 500, 160, 42);
 		btnRemove.setBackground(UIHelper.COLOR_CONTENIDO);
 		btnRemove.setForeground(UIHelper.COLOR_TEXTO);
 		btnRemove.setFocusPainted(false);
 		btnRemove.setBorder(new LineBorder(UIHelper.COLOR_BORDE, 1));
 		panelPrincipal.add(btnRemove);
+		
+		btnRemove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RegistroJuegoDTO juegoActual = obtenerJuegoActualEnVista();
+				if (juegoActual != null) {
+					JOptionPane.showMessageDialog(frame, 
+						"El juego fue quitado de la biblioteca correctamente.", 
+						"Quitar", 
+						JOptionPane.INFORMATION_MESSAGE
+					);
+					actualizarJuegoActual(); 
+				}
+			}
+		});
+		
+		JButton btnVerInfo = new JButton("Ver Info");
+		btnVerInfo.setFont(UIHelper.FONT_BOTON);
+		btnVerInfo.setBounds(190, 500, 160, 42);
+		btnVerInfo.setBackground(UIHelper.COLOR_CONTENIDO);
+		btnVerInfo.setForeground(UIHelper.COLOR_TEXTO);
+		btnVerInfo.setFocusPainted(false);
+		btnVerInfo.setBorder(new LineBorder(UIHelper.COLOR_BORDE, 1));
+		panelPrincipal.add(btnVerInfo);
 
 		// Cargar la primera imagen y título inicial al abrir la ventana
 		actualizarJuegoActual();
 
-		btnPlay.addActionListener(new ActionListener() {
+		btnVerInfo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				RegistroJuegoDTO juegoActual = obtenerJuegoActualEnVista();
+				if (juegoActual != null) {
+					JOptionPane.showMessageDialog(frame, 
+						"Información detallada:\n" + 
+						"Título: " + juegoActual.getTitulo() + "\n" +
+						"Código / ID: " + juegoActual.getId(), 
+						"Ver Info", 
+						JOptionPane.INFORMATION_MESSAGE
+					);
+				}
 			}
 		});
 		
 		btnBuscarRapido.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(frame, "Búsqueda realizada con éxito.", "Buscar", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 	}
 
-	/**
-	 * LÓGICA TEMPORAL ADAPTADA DEL CATÁLOGO PARA CARGAR LAS IMAGENES EN EL LBLVISTAPREVIA
-	 */
+	private RegistroJuegoDTO obtenerJuegoActualEnVista() {
+		int idJuego = indiceJuegoActual + 1;
+		String titulo = titulosJuegos[indiceJuegoActual];
+		return new RegistroJuegoDTO(idJuego, titulo);
+	}
+
 	private void actualizarJuegoActual() {
-		int idJuego = indiceJuegoActual + 1; // IDs del 1 al 3 (1: Street Fighter, 2: Doom, 3: Wolfenstein)
+		int idJuego = indiceJuegoActual + 1; 
 		String nombreArchivo = "esw-logo.png"; 
 
 		if (idJuego == 1) {
@@ -253,12 +316,12 @@ public class Biblioteca2 {
 		if (imgURL != null) {
 			ImageIcon iconOriginal = new ImageIcon(imgURL);
 			Image imagenEscalada = iconOriginal.getImage().getScaledInstance(
-					400, // Ancho adaptado al tamaño de lblVistaPrevia
-					280, // Alto adaptado al tamaño de lblVistaPrevia
+					400, 
+					280, 
 					Image.SCALE_SMOOTH
 			);
 			lblVistaPrevia.setIcon(new ImageIcon(imagenEscalada));
-			lblVistaPrevia.setText(""); // Limpia texto por si acaso
+			lblVistaPrevia.setText(""); 
 		} else {
 			lblVistaPrevia.setIcon(null);
 			lblVistaPrevia.setText("Sin Imagen");
