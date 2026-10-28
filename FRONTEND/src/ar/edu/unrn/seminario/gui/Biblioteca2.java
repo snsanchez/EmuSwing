@@ -75,7 +75,7 @@ public class Biblioteca2 {
 		mnPerfil.setFont(UIHelper.FONT_MENU);
 		menuBar.add(mnPerfil);
 
-		JMenu mnBiblioteca = new JMenu("Biblioteca");
+		JMenu mnBiblioteca = new JMenu("Menu principal");
 		mnBiblioteca.setForeground(UIHelper.COLOR_TEXTO);
 		mnBiblioteca.setFont(UIHelper.FONT_MENU);
 		menuBar.add(mnBiblioteca);
