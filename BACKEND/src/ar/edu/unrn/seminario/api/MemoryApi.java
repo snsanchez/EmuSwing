@@ -4,12 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+<<<<<<< HEAD
 
 import ar.edu.unrn.seminario.dto.RegistroJuegoDTO;
+=======
+import javax.xml.catalog.CatalogException;
+
+>>>>>>> origin/testing
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
+import ar.edu.unrn.seminario.dto.JuegoDTO;
+import ar.edu.unrn.seminario.exception.CatalogoVacioException;
 
 public class MemoryApi implements IApi {
 
@@ -27,6 +34,20 @@ public class MemoryApi implements IApi {
 		inicializarUsuarios();
 	}
 
+<<<<<<< HEAD
+=======
+	private void inicializarJuegos() {
+		this.juegos.add(new Juego(1, "Super Street Fighter II", "Lucha", "Capcom", "SNES", 1993));
+		this.juegos.add(new Juego(2, "DOOM", "FPS", "id Software", "MS-DOS", 1993));
+		this.juegos.add(new Juego(3, "Wolfenstein 3D", "FPS", "id Software", "MS-DOS", 1992));
+		
+		// agrego un link a cada juego
+		this.juegosLinks.put(1, "https://archive.org/embed/Super_Street_Fighter_II_USA.md");
+		this.juegosLinks.put(2, "https://archive.org/embed/msdos_DOOM_1993");
+		this.juegosLinks.put(3, "https://archive.org/embed/Wolfenstein3d");
+	}
+
+>>>>>>> origin/testing
 	private void inicializarUsuarios() {
 		registrarUsuario("admin", "1234", "admin@unrn.edu.ar", "Admin", 1);
 		registrarUsuario("ldifabio", "4", "ldifabio@unrn.edu.ar", "Lucas", 2);
@@ -138,6 +159,27 @@ public class MemoryApi implements IApi {
 				return user;
 		}
 		return null;
+	}
+	
+	@Override
+	public List<JuegoDTO> obtenerJuegos() throws CatalogoVacioException {
+		if (this.juegos.isEmpty()){
+			throw new CatalogoVacioException("No hay juegos registrados en el catálogo en este momento.");
+			
+		}
+		
+		List<JuegoDTO> dtos = new ArrayList<>();
+		for (Juego j : this.juegos) {
+			dtos.add(new JuegoDTO(
+				j.getId(),
+				j.getTitulo(), 
+				j.getGenero(), 
+				j.getDesarrollador(), 
+				j.getConsola(), 
+				j.getAño()
+			));
+		}
+		return dtos;
 	}
 
 

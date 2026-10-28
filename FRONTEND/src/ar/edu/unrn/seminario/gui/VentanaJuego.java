@@ -1,14 +1,25 @@
 package ar.edu.unrn.seminario.gui;
 
 import ar.edu.unrn.seminario.helpers.UIHelper;
+import ar.edu.unrn.seminario.gui.EmuladorWeb;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 
 public class VentanaJuego extends JFrame {
+    private static final long serialVersionUID = 1L;
+    private static final String URL_PRUEBA = "https://archive.org/embed/msdos_DOOM_1993";
     private JPanel contentPane;
+    private EmuladorWeb emuladorWeb;
 
     public VentanaJuego() {
+        this(URL_PRUEBA);
+    }
+
+    public VentanaJuego(String urlJuego) {
         setTitle("EmuSwing - Jugando");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(900, 650);
@@ -18,6 +29,21 @@ public class VentanaJuego extends JFrame {
         contentPane.setBackground(Color.BLACK);
         setContentPane(contentPane);
 
+        construirPanelSuperior();
+        construirPanelJuego(urlJuego);
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                if (emuladorWeb != null) {
+                    emuladorWeb.cerrar();
+                    emuladorWeb = null;
+                }
+            }
+        });
+    }
+
+    private void construirPanelSuperior() {
         JPanel panelSuperior = new JPanel(new BorderLayout());
         panelSuperior.setBackground(UIHelper.COLOR_FONDO);
 
@@ -25,40 +51,71 @@ public class VentanaJuego extends JFrame {
         lblAtras.setCursor(new Cursor(Cursor.HAND_CURSOR));
         lblAtras.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
 
-        try {
-            java.net.URL imgUrl = getClass().getResource("/img/flecha.png");
-            if (imgUrl != null) {
-                ImageIcon iconFlecha = new ImageIcon(imgUrl);
-                Image imgFlecha = iconFlecha.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-                lblAtras.setIcon(new ImageIcon(imgFlecha));
-                
-                lblAtras.setText(" VOLVER");
-                lblAtras.setForeground(UIHelper.COLOR_TEXTO);
-                lblAtras.setFont(UIHelper.FONT_SECCION);
-            } else {	
-            }
-        }catch (Exception e) {
-            lblAtras.setText("\u25C0 VOLVER");
-            lblAtras.setForeground(UIHelper.COLOR_TEXTO);
-            lblAtras.setFont(UIHelper.FONT_SECCION);
+        java.net.URL imgUrl = getClass().getResource("/img/flecha.png");
+
+        if (imgUrl != null) {
+            ImageIcon iconFlecha = new ImageIcon(imgUrl);
+            Image imgFlecha = iconFlecha.getImage()
+            .getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+            lblAtras.setIcon(new ImageIcon(imgFlecha));
+        } else {
+            lblAtras.setText("\u25C0");
         }
-        
+
+        lblAtras.setText(lblAtras.getText().isEmpty()
+                    ? " VOLVER" : lblAtras.getText() + " VOLVER");
+        lblAtras.setForeground(UIHelper.COLOR_TEXTO);
+        lblAtras.setFont(UIHelper.FONT_SECCION);
+
         panelSuperior.add(lblAtras, BorderLayout.WEST);
 
         JPanel panelNavegacion = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 15));
         panelNavegacion.setBackground(UIHelper.COLOR_FONDO);
 
-        String[] menuItems = {"Mi Perfil", "Biblioteca", "Juegos", "Tienda", "Soporte", "Ajustes"};
+        String[] menuItems = { "Mi Perfil", "Biblioteca", "Juegos", "Historia", "Controles", "Tienda", "Soporte", "Ajustes" };
+
         for (String texto : menuItems) {
             JLabel lblMenu = new JLabel(texto);
-            if(texto.equals("Juegos")) {
+
+            if (texto.equals("Juegos")) {
                 lblMenu.setForeground(UIHelper.COLOR_TEXTO);
                 lblMenu.setFont(UIHelper.FONT_SECCION);
-            } else {
+            }
+            else {
                 lblMenu.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
                 lblMenu.setFont(UIHelper.FONT_MENU);
             }
+
             lblMenu.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+            if (texto.equals("Controles")) {
+                lblMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+                    @Override
+                    public void mouseClicked(java.awt.event.MouseEvent e) {
+                        JOptionPane.showMessageDialog(
+                            VentanaJuego.this,
+                            "Controles Básicos:\nPresiona el 1 para empezar.\n Usa las flechas para moverte.\n Hay 3 botones: A, B y C, los cuales son CONTROL, ALT/OPTION y ESPACIO.",
+                            "Controles del Juego",
+                            JOptionPane.INFORMATION_MESSAGE
+                        );
+                    }
+                });
+            }
+
+            if (texto.equals("Historia")) {
+                lblMenu.addMouseListener(new java.awt.event.MouseAdapter() {
+                    @Override
+                    public void mouseClicked(java.awt.event.MouseEvent e) {
+                        JOptionPane.showMessageDialog(
+                            VentanaJuego.this,
+                            "El World Warrior Tournament sigue en pie, pero la paz es frágil:\n cuatro jefes malignos aún controlan el submundo del combate.\n Nuevos retadores llegan para desafiar al orden, y tú eres uno de ellos.\n Tu misión: derrotar a Balrog, Vega, Sagat y M. Bison, y reclamar el trono.",
+                            "Historia del Juego",
+                            JOptionPane.INFORMATION_MESSAGE
+                        );
+                    }
+                });
+            }
+
             panelNavegacion.add(lblMenu);
         }
         panelSuperior.add(panelNavegacion, BorderLayout.CENTER);
@@ -69,37 +126,33 @@ public class VentanaJuego extends JFrame {
 
         contentPane.add(panelSuperior, BorderLayout.NORTH);
 
-        JPanel panelJuego = new JPanel() {
-            private Image bgImage;
+    }
 
-            {
-                try {
-                    java.net.URL imgUrl = getClass().getResource("/img/juego_fondo.png");
-                    if (imgUrl != null) {
-                        bgImage = new ImageIcon(imgUrl).getImage();
-                    } else {
-                        System.out.println("No se encontró la imagen del juego en /img/juego_fondo.png");
-                    }
-                } catch (Exception e) {
-                    System.out.println("Error al cargar la imagen del juego.");
-                }
-            }
-
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                if (bgImage != null) {
-                    g.drawImage(bgImage, 0, 0, getWidth(), getHeight(), this);
-                }
-            }
-        };
-
+    private void construirPanelJuego(String urlJuego) {
+        JPanel panelJuego = new JPanel(new BorderLayout());
         panelJuego.setBackground(Color.BLACK);
+
+        try {
+            emuladorWeb = new EmuladorWeb(urlJuego);
+            panelJuego.add(emuladorWeb, BorderLayout.CENTER);
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            JLabel lblError = new JLabel(
+                "No se pudo iniciar el juego.",
+                SwingConstants.CENTER
+            );
+            lblError.setForeground(Color.WHITE);
+            panelJuego.add(lblError, BorderLayout.CENTER);
+        }
+
         contentPane.add(panelJuego, BorderLayout.CENTER);
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new VentanaJuego().setVisible(true);
-        });
-    }
+            SwingUtilities.invokeLater(() -> {
+                VentanaJuego ventana = new VentanaJuego();
+                ventana.setVisible(true);
+            });
+        }
 }
