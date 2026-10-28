@@ -2,6 +2,8 @@ package ar.edu.unrn.seminario.main;
 import javax.swing.SwingUtilities;
 import javax.swing.JOptionPane;
 
+import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.api.MemoryApi;
 import ar.edu.unrn.seminario.gui.VentanaJuego;
 
 public class PruebaEmuSwing {
@@ -9,10 +11,10 @@ public class PruebaEmuSwing {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
+                IApi api = new MemoryApi();
                 VentanaJuego ventana = new VentanaJuego(
-                    "https://archive.org/embed/Super_Street_Fighter_II_USA.md"
+                    api.getUrlJuegoByTitulo("Super Street Fighter II")
                 );
-
                 ventana.setVisible(true);
 
             } catch (Exception e) {
