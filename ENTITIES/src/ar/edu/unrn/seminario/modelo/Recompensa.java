@@ -5,12 +5,13 @@ public class Recompensa{
     private String descripcion;
     private int valor;
     private int codigo;
+     private CategoriaRecompensa categoria;
 
-
-    public Recompensa(int valor, String nombre, String, descripcion, int codigo){
+    public Recompensa(int valor, String nombre, String, descripcion, int codigo, CategoriaRecompensa categoria){
         this.valor = valor;
         this.nombre = nombre;
         this.descripcion = descripcion;
+        this.categoria = categoria
         this(codigo);
     }
 
@@ -53,5 +54,13 @@ public class Recompensa{
     public boolean equals(Recompensa recompensa){
         return this.HashCode = recompensa.HashCode;
     }
+    public CategoriaRecompensa getCategoria(){
+           return this.categoria;
+       }
+
+       public void setCategoria(CategoriaRecompensa categoria){
+           this.categoria = categoria;
+       }
+
 
 }

@@ -1,27 +1,42 @@
 package ar.edu.unrn.seminario.gui;
+
 import ar.edu.unrn.seminario.helpers.UIHelper;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.net.URL;
 
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.border.LineBorder;
 
 public class Biblioteca2 {
 
 	private JFrame frame;
+	private JTextField txtBuscarRapido;
+	
+	// Índice y títulos de los juegos de ejemplo provisionales
+	private int indiceJuegoActual = 0;
+	private final String[] titulosJuegos = {
+		"Super Street Fighter II", 
+		"DOOM", 
+		"Wolfenstein 3D"
+	};
 
-	// Paleta de colores EmuSwing
+	// Componentes dinámicos
+	private JLabel lblNombreJuego;
+	private JLabel lblVistaPrevia;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -46,131 +61,212 @@ public class Biblioteca2 {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 		frame.getContentPane().setLayout(null);
-		frame.getContentPane().setBackground(UIHelper.COLOR_FONDO_PRINCIPAL);
+		frame.getContentPane().setBackground(UIHelper.COLOR_FONDO);
 
 		// Barra de Menú
-		// JMenuBar centrado estilo Home
-				JMenuBar menuBar = new JMenuBar();
-				menuBar.setBackground(UIHelper.COLOR_FONDO_PRINCIPAL);
-				menuBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, UIHelper.COLOR_PANEL));
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setBackground(UIHelper.COLOR_FONDO);
+		menuBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, UIHelper.COLOR_TARJETA));
 
-				// Espaciador para centrar las opciones
-				menuBar.add(javax.swing.Box.createHorizontalGlue());
+		menuBar.add(javax.swing.Box.createHorizontalGlue());
 
-				JMenu mnPerfil = new JMenu("Mi Perfil");
-				mnPerfil.setForeground(UIHelper.COLOR_TEXTO);
-				mnPerfil.setFont(new Font("SansSerif", Font.PLAIN, 13));
-				menuBar.add(mnPerfil);
+		JMenu mnPerfil = new JMenu("Mi Perfil");
+		mnPerfil.setForeground(UIHelper.COLOR_TEXTO);
+		mnPerfil.setFont(UIHelper.FONT_MENU);
+		menuBar.add(mnPerfil);
 
-				JMenu mnBiblioteca = new JMenu("Biblioteca");
-				mnBiblioteca.setForeground(UIHelper.COLOR_TEXTO);
-				mnBiblioteca.setFont(new Font("SansSerif", Font.BOLD, 13));
-				menuBar.add(mnBiblioteca);
+		JMenu mnBiblioteca = new JMenu("Menu principal");
+		mnBiblioteca.setForeground(UIHelper.COLOR_TEXTO);
+		mnBiblioteca.setFont(UIHelper.FONT_MENU);
+		menuBar.add(mnBiblioteca);
 
-				JMenu mnJuegos = new JMenu("Juegos");
-				mnJuegos.setForeground(UIHelper.COLOR_TEXTO);
-				mnJuegos.setFont(new Font("SansSerif", Font.PLAIN, 13));
-				menuBar.add(mnJuegos);
+		JMenu mnJuegos = new JMenu("Juegos");
+		mnJuegos.setForeground(UIHelper.COLOR_TEXTO);
+		mnJuegos.setFont(UIHelper.FONT_MENU);
+		menuBar.add(mnJuegos);
 
-				JMenu mnTienda = new JMenu("Tienda");
-				mnTienda.setForeground(UIHelper.COLOR_TEXTO);
-				mnTienda.setFont(new Font("SansSerif", Font.PLAIN, 13));
-				menuBar.add(mnTienda);
+		JMenu mnTienda = new JMenu("Tienda");
+		mnTienda.setForeground(UIHelper.COLOR_TEXTO);
+		mnTienda.setFont(UIHelper.FONT_MENU);
+		menuBar.add(mnTienda);
 
-				JMenu mnSoporte = new JMenu("Soporte");
-				mnSoporte.setForeground(UIHelper.COLOR_TEXTO);
-				mnSoporte.setFont(new Font("SansSerif", Font.PLAIN, 13));
-				menuBar.add(mnSoporte);
+		JMenu mnSoporte = new JMenu("Soporte");
+		mnSoporte.setForeground(UIHelper.COLOR_TEXTO);
+		mnSoporte.setFont(UIHelper.FONT_MENU);
+		menuBar.add(mnSoporte);
 
-				JMenu mnAjustes = new JMenu("Ajustes");
-				mnAjustes.setForeground(UIHelper.COLOR_TEXTO);
-				mnAjustes.setFont(new Font("SansSerif", Font.PLAIN, 13));
-				menuBar.add(mnAjustes);
+		JMenu mnAjustes = new JMenu("Ajustes");
+		mnAjustes.setForeground(UIHelper.COLOR_TEXTO);
+		mnAjustes.setFont(UIHelper.FONT_MENU);
+		menuBar.add(mnAjustes);
 
-				// Espaciador derecho para empujar todo al centro
-				menuBar.add(javax.swing.Box.createHorizontalGlue());
+		menuBar.add(javax.swing.Box.createHorizontalGlue());
+		frame.setJMenuBar(menuBar);
 
-				frame.setJMenuBar(menuBar);			// Panel Principal
+		// Panel Principal
 		JPanel panelPrincipal = new JPanel();
 		panelPrincipal.setBounds(190, 40, 900, 580);
-		panelPrincipal.setBackground(UIHelper.COLOR_PANEL);
+		panelPrincipal.setBackground(UIHelper.COLOR_TARJETA);
 		panelPrincipal.setBorder(new LineBorder(UIHelper.COLOR_BORDE, 1, true));
 		panelPrincipal.setLayout(null);
 		frame.getContentPane().add(panelPrincipal);
 
 		// Título de la vista
 		JLabel lblTitulo = new JLabel("Explorar Biblioteca");
-		lblTitulo.setFont(new Font("SansSerif", Font.BOLD, 26));
+		lblTitulo.setFont(UIHelper.FONT_TITULO);
 		lblTitulo.setForeground(UIHelper.COLOR_TEXTO);
 		lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTitulo.setBounds(0, 25, 900, 35);
+		lblTitulo.setBounds(0, 43, 900, 35);
 		panelPrincipal.add(lblTitulo);
+
+		// Botón de búsqueda rápida en la esquina superior derecha
+		txtBuscarRapido = new JTextField();
+		txtBuscarRapido.setBounds(657, 12, 150, 28);
+		txtBuscarRapido.setFont(UIHelper.FONT_TEXTFIELDS);
+		txtBuscarRapido.setBackground(UIHelper.COLOR_FONDO);
+		txtBuscarRapido.setForeground(UIHelper.COLOR_TEXTO);
+		txtBuscarRapido.setCaretColor(UIHelper.COLOR_TEXTO);
+		txtBuscarRapido.setBorder(new LineBorder(UIHelper.COLOR_BORDE, 1, true));
+		panelPrincipal.add(txtBuscarRapido);
+
+		JButton btnBuscarRapido = new JButton("🔍");
+		btnBuscarRapido.setFont(UIHelper.FONT_BOTON);
+		btnBuscarRapido.setBounds(817, 11, 50, 28);
+		btnBuscarRapido.setBackground(UIHelper.COLOR_ACENTO);
+		btnBuscarRapido.setForeground(UIHelper.COLOR_TEXTO);
+		btnBuscarRapido.setFocusPainted(false);
+		btnBuscarRapido.setBorder(BorderFactory.createEmptyBorder());
+		panelPrincipal.add(btnBuscarRapido);
 
 		// Botón Anterior (<-)
 		JButton btnPrev = new JButton("◄");
-		btnPrev.setFont(new Font("SansSerif", Font.BOLD, 20));
+		btnPrev.setFont(UIHelper.FONT_BOTON);
 		btnPrev.setBounds(120, 200, 60, 180);
-		btnPrev.setBackground(UIHelper.COLOR_TARJETA);
+		btnPrev.setBackground(UIHelper.COLOR_CONTENIDO);
 		btnPrev.setForeground(UIHelper.COLOR_TEXTO);
 		btnPrev.setFocusPainted(false);
 		btnPrev.setBorder(new LineBorder(UIHelper.COLOR_BORDE, 1));
 		panelPrincipal.add(btnPrev);
 
+		btnPrev.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				indiceJuegoActual--;
+				if (indiceJuegoActual < 0) {
+					indiceJuegoActual = titulosJuegos.length - 1;
+				}
+				actualizarJuegoActual();
+			}
+		});
+
 		// Card central del juego
 		JPanel panelCard = new JPanel();
-		panelCard.setBackground(UIHelper.COLOR_TARJETA);
+		panelCard.setBackground(UIHelper.COLOR_CONTENIDO);
 		panelCard.setBorder(new LineBorder(UIHelper.COLOR_BORDE, 1, true));
 		panelCard.setBounds(230, 90, 440, 380);
 		panelCard.setLayout(null);
 		panelPrincipal.add(panelCard);
 
-		JLabel lblNombreJuego = new JLabel("Super Mario World");
-		lblNombreJuego.setFont(new Font("SansSerif", Font.BOLD, 20));
+		lblNombreJuego = new JLabel();
+		lblNombreJuego.setFont(UIHelper.FONT_SUBTITULO);
 		lblNombreJuego.setForeground(UIHelper.COLOR_TEXTO);
 		lblNombreJuego.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNombreJuego.setBounds(20, 320, 400, 30);
 		panelCard.add(lblNombreJuego);
 
-		JLabel lblVistaPrevia = new JLabel("[ Imagen / Carátula ]");
-		lblVistaPrevia.setFont(new Font("SansSerif", Font.ITALIC, 14));
-		lblVistaPrevia.setForeground(UIHelper.COLOR_TEXTO_MUTED);
+		lblVistaPrevia = new JLabel();
 		lblVistaPrevia.setHorizontalAlignment(SwingConstants.CENTER);
 		lblVistaPrevia.setBounds(20, 20, 400, 280);
-		lblVistaPrevia.setBorder(new LineBorder(UIHelper.COLOR_PANEL, 1));
+		lblVistaPrevia.setBorder(new LineBorder(UIHelper.COLOR_BORDE, 1));
 		panelCard.add(lblVistaPrevia);
 
 		// Botón Siguiente (->)
 		JButton btnNext = new JButton("►");
-		btnNext.setFont(new Font("SansSerif", Font.BOLD, 20));
+		btnNext.setFont(UIHelper.FONT_BOTON);
 		btnNext.setBounds(720, 200, 60, 180);
-		btnNext.setBackground(UIHelper.COLOR_TARJETA);
+		btnNext.setBackground(UIHelper.COLOR_CONTENIDO);
 		btnNext.setForeground(UIHelper.COLOR_TEXTO);
 		btnNext.setFocusPainted(false);
 		btnNext.setBorder(new LineBorder(UIHelper.COLOR_BORDE, 1));
 		panelPrincipal.add(btnNext);
 
+		btnNext.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				indiceJuegoActual++;
+				if (indiceJuegoActual >= titulosJuegos.length) {
+					indiceJuegoActual = 0;
+				}
+				actualizarJuegoActual();
+			}
+		});
+
 		// Acciones inferiores
 		JButton btnPlay = new JButton("► Jugar");
-		btnPlay.setFont(new Font("SansSerif", Font.BOLD, 14));
+		btnPlay.setFont(UIHelper.FONT_BOTON);
 		btnPlay.setBounds(280, 500, 160, 42);
-		btnPlay.setBackground(UIHelper.COLOR_ACCENTO);
+		btnPlay.setBackground(UIHelper.COLOR_ACENTO);
 		btnPlay.setForeground(UIHelper.COLOR_TEXTO);
 		btnPlay.setFocusPainted(false);
 		btnPlay.setBorder(BorderFactory.createEmptyBorder());
 		panelPrincipal.add(btnPlay);
 
 		JButton btnRemove = new JButton("Quitar");
-		btnRemove.setFont(new Font("SansSerif", Font.BOLD, 14));
+		btnRemove.setFont(UIHelper.FONT_BOTON);
 		btnRemove.setBounds(460, 500, 160, 42);
-		btnRemove.setBackground(UIHelper.COLOR_TARJETA);
+		btnRemove.setBackground(UIHelper.COLOR_CONTENIDO);
 		btnRemove.setForeground(UIHelper.COLOR_TEXTO);
 		btnRemove.setFocusPainted(false);
 		btnRemove.setBorder(new LineBorder(UIHelper.COLOR_BORDE, 1));
 		panelPrincipal.add(btnRemove);
 
+		// Cargar la primera imagen y título inicial al abrir la ventana
+		actualizarJuegoActual();
+
 		btnPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
+		
+		btnBuscarRapido.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+	}
+
+	/**
+	 * LÓGICA TEMPORAL ADAPTADA DEL CATÁLOGO PARA CARGAR LAS IMAGENES EN EL LBLVISTAPREVIA
+	 */
+	private void actualizarJuegoActual() {
+		int idJuego = indiceJuegoActual + 1; // IDs del 1 al 3 (1: Street Fighter, 2: Doom, 3: Wolfenstein)
+		String nombreArchivo = "esw-logo.png"; 
+
+		if (idJuego == 1) {
+			nombreArchivo = "Street-Fighter-II-USA_cover_1024x705.jpg";
+		} else if (idJuego == 2) {
+			nombreArchivo = "doom_1993_cover_720x1080.jpg"; 
+		} else if (idJuego == 3) {
+			nombreArchivo = "Wolfenstein 3D (PC Version).jpg"; 
+		}
+
+		String ruta = "/img/" + nombreArchivo;
+		URL imgURL = getClass().getResource(ruta);
+
+		if (imgURL != null) {
+			ImageIcon iconOriginal = new ImageIcon(imgURL);
+			Image imagenEscalada = iconOriginal.getImage().getScaledInstance(
+					400, // Ancho adaptado al tamaño de lblVistaPrevia
+					280, // Alto adaptado al tamaño de lblVistaPrevia
+					Image.SCALE_SMOOTH
+			);
+			lblVistaPrevia.setIcon(new ImageIcon(imagenEscalada));
+			lblVistaPrevia.setText(""); // Limpia texto por si acaso
+		} else {
+			lblVistaPrevia.setIcon(null);
+			lblVistaPrevia.setText("Sin Imagen");
+			lblVistaPrevia.setFont(UIHelper.FONT_TARJETA);
+			lblVistaPrevia.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
+			System.out.println("No se encontró la imagen: " + ruta);
+		}
+		
+		lblNombreJuego.setText(titulosJuegos[indiceJuegoActual]);
 	}
 }
