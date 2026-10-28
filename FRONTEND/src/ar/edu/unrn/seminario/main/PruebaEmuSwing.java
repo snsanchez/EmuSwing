@@ -15,6 +15,7 @@ public class PruebaEmuSwing {
                 VentanaJuego ventana = new VentanaJuego(
                     api.getUrlJuegoByTitulo("Super Street Fighter II")
                 );
+                // tambien se puede probar ingresar: DOOM, Wolfenstein 3D
                 ventana.setVisible(true);
 
             } catch (Exception e) {
