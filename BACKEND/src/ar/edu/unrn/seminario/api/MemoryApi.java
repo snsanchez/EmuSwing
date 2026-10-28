@@ -204,4 +204,18 @@ public class MemoryApi implements IApi {
 		return dtos;
 	}
 
+	public String getUrlJuegoById(Integer idJuego){
+		// ejemplo: this.juegosLinks.put(3, "https://archive.org/embed/super-castlevania-iv-usa_202301");
+		// si le uso getUrlJuegoById(3) me devuelve "https://archive.org/embed/super-castlevania-iv-usa_202301"
+	    return this.juegosLinks.get(idJuego);
+	}
+
+	public String getUrlJuegoByTitulo(String titulo){
+		Integer idJuego = this.getIdJuegoPorTitulo(titulo);
+		if(idJuego != null){
+			return this.getUrlJuegoById(idJuego);
+		}
+		return null;
+	}
+
 }

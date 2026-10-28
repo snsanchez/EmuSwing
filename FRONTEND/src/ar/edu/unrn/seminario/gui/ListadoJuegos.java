@@ -55,10 +55,39 @@ public class ListadoJuegos extends JFrame {
 		try {
 			List<JuegoDTO> juegos = api.obtenerJuegos();
 			
-			for (JuegoDTO j : juegos) {
-				JPanel tarjeta = crearTarjetaJuego(j);
-				panelGrilla.add(tarjeta);
-			}
+			JuegoDTO juego1 = juegos.get(0);
+			JuegoDTO juego2 = juegos.get(1);
+			JuegoDTO juego3 = juegos.get(2);
+
+			JPanel tarjet1 = crearTarjetaJuego(juego1);
+			tarjet1.addMouseListener(new java.awt.event.MouseAdapter() {
+				@Override
+				public void mouseClicked(java.awt.event.MouseEvent evt) {
+					VentanaJuego ventanaJuego = new VentanaJuego("https://archive.org/embed/Super_Street_Fighter_II_USA.md");
+					ventanaJuego.setVisible(true);
+				}
+			});
+			JPanel tarjet2 = crearTarjetaJuego(juego2);
+			tarjet2.addMouseListener(new java.awt.event.MouseAdapter() {
+				@Override
+				public void mouseClicked(java.awt.event.MouseEvent evt) {
+					VentanaJuego ventanaJuego = new VentanaJuego("https://archive.org/embed/msdos_DOOM_1993");
+					ventanaJuego.setVisible(true);
+				}
+			});
+			JPanel tarjet3 = crearTarjetaJuego(juego3);
+			tarjet3.addMouseListener(new java.awt.event.MouseAdapter() {
+				@Override
+				public void mouseClicked(java.awt.event.MouseEvent evt) {
+					VentanaJuego ventanaJuego = new VentanaJuego("https://archive.org/embed/Wolfenstein3d");
+					ventanaJuego.setVisible(true);
+				}
+			});
+
+			panelGrilla.add(tarjet1);
+			panelGrilla.add(tarjet2);
+			panelGrilla.add(tarjet3);
+
 		} catch (CatalogoVacioException e) {
 			// Si salta la excepción, mostrams un cartel con mensaje de error
 			JLabel lblVacio = new JLabel(e.getMessage());

@@ -32,6 +32,18 @@ public interface IApi {
 	void activarUsuario(String username); // recuperar el objeto Usuario, implementar el comportamiento de estado.
 
 	void desactivarUsuario(String username); // recuperar el objeto Usuario, implementar el comportamiento de estado.
-	
+
+	// el requerimiento cargarJuego
+
+	// el metodo cargarJuego no va en el backend porque maneja frontend
+
+	public Integer getIdJuegoPorTitulo(String titulo); // recuperar el id del juego a partir de su titulo.
+
+	public String getUrlJuegoById(Integer idJuego);
+
+	public String getUrlJuegoByTitulo(String titulo);
+
+
+
 	List<JuegoDTO> obtenerJuegos() throws CatalogoVacioException;
 }
