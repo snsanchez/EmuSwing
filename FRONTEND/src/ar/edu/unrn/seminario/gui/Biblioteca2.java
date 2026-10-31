@@ -77,9 +77,9 @@ public class Biblioteca2 {
 	private void inicializarJuegosDesdeApi() {
 		juegosSet = new HashSet<>();
 		try {
-			if (this.memoryApi != null && this.memoryApi.obtenerFavoritos() != null) {
-				juegosSet.addAll(this.memoryApi.obtenerFavoritos());
-			}
+			
+			juegosSet.addAll(this.memoryApi.obtenerFavoritos());
+			
 		} catch (Exception e) {
 			juegosSet.add(new JuegoDTO(1, "Super Street Fighter II", "Lucha", "Capcom", "SNES", 1993));
 			juegosSet.add(new JuegoDTO(2, "DOOM", "FPS", "id Software", "MS-DOS", 1993));
