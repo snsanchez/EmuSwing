@@ -87,7 +87,22 @@ public class VentanaPrincipal extends JFrame {
 
         panelMenu.add(crearBotonMenu("Mi Perfil"));
         panelMenu.add(crearBotonMenu("Biblioteca"));
-        panelMenu.add(crearBotonMenu("Juegos"));
+        
+        // -- BOTON JUEGOS PARA LA CONEXION CON LISTADO JUEGOS --
+        JButton btnMenuJuegos = crearBotonMenu("Juegos");
+        btnMenuJuegos.addActionListener(e -> {
+            try {
+                ListadoJuegos ventanaListado = new ListadoJuegos(api);
+                ventanaListado.setVisible(true);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this, 
+                    "Error al abrir el catálogo de juegos.", 
+                    "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        panelMenu.add(btnMenuJuegos);
+        
         panelMenu.add(crearBotonMenu("Tienda"));
         panelMenu.add(crearBotonMenu("Soporte"));
 
@@ -201,10 +216,41 @@ public class VentanaPrincipal extends JFrame {
         // el \u25B6 es Unicode para el icono de jugar
         JButton btnJugar = crearBotonAccion("\u25B6  Jugar", true);
 
+        // --- LISTENER DEL BOTÓN JUGAR 
+     		btnJugar.addActionListener(e -> {
+     			// Verificamos que el usuario haya hecho clic en alguna tarjeta
+     			if (juegoSeleccionado == null) {
+     				javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this, 
+     						"Por favor, seleccioná un juego primero.", 
+     						"Atención", javax.swing.JOptionPane.WARNING_MESSAGE);
+     				return;
+     			}
+
+     			// Buscamos la URL del juego usando el método getUrlJuegoByTitulo
+     			String urlJuego = api.getUrlJuegoByTitulo(juegoSeleccionado);
+
+     			if (urlJuego != null) {
+     				try {
+     					// Lanzamos el emulador web real
+     					VentanaJuego ventana = new VentanaJuego(urlJuego);
+     					ventana.setVisible(true);
+     				} catch (Exception ex) {
+     					ex.printStackTrace();
+     					javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this, 
+     						"Error al intentar iniciar el juego.", 
+     						"Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+     				}
+     			} else {
+     				javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this, 
+     						"El enlace para este juego no está disponible en la base de datos.", 
+     						"Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+     			}
+     		});
+     		// ------------------------------------------------
+        
         panelAcciones.add(btnDetalles);
         panelAcciones.add(btnJugar);
         panelContenido.add(panelAcciones, BorderLayout.SOUTH);
-        // no le pongo ningun listener aun porque por ahora solo es visual
 
     }
 

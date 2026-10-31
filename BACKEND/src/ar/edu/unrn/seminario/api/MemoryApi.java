@@ -41,11 +41,13 @@ public class MemoryApi implements IApi {
 		this.juegos.add(new Juego(1, "Super Street Fighter II", "Lucha", "Capcom", "SNES", 1993));
 		this.juegos.add(new Juego(2, "DOOM", "FPS", "id Software", "MS-DOS", 1993));
 		this.juegos.add(new Juego(3, "Wolfenstein 3D", "FPS", "id Software", "MS-DOS", 1992));
+		this.juegos.add(new Juego(4, "Super Mario World", "Plataformas", "Nintendo", "NES", 1985));
 		
 		// agrego un link a cada juego
 		this.juegosLinks.put(1, "https://archive.org/embed/Super_Street_Fighter_II_USA.md");
 		this.juegosLinks.put(2, "https://archive.org/embed/msdos_DOOM_1993");
 		this.juegosLinks.put(3, "https://archive.org/embed/Wolfenstein3d");
+		this.juegosLinks.put(4, "https://archive.org/embed/super-mario-world-usa_202406");
 	}
 
 	private void inicializarUsuarios() {
