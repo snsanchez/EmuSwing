@@ -1,18 +1,19 @@
 package ar.edu.unrn.seminario.gui;
 
-import ar.edu.unrn.seminario.dto.RegistroJuegoDTO;
+import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.api.MemoryApi;
+import ar.edu.unrn.seminario.dto.JuegoDTO;
+import ar.edu.unrn.seminario.exception.JuegoNoEncontradoException;
 import ar.edu.unrn.seminario.helpers.UIHelper;
-import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.Image;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JFrame;
 import javax.swing.JButton;
@@ -20,7 +21,6 @@ import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.BorderFactory;
@@ -33,27 +33,23 @@ public class Biblioteca2 {
 	private JFrame frame;
 	private JTextField txtBuscarRapido;
 	
-	private Object memoryApi; 
+	private IApi memoryApi; 
 
-	// Listas paralelas para mantener los datos de los juegos de ejemplo
-	private List<RegistroJuegoDTO> listaJuegos;
-	private List<String> listaTitulos;
-	private List<Integer> listaAnios;
+	private Set<JuegoDTO> juegosSet;
+	private List<JuegoDTO> listaJuegos;
 	
 	private int indiceJuegoActual = 0;
 
-	// Componentes dinámicos
 	private JLabel lblNombreJuego;
 	private JLabel lblVistaPrevia;
 	private JPanel panelDetalle;
 	private JPanel panelMatriz;
-	private boolean modoMatriz = false;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Biblioteca2 window = new Biblioteca2();
+					Biblioteca2 window = new Biblioteca2(new MemoryApi());
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -63,34 +59,33 @@ public class Biblioteca2 {
 	}
 
 	public Biblioteca2() {
-		this.memoryApi = null;
-		inicializarJuegosEjemplo();
+		this.memoryApi = new MemoryApi();
+		inicializarJuegosDesdeApi();
 		initialize();
 	}
 
 	public Biblioteca2(Object memoryApi) {
-		this.memoryApi = memoryApi;
-		inicializarJuegosEjemplo();
+		if (memoryApi instanceof IApi) {
+			this.memoryApi = (IApi) memoryApi;
+		} else {
+			this.memoryApi = new MemoryApi();
+		}
+		inicializarJuegosDesdeApi();
 		initialize();
 	}
 
-	private void inicializarJuegosEjemplo() {
-		listaJuegos = new ArrayList<>();
-		listaTitulos = new ArrayList<>();
-		listaAnios = new ArrayList<>();
-
-		// El DTO recibe (Integer idJuego, Integer horas)
-		listaJuegos.add(new RegistroJuegoDTO(1, 15));
-		listaTitulos.add("Super Street Fighter II");
-		listaAnios.add(1993);
-
-		listaJuegos.add(new RegistroJuegoDTO(2, 42));
-		listaTitulos.add("DOOM");
-		listaAnios.add(1993);
-
-		listaJuegos.add(new RegistroJuegoDTO(3, 8));
-		listaTitulos.add("Wolfenstein 3D");
-		listaAnios.add(1992);
+	private void inicializarJuegosDesdeApi() {
+		juegosSet = new HashSet<>();
+		try {
+			if (this.memoryApi != null && this.memoryApi.obtenerFavoritos() != null) {
+				juegosSet.addAll(this.memoryApi.obtenerFavoritos());
+			}
+		} catch (Exception e) {
+			juegosSet.add(new JuegoDTO(1, "Super Street Fighter II", "Lucha", "Capcom", "SNES", 1993));
+			juegosSet.add(new JuegoDTO(2, "DOOM", "FPS", "id Software", "MS-DOS", 1993));
+			juegosSet.add(new JuegoDTO(3, "Wolfenstein 3D", "FPS", "id Software", "MS-DOS", 1992));
+		}
+		listaJuegos = new ArrayList<>(juegosSet);
 	}
 
 	private void initialize() {
@@ -101,7 +96,6 @@ public class Biblioteca2 {
 		frame.getContentPane().setLayout(null);
 		frame.getContentPane().setBackground(UIHelper.COLOR_FONDO);
 
-		// Barra de Menú
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBackground(UIHelper.COLOR_FONDO);
 		menuBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, UIHelper.COLOR_TARJETA));
@@ -111,37 +105,50 @@ public class Biblioteca2 {
 		JMenu mnPerfil = new JMenu("Mi Perfil");
 		mnPerfil.setForeground(UIHelper.COLOR_TEXTO);
 		mnPerfil.setFont(UIHelper.FONT_MENU);
+		mnPerfil.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				frame.dispose();
+				new VentanaMiPerfil().setVisible(true);
+			}
+		});
 		menuBar.add(mnPerfil);
 
 		JMenu mnBiblioteca = new JMenu("Menu principal");
 		mnBiblioteca.setForeground(UIHelper.COLOR_TEXTO);
 		mnBiblioteca.setFont(UIHelper.FONT_MENU);
+		mnBiblioteca.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				frame.dispose();
+				new Biblioteca2(memoryApi).frame.setVisible(true);
+			}
+		});
 		menuBar.add(mnBiblioteca);
 
 		JMenu mnJuegos = new JMenu("Juegos");
 		mnJuegos.setForeground(UIHelper.COLOR_TEXTO);
 		mnJuegos.setFont(UIHelper.FONT_MENU);
+		mnJuegos.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				frame.dispose();
+				JOptionPane.showMessageDialog(frame, "Sección de Juegos disponible próximamente.", "Juegos", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
 		menuBar.add(mnJuegos);
 
 		JMenu mnTienda = new JMenu("Tienda");
 		mnTienda.setForeground(UIHelper.COLOR_TEXTO);
 		mnTienda.setFont(UIHelper.FONT_MENU);
+		mnTienda.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				frame.dispose();
+				new VentanaTienda().setVisible(true);
+			}
+		});
 		menuBar.add(mnTienda);
-
-		JMenu mnSoporte = new JMenu("Soporte");
-		mnSoporte.setForeground(UIHelper.COLOR_TEXTO);
-		mnSoporte.setFont(UIHelper.FONT_MENU);
-		menuBar.add(mnSoporte);
-
-		JMenu mnAjustes = new JMenu("Ajustes");
-		mnAjustes.setForeground(UIHelper.COLOR_TEXTO);
-		mnAjustes.setFont(UIHelper.FONT_MENU);
-		menuBar.add(mnAjustes);
 
 		menuBar.add(javax.swing.Box.createHorizontalGlue());
 		frame.setJMenuBar(menuBar);
 
-		// Panel Principal
 		JPanel panelPrincipal = new JPanel();
 		panelPrincipal.setBounds(190, 40, 900, 580);
 		panelPrincipal.setBackground(UIHelper.COLOR_TARJETA);
@@ -149,7 +156,6 @@ public class Biblioteca2 {
 		panelPrincipal.setLayout(null);
 		frame.getContentPane().add(panelPrincipal);
 
-		// Botón de búsqueda rápida
 		txtBuscarRapido = new JTextField();
 		txtBuscarRapido.setBounds(648, 39, 150, 28);
 		txtBuscarRapido.setFont(UIHelper.FONT_TEXTFIELDS);
@@ -167,7 +173,6 @@ public class Biblioteca2 {
 		btnBuscarRapido.setFocusPainted(false);
 		btnBuscarRapido.setBorder(BorderFactory.createEmptyBorder());
 		panelPrincipal.add(btnBuscarRapido);
-
 		
 		panelDetalle = new JPanel();
 		panelDetalle.setBounds(0, 60, 900, 520);
@@ -261,8 +266,6 @@ public class Biblioteca2 {
 		btnRemove.setFocusPainted(false);
 		btnRemove.setBorder(new LineBorder(UIHelper.COLOR_BORDE, 1));
 		panelDetalle.add(btnRemove);
-
-
 	
 		panelMatriz = new JPanel();
 		panelMatriz.setBounds(0, 60, 900, 520);
@@ -271,15 +274,13 @@ public class Biblioteca2 {
 		panelMatriz.setVisible(false);
 		panelPrincipal.add(panelMatriz);
 		
-				// Título de la vista
-				JLabel lblTitulo = new JLabel("Explorar Biblioteca");
-				lblTitulo.setBounds(12, 0, 900, 35);
-				panelPrincipal.add(lblTitulo);
-				lblTitulo.setFont(UIHelper.FONT_TITULO);
-				lblTitulo.setForeground(UIHelper.COLOR_TEXTO);
-				lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+		JLabel lblTitulo = new JLabel("Explorar Biblioteca");
+		lblTitulo.setBounds(12, 0, 900, 35);
+		panelPrincipal.add(lblTitulo);
+		lblTitulo.setFont(UIHelper.FONT_TITULO);
+		lblTitulo.setForeground(UIHelper.COLOR_TEXTO);
+		lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
 
-	
 		btnPlay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (listaJuegos.isEmpty()) {
@@ -287,14 +288,13 @@ public class Biblioteca2 {
 					return;
 				}
 				JOptionPane.showMessageDialog(frame, 
-					"¡Iniciando el juego exitosamente!\n" + listaTitulos.get(indiceJuegoActual), 
+					"¡Iniciando el juego exitosamente!\n" + listaJuegos.get(indiceJuegoActual).getTitulo(), 
 					"Jugar", 
 					JOptionPane.INFORMATION_MESSAGE
 				);
 			}
 		});
 
-		// BORRADO LÓGICO AL QUITAR
 		btnRemove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (listaJuegos.isEmpty()) {
@@ -302,14 +302,17 @@ public class Biblioteca2 {
 					return;
 				}
 
-				String tituloQuitado = listaTitulos.get(indiceJuegoActual);
+				JuegoDTO juegoQuitado = listaJuegos.get(indiceJuegoActual);
 
+				juegosSet.remove(juegoQuitado);
 				listaJuegos.remove(indiceJuegoActual);
-				listaTitulos.remove(indiceJuegoActual);
-				listaAnios.remove(indiceJuegoActual);
+				
+				if (memoryApi != null) {
+					memoryApi.quitarFavorito(juegoQuitado);
+				}
 
 				JOptionPane.showMessageDialog(frame, 
-					"El juego '" + tituloQuitado + "' fue quitado de la biblioteca correctamente.", 
+					"El juego '" + juegoQuitado.getTitulo() + "' fue quitado de la biblioteca correctamente.", 
 					"Quitar", 
 					JOptionPane.INFORMATION_MESSAGE
 				);
@@ -322,23 +325,17 @@ public class Biblioteca2 {
 			}
 		});
 
-		// MOSTRAR INFORMACIÓN DETALLADA DEL JUEGO
 		btnVerInfo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (listaJuegos.isEmpty()) {
 					JOptionPane.showMessageDialog(frame, "No hay juegos disponibles.", "Aviso", JOptionPane.WARNING_MESSAGE);
 					return;
 				}
-				RegistroJuegoDTO juegoActual = listaJuegos.get(indiceJuegoActual);
-				String titulo = listaTitulos.get(indiceJuegoActual);
-				int anio = listaAnios.get(indiceJuegoActual);
+				JuegoDTO juegoActual = listaJuegos.get(indiceJuegoActual);
+				String info = memoryApi.getInfoJuego(juegoActual);
 
 				JOptionPane.showMessageDialog(frame, 
-					"Información del Juego:\n" + 
-					"• Título: " + titulo + "\n" +
-					"• Año de salida: " + anio + "\n" +
-					"• ID de Registro: " + juegoActual.getIdJuego() + "\n" +
-					"• Horas jugadas: " + juegoActual.getHoras() + " hrs", 
+					"Información del Juego:\n" + info, 
 					"Ver Info", 
 					JOptionPane.INFORMATION_MESSAGE
 				);
@@ -347,11 +344,38 @@ public class Biblioteca2 {
 		
 		btnBuscarRapido.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(frame, "Búsqueda realizada con éxito.", "Buscar", JOptionPane.INFORMATION_MESSAGE);
+				String textoBusqueda = txtBuscarRapido.getText().trim();
+				if (textoBusqueda.isEmpty()) {
+					JOptionPane.showMessageDialog(frame, "Ingrese un título para buscar.", "Aviso", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+
+				try {
+					boolean encontrado = false;
+					int indexEncontrado = -1;
+					
+					for (int i = 0; i < listaJuegos.size(); i++) {
+						if (listaJuegos.get(i).getTitulo().equalsIgnoreCase(textoBusqueda) || 
+							listaJuegos.get(i).getTitulo().toLowerCase().contains(textoBusqueda.toLowerCase())) {
+							indexEncontrado = i;
+							encontrado = true;
+							break;
+						}
+					}
+
+					if (encontrado) {
+						indiceJuegoActual = indexEncontrado;
+						actualizarJuegoActual();
+						JOptionPane.showMessageDialog(frame, "¡Juego encontrado y seleccionado con éxito!", "Buscar", JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						throw new JuegoNoEncontradoException("El juego '" + textoBusqueda + "' no fue encontrado.");
+					}
+				} catch (JuegoNoEncontradoException ex) {
+					JOptionPane.showMessageDialog(frame, ex.getMessage(), "Juego No Encontrado", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 
-		// Cargar primer juego inicial
 		actualizarJuegoActual();
 	}
 
@@ -363,8 +387,8 @@ public class Biblioteca2 {
 			return;
 		}
 
-		RegistroJuegoDTO juegoActual = listaJuegos.get(indiceJuegoActual);
-		int idJuego = juegoActual.getIdJuego();
+		JuegoDTO juegoActual = listaJuegos.get(indiceJuegoActual);
+		int idJuego = juegoActual.getId();
 		String nombreArchivo = "esw-logo.png"; 
 
 		if (idJuego == 1) {
@@ -394,82 +418,6 @@ public class Biblioteca2 {
 			lblVistaPrevia.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
 		}
 		
-		lblNombreJuego.setText(listaTitulos.get(indiceJuegoActual));
-	}
-
-	private void actualizarPanelMatriz() {
-		panelMatriz.removeAll();
-
-		JPanel gridTarjetas = new JPanel(new FlowLayout(FlowLayout.CENTER, 25, 20));
-		gridTarjetas.setBackground(UIHelper.COLOR_TARJETA);
-		
-		if (listaJuegos.isEmpty()) {
-			JLabel lblVacio = new JLabel("No hay juegos en la biblioteca.");
-			lblVacio.setFont(UIHelper.FONT_SUBTITULO);
-			lblVacio.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
-			gridTarjetas.add(lblVacio);
-		} else {
-			for (int i = 0; i < listaJuegos.size(); i++) {
-				int id = listaJuegos.get(i).getIdJuego();
-				String titulo = listaTitulos.get(i);
-				String archivo = "esw-logo.png";
-				if (id == 1) archivo = "Street-Fighter-II-USA_cover_1024x705.jpg";
-				else if (id == 2) archivo = "doom_1993_cover_720x1080.jpg";
-				else if (id == 3) archivo = "Wolfenstein 3D (PC Version).jpg";
-
-				gridTarjetas.add(crearTarjetaMatriz(id, titulo, archivo));
-			}
-		}
-
-		JScrollPane scrollMatriz = new JScrollPane(gridTarjetas);
-		scrollMatriz.setBounds(50, 20, 800, 470);
-		scrollMatriz.setBorder(BorderFactory.createEmptyBorder());
-		scrollMatriz.getViewport().setBackground(UIHelper.COLOR_TARJETA);
-		panelMatriz.add(scrollMatriz);
-		panelMatriz.revalidate();
-		panelMatriz.repaint();
-	}
-
-	private JPanel crearTarjetaMatriz(int id, String titulo, String nombreArchivo) {
-		JPanel tarjeta = new JPanel(new BorderLayout());
-		tarjeta.setPreferredSize(new Dimension(UIHelper.ANCHO_TARJETA, UIHelper.ALTO_TARJETA));
-		tarjeta.setBackground(UIHelper.COLOR_CONTENIDO);
-		tarjeta.setBorder(BorderFactory.createLineBorder(UIHelper.COLOR_BORDE, 2));
-
-		String ruta = "/img/" + nombreArchivo;
-		URL imgURL = getClass().getResource(ruta);
-		
-		JLabel lblImagen = new JLabel();
-		lblImagen.setHorizontalAlignment(SwingConstants.CENTER);
-		lblImagen.setPreferredSize(new Dimension(UIHelper.ANCHO_PORTADA, UIHelper.ALTO_PORTADA));
-
-		if (imgURL != null) {
-			ImageIcon iconOriginal = new ImageIcon(imgURL);
-			Image imagenEscalada = iconOriginal.getImage().getScaledInstance(
-					UIHelper.ANCHO_PORTADA, 
-					UIHelper.ALTO_PORTADA, 
-					Image.SCALE_SMOOTH
-			);
-			lblImagen.setIcon(new ImageIcon(imagenEscalada));
-		} else {
-			lblImagen.setText("Sin Imagen");
-			lblImagen.setFont(UIHelper.FONT_TARJETA);
-			lblImagen.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
-		}
-		
-		tarjeta.add(lblImagen, BorderLayout.CENTER);
-
-		JPanel panelDatos = new JPanel(new BorderLayout());
-		panelDatos.setBackground(UIHelper.COLOR_CONTENIDO);
-		panelDatos.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-		JLabel lblTituloTarjeta = new JLabel(titulo, SwingConstants.CENTER);
-		lblTituloTarjeta.setFont(UIHelper.FONT_TARJETA);
-		lblTituloTarjeta.setForeground(UIHelper.COLOR_TEXTO);
-		panelDatos.add(lblTituloTarjeta, BorderLayout.CENTER);
-
-		tarjeta.add(panelDatos, BorderLayout.SOUTH);
-
-		return tarjeta;
+		lblNombreJuego.setText(juegoActual.getTitulo());
 	}
 }

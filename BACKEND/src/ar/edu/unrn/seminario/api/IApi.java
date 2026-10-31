@@ -1,11 +1,12 @@
 package ar.edu.unrn.seminario.api;
-import ar.edu.unrn.seminario.exception.CatalogoVacioException;
 
 import java.util.List;
-
+import java.util.Set;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.JuegoDTO;
+import ar.edu.unrn.seminario.exception.CatalogoVacioException;
+import ar.edu.unrn.seminario.exception.JuegoNoEncontradoException;
 
 public interface IApi {
 
@@ -19,40 +20,29 @@ public interface IApi {
 
 	List<RolDTO> obtenerRolesActivos();
 
-	void guardarRol(Integer codigo, String descripcion, boolean estado); // crear el objeto de dominio �Rol�
+	void guardarRol(Integer codigo, String descripcion, boolean estado);
 
-	RolDTO obtenerRolPorCodigo(Integer codigo); // recuperar el rol almacenado
+	void activarRol(Integer codigo);
 
-	void activarRol(Integer codigo); // recuperar el objeto Rol, implementar el comportamiento de estado.
+	void desactivarRol(Integer codigo);
 
-	void desactivarRol(Integer codigo); // recuperar el objeto Rol, imp
+	List<UsuarioDTO> obtenerUsuarios();
 
-	List<UsuarioDTO> obtenerUsuarios(); // recuperar todos los usuarios
+	void activarUsuario(String username);
 
-	void activarUsuario(String username); // recuperar el objeto Usuario, implementar el comportamiento de estado.
+	void desactivarUsuario(String username);
+	
+	List<JuegoDTO> obtenerJuegos() throws CatalogoVacioException;
 
-	void desactivarUsuario(String username); // recuperar el objeto Usuario, implementar el comportamiento de estado.
-<<<<<<< HEAD
+	void agregarFavorito(JuegoDTO juego);
 
+	void quitarFavorito(JuegoDTO juego);
 
-// para la gestion de la biblioteca falta una instancia de juego o otra forma de manejar los favoritos
+	Set<JuegoDTO> obtenerFavoritos();
 
-	void agregarFavorito(RegistrarJuegoDTO j);
-
-	void quitarFavorito(RegistrarJuegoDTO j);
-
-	List<RegistrarJuegoDTO> obtenerFavoritos();
-
-	RegistrarJuegoDTO getFavorito(String nombre_juego);
+	JuegoDTO getFavorito(String nombreJuego) throws JuegoNoEncontradoException;
 
 	int contarFavoritos();
 
-	RegistrarJuegoDTO verInfoJuego(JuegoDTO j);
-
-
-
-=======
-	
-	List<JuegoDTO> obtenerJuegos() throws CatalogoVacioException;
->>>>>>> origin/testing
+	String getInfoJuego(JuegoDTO juego);
 }
