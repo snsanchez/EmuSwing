@@ -47,7 +47,7 @@ public class MemoryApi implements IApi {
 		this.juegosLinks.put(1, "https://archive.org/embed/Super_Street_Fighter_II_USA.md");
 		this.juegosLinks.put(2, "https://archive.org/embed/msdos_DOOM_1993");
 		this.juegosLinks.put(3, "https://archive.org/embed/Wolfenstein3d");
-		this.juegosLinks.put(4, "https://archive.org/details/super-mario-world-usa_202406");
+		this.juegosLinks.put(4, "https://archive.org/embed/super-mario-world-usa_202406");
 	}
 
 	private void inicializarUsuarios() {
