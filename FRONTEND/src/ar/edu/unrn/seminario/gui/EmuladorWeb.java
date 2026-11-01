@@ -1,4 +1,11 @@
 /*
+Para renderizar el juego en un JPanel, se utiliza la biblioteca JCEF (Java Chromium Embedded Framework)
+
+Ver docu:
+- https://github.com/chromiumembedded/java-cef
+- https://chromiumembedded.github.io/java-cef/building_openjdk.html
+
+
 IMPORTANTE
 - tener configurado java 8 en eclipse. Ver run -> run configurations -> JREs
 
@@ -44,17 +51,22 @@ public class EmuladorWeb extends JPanel {
 
     private void inicializarNavegador(String urlJuego) throws Exception {
         String sistema = System.getProperty("os.name").toLowerCase();
+        // En Windows el OSR causa problemas de rendimiento y compatibilidad
         boolean usarOSR = !sistema.contains("win");
 
         CefAppBuilder builder = new CefAppBuilder();
+
+        // OSR significa Off-Screen Rendering, que permite renderizar el contenido del navegador sin necesidad de una ventana nativa. Permite mas control sobre apariencia y comportamiento del navegador.
         builder.getCefSettings().windowless_rendering_enabled = usarOSR;
 
+        // esto me permite que el navegador funcione en sistemas donde no hay GPU o aceleración gráfica.
         builder.addJcefArgs("--disable-gpu");
 
         File cacheDir = new File(
             System.getProperty("user.home"),
             ".emuswing/cef-cache"
         );
+        // guarda una pequeña cache para mejorar el rendimiento, contiene: recursos de la web, cookies, historial, etc. Se puede borrar si se quiere liberar espacio o resetear el navegador)
 
         if (!cacheDir.exists() && !cacheDir.mkdirs()) {
             throw new IllegalStateException(
@@ -67,14 +79,15 @@ public class EmuladorWeb extends JPanel {
 
 
         cefApp = builder.build();
+        // cefApp seria el proceso principal que gestiona la vida útil del navegador y sus recursos
         client = cefApp.createClient();
 
         browser = client.createBrowser(urlJuego, usarOSR, false);
-        // El primer true solicita renderizado sin ventana nativa para ese navegador; el segundo false mantiene desactivada la transparencia
         add(browser.getUIComponent(), BorderLayout.CENTER);
     }
 
     public void cerrar() {
+        // cierra la instancia y libera los recursos asociados al navegador, cliente y aplicación CEF
         if (browser != null) {
             browser.close(true);
             browser = null;
