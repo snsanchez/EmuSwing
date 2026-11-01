@@ -17,6 +17,9 @@ import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.dto.JuegoDTO;
 import ar.edu.unrn.seminario.exception.CatalogoVacioException;
+import ar.edu.unrn.seminario.exception.UsuarioExistenteException;
+import ar.edu.unrn.seminario.exception.RolNoEncontradoException;
+
 
 public class MemoryApi implements IApi {
 
@@ -51,21 +54,41 @@ public class MemoryApi implements IApi {
 	}
 
 	private void inicializarUsuarios() {
-		registrarUsuario("admin", "1234", "admin@unrn.edu.ar", "Admin", 1);
-		registrarUsuario("ldifabio", "4", "ldifabio@unrn.edu.ar", "Lucas", 2);
-		registrarUsuario("bjgorosito", "1234", "bjgorosito@unrn.edu.ar", "Bruno", 3);
-
+	    registrarUsuario("admin", "1234", "admin@unrn.edu.ar", "Admin", 1);
+	    registrarUsuario("ldifabio", "4", "ldifabio@unrn.edu.ar", "Lucas", 2);
+	    registrarUsuario("bjgorosito", "1234", "bjgorosito@unrn.edu.ar", "Bruno", 3);
 	}
 
 	@Override
-	public void registrarUsuario(String username, String password, String email, String nombre, Integer rol) {
+	public void registrarUsuario(String username, String password,
+	        String email, String nombre, Integer rol)
+	        throws UsuarioExistenteException, RolNoEncontradoException {
+		
+		// Verificar que los datos estén completos
+		if (username == null || username.trim().isEmpty()  || password == null || password.trim().isEmpty() || email == null || email.trim().isEmpty()  || nombre == null || nombre.trim().isEmpty() || rol == null) {
 
-		Rol role = this.buscarRol(rol);
-		Usuario usuario = new Usuario(username, password, nombre, email, role);
-		this.usuarios.add(usuario);
+		    throw new IllegalArgumentException("Complete todos los campos.");
+		}
 
+	    // Verificar que el nombre de usuario no exista
+	    for (Usuario u : usuarios) {
+
+	        if (u.getUsuario().equalsIgnoreCase(username)) {
+	        	throw new UsuarioExistenteException("El nombre de usuario ya existe.");	        }
+	    }
+
+	 // Buscar el rol seleccionado
+	    Rol role = this.buscarRol(rol);
+
+	 // Verificar que el rol exista
+	    if (role == null) {
+	        throw new RolNoEncontradoException("El rol seleccionado no existe.");
+	    }
+
+	    // Crear y guardar el usuario
+	    Usuario usuario = new Usuario(username, password, nombre, email, role);
+	    this.usuarios.add(usuario);
 	}
-
 	@Override
 	public List<UsuarioDTO> obtenerUsuarios() {
 		List<UsuarioDTO> dtos = new ArrayList<>();

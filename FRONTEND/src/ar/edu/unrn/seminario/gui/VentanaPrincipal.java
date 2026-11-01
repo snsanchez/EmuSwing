@@ -88,6 +88,16 @@ public class VentanaPrincipal extends JFrame {
         panelMenu.add(crearBotonMenu("Mi Perfil"));
         panelMenu.add(crearBotonMenu("Biblioteca"));
         
+     // Botón Registrar Usuario
+        JButton btnRegistrarUsuario = crearBotonMenu("Registrar Usuario");
+
+        btnRegistrarUsuario.addActionListener(e -> {
+            RegistrarUsuario ventana = new RegistrarUsuario(api);
+            ventana.mostrar();
+        });
+
+        panelMenu.add(btnRegistrarUsuario);
+        
         // -- BOTON JUEGOS PARA LA CONEXION CON LISTADO JUEGOS --
         JButton btnMenuJuegos = crearBotonMenu("Juegos");
         btnMenuJuegos.addActionListener(e -> {

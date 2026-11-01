@@ -1,5 +1,7 @@
 package ar.edu.unrn.seminario.api;
 import ar.edu.unrn.seminario.exception.CatalogoVacioException;
+import ar.edu.unrn.seminario.exception.UsuarioExistenteException;
+import ar.edu.unrn.seminario.exception.RolNoEncontradoException;
 
 import java.util.List;
 
@@ -9,8 +11,9 @@ import ar.edu.unrn.seminario.dto.JuegoDTO;
 
 public interface IApi {
 
-	void registrarUsuario(String username, String password, String email, String nombre, Integer rol);
-
+	void registrarUsuario(String username, String password, String email, String nombre, Integer rol)
+	        throws UsuarioExistenteException, RolNoEncontradoException;
+	
 	UsuarioDTO obtenerUsuario(String username);
 
 	void eliminarUsuario(String username);
