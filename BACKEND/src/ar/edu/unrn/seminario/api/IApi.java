@@ -12,7 +12,7 @@ import ar.edu.unrn.seminario.dto.JuegoDTO;
 public interface IApi {
 
 	void registrarUsuario(String username, String password, String email, String nombre, Integer rol)
-			throws UsuarioExistenteException, RolNoEncontradoException;
+	        throws UsuarioExistenteException, RolNoEncontradoException;
 	
 	UsuarioDTO obtenerUsuario(String username);
 

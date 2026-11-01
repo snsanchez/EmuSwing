@@ -17,6 +17,9 @@ import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.dto.JuegoDTO;
 import ar.edu.unrn.seminario.exception.CatalogoVacioException;
+import ar.edu.unrn.seminario.exception.UsuarioExistenteException;
+import ar.edu.unrn.seminario.exception.RolNoEncontradoException;
+
 
 
 public class MemoryApi implements IApi {

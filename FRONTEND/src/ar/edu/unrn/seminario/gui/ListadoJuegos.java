@@ -1,9 +1,10 @@
 package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Image;
+import java.net.URL;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -14,17 +15,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
-import javax.xml.catalog.CatalogException;
-
-
-import java.net.URL;
-import java.awt.Image;
-
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.JuegoDTO;
-import ar.edu.unrn.seminario.helpers.UIHelper;
 import ar.edu.unrn.seminario.exception.CatalogoVacioException;
+import ar.edu.unrn.seminario.helpers.UIHelper;
 
 public class ListadoJuegos extends JFrame {
 
@@ -52,26 +47,53 @@ public class ListadoJuegos extends JFrame {
 		panelGrilla.setBackground(UIHelper.COLOR_FONDO);
 
 		// Solicitamos los juegos a la API (simulacion con los juegos de prueba cargados)
-		try {
-			List<JuegoDTO> juegos = api.obtenerJuegos();
-			
-			for (JuegoDTO j : juegos) {
-				JPanel tarjeta = crearTarjetaJuego(j);
-				panelGrilla.add(tarjeta);
-			}
-		} catch (CatalogoVacioException e) {
-			// Si salta la excepción, mostrams un cartel con mensaje de error
-			JLabel lblVacio = new JLabel(e.getMessage());
-			lblVacio.setFont(UIHelper.FONT_SUBTITULO);
-			lblVacio.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
-			panelGrilla.add(lblVacio);
-		} catch (Exception e) {
-			javax.swing.JOptionPane.showMessageDialog(this, 
-				"Ocurrió un error al cargar los juegos.", 
-				"Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-		}
-				
+				try {
+					List<JuegoDTO> juegos = api.obtenerJuegos();
+					
+					for (JuegoDTO j : juegos) {
+						JPanel tarjeta = crearTarjetaJuego(j);
+						
+						tarjeta.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+						
+						tarjeta.addMouseListener(new java.awt.event.MouseAdapter() {
+							
+							@Override
+							public void mouseClicked(java.awt.event.MouseEvent evt) {
+								// Usamos el método getUrlJuegoByTitulo 
+								String urlJuego = api.getUrlJuegoByTitulo(j.getTitulo());
+								
+								if (urlJuego != null) {
+									try {
+										VentanaJuego ventanaJuego = new VentanaJuego(urlJuego);
+										ventanaJuego.setVisible(true);
+									} catch (Exception ex) {
+										ex.printStackTrace();
+										javax.swing.JOptionPane.showMessageDialog(ListadoJuegos.this, 
+											"Error al intentar iniciar el emulador web.", 
+											"Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+									}
+								} else {
+									javax.swing.JOptionPane.showMessageDialog(ListadoJuegos.this, 
+										"El enlace para este juego no está disponible.", 
+										"Juego no disponible", javax.swing.JOptionPane.WARNING_MESSAGE);
+								}
+							}
+						});
 
+						panelGrilla.add(tarjeta);
+					}
+				} catch (CatalogoVacioException e) {
+					JLabel lblVacio = new JLabel(e.getMessage());
+					lblVacio.setFont(UIHelper.FONT_SUBTITULO);
+					lblVacio.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
+					panelGrilla.add(lblVacio);
+		            
+				} catch (Exception e) {
+					javax.swing.JOptionPane.showMessageDialog(this, 
+						"Ocurrió un error al cargar los juegos.", 
+						"Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+				}
+				
 		// ScrollPane para navegacion mas comoda entre los juegos
 		JScrollPane scrollPane = new JScrollPane(panelGrilla);
 		scrollPane.setBorder(null); 
@@ -108,6 +130,8 @@ public class ListadoJuegos extends JFrame {
 			nombreArchivo = "doom_1993_cover_720x1080.jpg"; 
 		} else if (juego.getId() == 3) {
 			nombreArchivo = "Wolfenstein 3D (PC Version).jpg"; 
+		} else if (juego.getId() == 4) {
+			nombreArchivo = "Super-Mario-Word_1990_cover_474x332.jpg";
 		}
 
 		String ruta = "/img/" + nombreArchivo;
