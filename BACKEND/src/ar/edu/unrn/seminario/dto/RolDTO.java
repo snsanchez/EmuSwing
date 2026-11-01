@@ -1,14 +1,22 @@
-package ar.edu.unrn.seminario.modelo;
+package ar.edu.unrn.seminario.dto;
 
-public class Rol {
+public class RolDTO {
+
 	private Integer codigo;
 	private String nombre;
 	private boolean activo;
 
-	public Rol(Integer codigo, String nombre) {
+	public RolDTO(Integer codigo, String nombre) {
+		super();
 		this.codigo = codigo;
 		this.nombre = nombre;
-		this.activo = true;
+	}
+
+	public RolDTO(Integer codigo, String nombre, boolean activo) {
+		super();
+		this.codigo = codigo;
+		this.nombre = nombre;
+		this.activo = activo;
 	}
 
 	public Integer getCodigo() {
@@ -31,26 +39,8 @@ public class Rol {
 		return activo;
 	}
 
-	public void activar() {
-		this.activo = true;
+	public void setActivo(boolean activo) {
+		this.activo = activo;
 	}
 
-	public void desactivar() {
-		this.activo = false;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null || getClass() != obj.getClass())
-			return false;
-		Rol rol = (Rol) obj;
-		return codigo != null && codigo.equals(rol.codigo);
-	}
-
-	@Override
-	public int hashCode() {
-		return codigo != null ? codigo.hashCode() : 0;
-	}
 }

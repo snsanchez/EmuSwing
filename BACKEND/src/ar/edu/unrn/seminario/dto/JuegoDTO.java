@@ -1,0 +1,73 @@
+package ar.edu.unrn.seminario.dto;
+
+public class JuegoDTO {
+    private Integer id;
+    private String titulo;
+    private String genero;
+    private String desarrollador;
+    private String consola;
+    private Integer año;
+
+    public JuegoDTO(Integer id, String titulo, String genero, String desarrollador, String consola, Integer año) {
+        this.id = id;
+        this.titulo = titulo;
+        this.genero = genero;
+        this.desarrollador = desarrollador;
+        this.consola = consola;
+        this.año = año;
+    }
+    
+    
+    
+    public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getTitulo() {
+		return titulo;
+	}
+
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
+	}
+
+	public String getGenero() {
+		return genero;
+	}
+
+	public void setGenero(String genero) {
+		this.genero = genero;
+	}
+
+	public String getDesarrollador() {
+		return desarrollador;
+	}
+
+	public void setDesarrollador(String desarrollador) {
+		this.desarrollador = desarrollador;
+	}
+
+	public String getConsola() {
+		return consola;
+	}
+
+	public void setConsola(String consola) {
+		this.consola = consola;
+	}
+
+	public Integer getAño() {
+		return año;
+	}
+
+	public void setAño(Integer año) {
+		this.año = año;
+	}
+
+	
+
+    
+}

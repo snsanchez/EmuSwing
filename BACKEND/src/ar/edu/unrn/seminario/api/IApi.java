@@ -1,17 +1,19 @@
 package ar.edu.unrn.seminario.api;
+import ar.edu.unrn.seminario.exception.CatalogoVacioException;
+import ar.edu.unrn.seminario.exception.UsuarioExistenteException;
+import ar.edu.unrn.seminario.exception.RolNoEncontradoException;
 
 import java.util.List;
-import java.util.Set;
+
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.JuegoDTO;
-import ar.edu.unrn.seminario.exception.CatalogoVacioException;
-import ar.edu.unrn.seminario.exception.JuegoNoEncontradoException;
 
 public interface IApi {
 
-	void registrarUsuario(String username, String password, String email, String nombre, Integer rol);
-
+	void registrarUsuario(String username, String password, String email, String nombre, Integer rol)
+			throws UsuarioExistenteException, RolNoEncontradoException;
+	
 	UsuarioDTO obtenerUsuario(String username);
 
 	void eliminarUsuario(String username);
@@ -20,29 +22,31 @@ public interface IApi {
 
 	List<RolDTO> obtenerRolesActivos();
 
-	void guardarRol(Integer codigo, String descripcion, boolean estado);
+	void guardarRol(Integer codigo, String descripcion, boolean estado); // crear el objeto de dominio �Rol�
 
-	void activarRol(Integer codigo);
+	RolDTO obtenerRolPorCodigo(Integer codigo); // recuperar el rol almacenado
 
-	void desactivarRol(Integer codigo);
+	void activarRol(Integer codigo); // recuperar el objeto Rol, implementar el comportamiento de estado.
 
-	List<UsuarioDTO> obtenerUsuarios();
+	void desactivarRol(Integer codigo); // recuperar el objeto Rol, imp
 
-	void activarUsuario(String username);
+	List<UsuarioDTO> obtenerUsuarios(); // recuperar todos los usuarios
 
-	void desactivarUsuario(String username);
-	
+	void activarUsuario(String username); // recuperar el objeto Usuario, implementar el comportamiento de estado.
+
+	void desactivarUsuario(String username); // recuperar el objeto Usuario, implementar el comportamiento de estado.
+
+	// el requerimiento cargarJuego
+
+	// el metodo cargarJuego no va en el backend porque maneja frontend
+
+	public Integer getIdJuegoPorTitulo(String titulo); // recuperar el id del juego a partir de su titulo.
+
+	public String getUrlJuegoById(Integer idJuego);
+
+	public String getUrlJuegoByTitulo(String titulo);
+
+
+
 	List<JuegoDTO> obtenerJuegos() throws CatalogoVacioException;
-
-	void agregarFavorito(JuegoDTO juego);
-
-	void quitarFavorito(JuegoDTO juego);
-
-	Set<JuegoDTO> obtenerFavoritos();
-
-	JuegoDTO getFavorito(String nombreJuego) throws JuegoNoEncontradoException;
-
-	int contarFavoritos();
-
-	String getInfoJuego(JuegoDTO juego);
 }
