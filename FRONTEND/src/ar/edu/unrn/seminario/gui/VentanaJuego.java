@@ -136,14 +136,12 @@ public class VentanaJuego extends JFrame {
             emuladorWeb = new EmuladorWeb(urlJuego);
             panelJuego.add(emuladorWeb, BorderLayout.CENTER);
         } catch (Exception e) {
-            e.printStackTrace();
-
-            JLabel lblError = new JLabel(
-                "No se pudo iniciar el juego.",
-                SwingConstants.CENTER
+            JOptionPane.showMessageDialog(
+                this,
+                "No se pudo iniciar el juego:\n" + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE
             );
-            lblError.setForeground(Color.WHITE);
-            panelJuego.add(lblError, BorderLayout.CENTER);
         }
 
         contentPane.add(panelJuego, BorderLayout.CENTER);
