@@ -54,18 +54,9 @@ public class MemoryApi implements IApi {
 	}
 
 	private void inicializarUsuarios() {
-
-	    try {
-	        registrarUsuario("admin", "1234", "admin@unrn.edu.ar", "Admin", 1);
-	        registrarUsuario("ldifabio", "4", "ldifabio@unrn.edu.ar", "Lucas", 2);
-	        registrarUsuario("bjgorosito", "1234", "bjgorosito@unrn.edu.ar", "Bruno", 3);
-
-	    } catch (UsuarioExistenteException e) {
-	        e.printStackTrace();
-
-	    } catch (RolNoEncontradoException e) {
-	        e.printStackTrace();
-	    }
+	    registrarUsuario("admin", "1234", "admin@unrn.edu.ar", "Admin", 1);
+	    registrarUsuario("ldifabio", "4", "ldifabio@unrn.edu.ar", "Lucas", 2);
+	    registrarUsuario("bjgorosito", "1234", "bjgorosito@unrn.edu.ar", "Bruno", 3);
 	}
 
 	@Override
