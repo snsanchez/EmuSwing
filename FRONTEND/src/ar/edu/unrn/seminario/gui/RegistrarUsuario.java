@@ -82,7 +82,7 @@ public class RegistrarUsuario {
         mnBiblioteca.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Biblioteca2.main(new String[0]);
+                Biblioteca.main(new String[0]);
             }
         });
 

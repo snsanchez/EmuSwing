@@ -18,6 +18,7 @@ import ar.edu.unrn.seminario.exception.UsuarioExistenteException;
 import ar.edu.unrn.seminario.exception.RolNoEncontradoException;
 
 
+
 public class MemoryApi implements IApi {
 
 	// estos son objetos de dominio, cuando se expongan hay que pasarlos a DTO
@@ -26,6 +27,9 @@ public class MemoryApi implements IApi {
 
 	private Set<Juego> juegos = new HashSet<>();
 	private Map<Integer, String> juegosLinks = new HashMap<>();
+	
+	// --- Coleccion para favoritos ---
+	private Set<Integer> juegosFavoritosIds = new HashSet<>();
 
 	public MemoryApi() {
 
@@ -55,6 +59,8 @@ public class MemoryApi implements IApi {
 	    registrarUsuario("ldifabio", "4", "ldifabio@unrn.edu.ar", "Lucas", 2);
 	    registrarUsuario("bjgorosito", "1234", "bjgorosito@unrn.edu.ar", "Bruno", 3);
 	}
+	
+	
 
 	@Override
 	public void registrarUsuario(String username, String password,
@@ -179,13 +185,24 @@ public class MemoryApi implements IApi {
 
 	@Override
 	public void activarUsuario(String usuario) {
-		Usuario user = this.buscarUsuario(usuario);
-		user.activar();
+		for (Usuario u : this.usuarios) {
+			// usamos equalsIgnoreCase por si hay diferencias de MAYUS/MINUS
+			if (u.getUsuario().equalsIgnoreCase(usuario)) {
+				u.activar();
+				break; 
+			}
+		}
 	}
 
 	@Override
 	public void desactivarUsuario(String usuario) {
-	    this.buscarUsuario(usuario).desactivar();
+		for (Usuario u : this.usuarios) {
+			// usamos equalsIgnoreCase por si hay diferencias de MAYUS/MINUS
+			if (u.getUsuario().equalsIgnoreCase(usuario)) {
+				u.desactivar();
+				break; 
+			}
+		}
 	}
 
 	private Rol buscarRol(Integer codigo) {
@@ -226,6 +243,31 @@ public class MemoryApi implements IApi {
 		return dtos;
 	}
 
+	@Override
+	public List<JuegoDTO> obtenerJuegosBiblioteca() throws CatalogoVacioException {
+		List<JuegoDTO> dtos = new ArrayList<>();
+		
+		// Simulamos que el usuario tiene los juegos 1 y 2 en su biblioteca
+		for (Juego j : this.juegos) {
+			if (j.getId() == 1 || j.getId() == 2) {
+				dtos.add(new JuegoDTO(
+					j.getId(),
+					j.getTitulo(), 
+					j.getGenero(), 
+					j.getDesarrollador(), 
+					j.getConsola(), 
+					j.getAño()
+				));
+			}
+		}
+
+		if (dtos.isEmpty()) {
+			throw new CatalogoVacioException("Tu biblioteca está vacía. ¡Agregá algunos juegos desde el catálogo!");
+		}
+		
+		return dtos;
+	}
+	
 	public String getUrlJuegoById(Integer idJuego){
 		// ejemplo: this.juegosLinks.put(3, "https://archive.org/embed/super-castlevania-iv-usa_202301");
 		// si le uso getUrlJuegoById(3) me devuelve "https://archive.org/embed/super-castlevania-iv-usa_202301"
@@ -238,6 +280,45 @@ public class MemoryApi implements IApi {
 			return this.getUrlJuegoById(idJuego);
 		}
 		return null;
+	}
+	
+	@Override
+	public void agregarAFavoritos(Integer idJuego) {
+		if (idJuego != null) {
+			this.juegosFavoritosIds.add(idJuego);
+		}
+	}
+
+	@Override
+	public void quitarDeFavoritos(Integer idJuego) {
+		if (idJuego != null) {
+			this.juegosFavoritosIds.remove(idJuego);
+		}
+	}
+
+	@Override
+	public List<JuegoDTO> obtenerJuegosFavoritos() throws CatalogoVacioException {
+		List<JuegoDTO> dtos = new ArrayList<>();
+		
+		// Recorremos todos los juegos y filtramos los que están en la lista de favoritos
+		for (Juego j : this.juegos) {
+			if (this.juegosFavoritosIds.contains(j.getId())) {
+				dtos.add(new JuegoDTO(
+					j.getId(),
+					j.getTitulo(), 
+					j.getGenero(), 
+					j.getDesarrollador(), 
+					j.getConsola(), 
+					j.getAño()
+				));
+			}
+		}
+
+		if (dtos.isEmpty()) {
+			throw new CatalogoVacioException("No tenés juegos marcados como favoritos aún.");
+		}
+		
+		return dtos;
 	}
 
 }

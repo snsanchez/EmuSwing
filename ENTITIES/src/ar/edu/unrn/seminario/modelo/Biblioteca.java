@@ -4,6 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Iterator;
 
+
+// ARREGLAR 
+
 public class Biblioteca {
     private String idUsuario;
     // es el id del juego
