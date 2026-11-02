@@ -1,3 +1,5 @@
+/*
+
 package ar.edu.unrn.seminario.modelo;
 
 // Ver para que usarlo, si dejarlo o sacarlo
@@ -13,7 +15,7 @@ public class Recompensa{
         this.valor = valor;
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.categoria = categoria
+        this.categoria = categoria;
         this(codigo);
     }
 
@@ -30,7 +32,7 @@ public class Recompensa{
     }
 
     public String getDescripcion(){
-        return this.descripcion
+        return this.descripcion;
     }
 
     public void setDescripcion(String descripcion){
@@ -66,3 +68,5 @@ public class Recompensa{
 
 
 }
+
+*/

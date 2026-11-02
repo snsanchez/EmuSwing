@@ -1,9 +1,10 @@
-package ar.edu.unrn.seminario.mappers;
+/*  TIRA ERROR 
+
+ackage ar.edu.unrn.seminario.mappers;
 
 import ar.edu.unrn.seminario.dto.RegistroJuegoDTO;
 import ar.edu.unrn.seminario.modelo.RegistroJuego;
 
-// TIRA ERROR 
 
 public class JuegoMapper {
 
@@ -37,3 +38,5 @@ public class JuegoMapper {
                 );
     }
 }
+
+*/
