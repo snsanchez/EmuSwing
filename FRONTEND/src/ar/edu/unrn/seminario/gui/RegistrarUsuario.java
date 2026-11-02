@@ -128,7 +128,7 @@ public class RegistrarUsuario {
         mnAjustes.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                VentanaConfiguracion ventana = new VentanaConfiguracion();
+                VentanaConfiguracion ventana = new VentanaConfiguracion(api,"bjgorosito");
                 ventana.setVisible(true);
             }
         });
