@@ -1,7 +1,14 @@
+package ar.edu.unrn.seminario.mappers;
+
+import ar.edu.unrn.seminario.dto.RegistroJuegoDTO;
+import ar.edu.unrn.seminario.modelo.RegistroJuego;
+
+// TIRA ERROR 
+
 public class JuegoMapper {
 
     // Transforma una Entidad de Dominio a un DTO (para enviar hacia la interfaz/vista)
-    public static JuegoDto transform(RegistroJuego juego) {
+    public static RegistroJuegoDTO transform(RegistroJuego juego) {
         if (juego == null) {
             return null;
         }
@@ -16,8 +23,8 @@ public class JuegoMapper {
     }
 
     // Transforma un DTO a una Entidad de Dominio (cuando ingresan datos nuevos)
-    public static Juego transform(RegistroJuegoDTO juegoDto) {
-        if (juegoDto == null) {
+    public static RegistroJuego transform(RegistroJuegoDTO dto) {
+        if (dto == null) {
             return null;
         }
         return new RegistroJuego(

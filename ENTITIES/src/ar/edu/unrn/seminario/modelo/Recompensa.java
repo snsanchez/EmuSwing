@@ -1,5 +1,7 @@
 package ar.edu.unrn.seminario.modelo;
 
+// Ver para que usarlo, si dejarlo o sacarlo
+
 public class Recompensa{
     private String nombre;
     private String descripcion;

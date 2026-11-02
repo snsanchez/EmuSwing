@@ -1,186 +1,316 @@
 package ar.edu.unrn.seminario.gui;
-import ar.edu.unrn.seminario.helpers.UIHelper;
+
+import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Image;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 
-public class Biblioteca {
+import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.dto.JuegoDTO;
+import ar.edu.unrn.seminario.exception.CatalogoVacioException;
+import ar.edu.unrn.seminario.helpers.UIHelper;
 
-	private JFrame frame;
-	private JTable table;
+public class Biblioteca extends JFrame {
 
-	// Paleta de colores EmuSwing
-
-
-	/**
-	 * Launch the application.
-	 */
+	private IApi api;
+	private JPanel panelListaJuegos;
+	
+	// Variables para manejar la selección
+	private JuegoDTO juegoSeleccionado;
+	private final List<JPanel> filasJuegos = new ArrayList<>();
+	
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
+		java.awt.EventQueue.invokeLater(() -> {
+			try {
+				IApi apiPrueba = new ar.edu.unrn.seminario.api.MemoryApi();
+				Biblioteca frame = new Biblioteca(apiPrueba);
+				frame.setVisible(true);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+	}
+
+	public Biblioteca(IApi api) {
+		this.api = api;
+
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setTitle("Catálogo General - EmuSwing");
+		setSize(1000, 700);
+		setLocationRelativeTo(null);
+
+		JPanel contentPane = new JPanel(new BorderLayout());
+		contentPane.setBackground(UIHelper.COLOR_FONDO);
+		setContentPane(contentPane);
+
+		// ---------- ENCABEZADO (TÍTULOS) ----------
+		JPanel panelEncabezado = new JPanel(new BorderLayout());
+		panelEncabezado.setBackground(UIHelper.COLOR_FONDO);
+		panelEncabezado.setBorder(new EmptyBorder(20, 0, 20, 0));
+
+		JLabel lblTitulo = new JLabel("Biblioteca de Juegos", SwingConstants.CENTER);
+		lblTitulo.setFont(UIHelper.FONT_TITULO);
+		lblTitulo.setForeground(UIHelper.COLOR_TEXTO);
+		
+		JLabel lblSubtitulo = new JLabel("Explorá todos los títulos disponibles", SwingConstants.CENTER);
+		lblSubtitulo.setFont(UIHelper.FONT_SUBTITULO);
+		lblSubtitulo.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
+
+		panelEncabezado.add(lblTitulo, BorderLayout.NORTH);
+		panelEncabezado.add(lblSubtitulo, BorderLayout.SOUTH);
+		contentPane.add(panelEncabezado, BorderLayout.NORTH);
+
+		// ---------- CONTENEDOR CENTRAL (LISTA DE JUEGOS) ----------
+		panelListaJuegos = new JPanel();
+		panelListaJuegos.setLayout(new BoxLayout(panelListaJuegos, BoxLayout.Y_AXIS));
+		panelListaJuegos.setBackground(UIHelper.COLOR_CONTENIDO);
+		panelListaJuegos.setBorder(new EmptyBorder(15, 15, 15, 15));
+
+		JScrollPane scrollPane = new JScrollPane(panelListaJuegos);
+		scrollPane.setBorder(new LineBorder(UIHelper.COLOR_ACENTO, 2, true));
+		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+		scrollPane.getViewport().setBackground(UIHelper.COLOR_CONTENIDO);
+		
+		JPanel panelMargen = new JPanel(new BorderLayout());
+		panelMargen.setBackground(UIHelper.COLOR_FONDO);
+		panelMargen.setBorder(new EmptyBorder(0, 50, 20, 50));
+		panelMargen.add(scrollPane, BorderLayout.CENTER);
+		
+		contentPane.add(panelMargen, BorderLayout.CENTER);
+
+		// ---------- PANEL INFERIOR (BOTONES ÚNICOS) ----------
+		JPanel panelAcciones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 15));
+		panelAcciones.setBackground(UIHelper.COLOR_FONDO);
+		
+		JButton btnInfo = crearBotonAccion("Info", false);
+		JButton btnAgregar = crearBotonAccion("Agregar a Favoritos", false);
+		JButton btnJugar = crearBotonAccion("\u25B6 Jugar", true);
+		JButton btnVerFavoritos = crearBotonAccion("★ Ver Favoritos", false);
+		
+		// Lógica del nuevo botón "Ver Favoritos"
+				btnVerFavoritos.addActionListener(e -> {
+					try {
+						// Instanciamos la ventana que vamos a crear en el próximo paso
+						BibliotecaFavoritos ventanaFavoritos = new BibliotecaFavoritos(api);
+						ventanaFavoritos.setVisible(true);
+								
+						// Opcional: cerramos esta ventana para no apilar muchas pantallas
+						dispose(); 
+					  } catch (Exception ex) {
+						ex.printStackTrace();
+						javax.swing.JOptionPane.showMessageDialog(this, "Error al abrir favoritos.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+					}
+				});
+			
+		
+		
+
+		// Lógica del botón Jugar
+		btnJugar.addActionListener(e -> {
+			if (juegoSeleccionado == null) {
+				javax.swing.JOptionPane.showMessageDialog(this, "Seleccioná un juego primero.", "Atención", javax.swing.JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+			String urlJuego = api.getUrlJuegoByTitulo(juegoSeleccionado.getTitulo());
+			if (urlJuego != null) {
 				try {
-					Biblioteca window = new Biblioteca();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
+					VentanaJuego ventana = new VentanaJuego(urlJuego);
+					ventana.setVisible(true);
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					javax.swing.JOptionPane.showMessageDialog(this, "Error al iniciar el juego.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+				}
+			} else {
+				javax.swing.JOptionPane.showMessageDialog(this, "Enlace no disponible.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+			}
+		});
+
+		// Lógica del botón Info
+		btnInfo.addActionListener(e -> {
+			if (juegoSeleccionado == null) {
+				javax.swing.JOptionPane.showMessageDialog(this, "Seleccioná un juego primero.", "Atención", javax.swing.JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+			mostrarInfoJuego(juegoSeleccionado);
+		});
+		
+		// Lógica del botón Agregar a Favoritos
+		btnAgregar.addActionListener(e -> {
+			if (juegoSeleccionado == null) {
+				javax.swing.JOptionPane.showMessageDialog(this, "Seleccioná un juego primero.", "Atención", javax.swing.JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+			
+			// Llamamos al método del backend para guardar el ID
+			api.agregarAFavoritos(juegoSeleccionado.getId());
+			
+			javax.swing.JOptionPane.showMessageDialog(this, 
+				"¡" + juegoSeleccionado.getTitulo() + " se agregó a tus favoritos!", 
+				"Éxito", 
+				javax.swing.JOptionPane.INFORMATION_MESSAGE);
+		});
+
+		panelAcciones.add(btnVerFavoritos);
+		panelAcciones.add(btnInfo);
+		panelAcciones.add(btnAgregar);
+		panelAcciones.add(btnJugar);
+		contentPane.add(panelAcciones, BorderLayout.SOUTH);
+
+
+		// ---------- CARGA DE JUEGOS ----------
+		cargarJuegos();
+	}
+
+	private void cargarJuegos() {
+		try {
+			List<JuegoDTO> juegosTodos = api.obtenerJuegos();
+			for (JuegoDTO j : juegosTodos) {
+				JPanel filaJuego = crearFilaJuego(j);
+				panelListaJuegos.add(filaJuego);
+				filasJuegos.add(filaJuego); 
+				panelListaJuegos.add(javax.swing.Box.createRigidArea(new Dimension(0, 15)));
+			}
+		} catch (CatalogoVacioException e) {
+			JLabel lblVacio = new JLabel(e.getMessage(), SwingConstants.CENTER);
+			lblVacio.setFont(UIHelper.FONT_SUBTITULO);
+			lblVacio.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
+			panelListaJuegos.add(lblVacio);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private JPanel crearFilaJuego(JuegoDTO juego) {
+		JPanel fila = new JPanel(new BorderLayout(15, 0));
+		fila.setBackground(UIHelper.COLOR_TARJETA);
+		fila.setBorder(new CompoundBorder(new LineBorder(UIHelper.COLOR_BORDE, 2, true), new EmptyBorder(10, 10, 10, 10)));
+		fila.setMaximumSize(new Dimension(Integer.MAX_VALUE, 120));
+		fila.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
+
+		JLabel lblPortada = new JLabel();
+		lblPortada.setPreferredSize(new Dimension(80, 100)); 
+		
+		String nombreArchivo = "esw-logo.png"; 
+		if (juego.getId().equals(api.getIdJuegoPorTitulo("Super Street Fighter II"))) nombreArchivo = "Street-Fighter-II-USA_cover_1024x705.jpg";
+		else if (juego.getId().equals(api.getIdJuegoPorTitulo("DOOM"))) nombreArchivo = "doom_1993_cover_720x1080.jpg"; 
+		else if (juego.getId().equals(api.getIdJuegoPorTitulo("Wolfenstein 3D"))) nombreArchivo = "Wolfenstein 3D (PC Version).jpg";
+		else if (juego.getId().equals(api.getIdJuegoPorTitulo("Super Mario World"))) nombreArchivo = "Super-Mario-Word_1990_cover_474x332.jpg"; 
+
+		URL imgURL = getClass().getResource("/img/" + nombreArchivo);
+		if (imgURL != null) {
+			ImageIcon iconOriginal = new ImageIcon(imgURL);
+			Image imagenEscalada = iconOriginal.getImage().getScaledInstance(80, 100, Image.SCALE_SMOOTH);
+			lblPortada.setIcon(new ImageIcon(imagenEscalada));
+		} else {
+			lblPortada.setText("Sin IMG");
+			lblPortada.setForeground(Color.GRAY);
+		}
+		fila.add(lblPortada, BorderLayout.WEST);
+
+		JLabel lblTitulo = new JLabel(juego.getTitulo());
+		lblTitulo.setFont(UIHelper.FONT_TARJETA);
+		lblTitulo.setForeground(UIHelper.COLOR_TEXTO);
+		fila.add(lblTitulo, BorderLayout.CENTER);
+
+		// Eventos de selección de la fila
+		fila.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				seleccionarFila(fila, juego);
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				if (juegoSeleccionado == null || !juegoSeleccionado.getId().equals(juego.getId())) {
+					fila.setBorder(new CompoundBorder(new LineBorder(UIHelper.COLOR_TARJETA_HOVER, 2, true), new EmptyBorder(10, 10, 10, 10)));
+				}
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (juegoSeleccionado == null || !juegoSeleccionado.getId().equals(juego.getId())) {
+					fila.setBorder(new CompoundBorder(new LineBorder(UIHelper.COLOR_BORDE, 2, true), new EmptyBorder(10, 10, 10, 10)));
 				}
 			}
 		});
+
+		return fila;
 	}
 
-	/**
-	 * Create the application.
-	 */
-	public Biblioteca() {
-		initialize();
-	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		frame = new JFrame("EmuSwing - Biblioteca");
-		frame.setBounds(100, 100, 1280, 720);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
-		frame.getContentPane().setBackground(UIHelper.COLOR_FONDO);
-
-		// Barra Superior de Navegación estilo Home
-		// JMenuBar centrado estilo Home
-				JMenuBar menuBar = new JMenuBar();
-				menuBar.setBackground(UIHelper.COLOR_FONDO);
-				//menuBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, COLOR_PANEL));
-				menuBar.setBorder(BorderFactory.createEmptyBorder());
-				// Espaciador para centrar las opciones
-				menuBar.add(javax.swing.Box.createHorizontalGlue());
-
-				JMenu mnPerfil = new JMenu("Mi Perfil");
-				mnPerfil.setForeground(UIHelper.COLOR_TEXTO);
-				mnPerfil.setFont(new Font("SansSerif", Font.PLAIN, 13));
-				menuBar.add(mnPerfil);
-
-				JMenu mnBiblioteca = new JMenu("Biblioteca");
-				mnBiblioteca.setForeground(UIHelper.COLOR_TEXTO);
-				mnBiblioteca.setFont(new Font("SansSerif", Font.BOLD, 13));
-				menuBar.add(mnBiblioteca);
-
-				JMenu mnJuegos = new JMenu("Juegos");
-				mnJuegos.setForeground(UIHelper.COLOR_TEXTO);
-				mnJuegos.setFont(new Font("SansSerif", Font.PLAIN, 13));
-				menuBar.add(mnJuegos);
-
-				JMenu mnTienda = new JMenu("Tienda");
-				mnTienda.setForeground(UIHelper.COLOR_TEXTO);
-				mnTienda.setFont(new Font("SansSerif", Font.PLAIN, 13));
-				menuBar.add(mnTienda);
-
-				JMenu mnSoporte = new JMenu("Soporte");
-				mnSoporte.setForeground(UIHelper.COLOR_TEXTO);
-				mnSoporte.setFont(new Font("SansSerif", Font.PLAIN, 13));
-				menuBar.add(mnSoporte);
-
-				JMenu mnAjustes = new JMenu("Ajustes");
-				mnAjustes.setForeground(UIHelper.COLOR_TEXTO);
-				mnAjustes.setFont(new Font("SansSerif", Font.PLAIN, 13));
-				menuBar.add(mnAjustes);
-
-				// Espaciador derecho para empujar todo al centro
-				menuBar.add(javax.swing.Box.createHorizontalGlue());
-
-				frame.setJMenuBar(menuBar);
-
-		// Contenedor principal estilo tarjeta EmuSwing
-		JPanel panel = new JPanel();
-		panel.setBounds(190, 40, 900, 560);
-		panel.setBackground(UIHelper.COLOR_TARJETA);
-		panel.setBorder(new LineBorder(UIHelper.COLOR_BORDE, 2, true));
-		panel.setLayout(null);
-		frame.getContentPane().add(panel);
-
-		JLabel lblBiblioteca = new JLabel("Mi Biblioteca");
-		lblBiblioteca.setHorizontalAlignment(SwingConstants.CENTER);
-		lblBiblioteca.setFont(new Font("SansSerif", Font.BOLD, 26));
-		lblBiblioteca.setForeground(UIHelper.COLOR_TEXTO);
-		lblBiblioteca.setBounds(50, 25, 800, 35);
-		panel.add(lblBiblioteca);
-
-		JLabel lblSubtitulo = new JLabel("Listado general de juegos guardados.");
-		lblSubtitulo.setHorizontalAlignment(SwingConstants.CENTER);
-		lblSubtitulo.setFont(new Font("SansSerif", Font.PLAIN, 13));
-		//lblSubtitulo.setForeground(UIHelper.COLOR_TEXTO_MUTED);
-		lblSubtitulo.setBounds(50, 62, 800, 20);
-		panel.add(lblSubtitulo);
-
-		// Configuración de Tabla
-		DefaultTableModel modelo = new DefaultTableModel(
-			new Object[][]{
-				{"Super Street Fighter II", "SNES-001"},
-				{"Super Mario World", "SNES-002"},
-				{"Doom", "PC-003"}
-			},
-			new Object[]{"Nombre", "Código"}
-		);
-
-		table = new JTable(modelo);
-		table.setBackground(new Color(25, 12, 35));
-		table.setForeground(UIHelper.COLOR_TEXTO);
-		table.setGridColor(UIHelper.COLOR_BORDE);
-		table.setRowHeight(30);
-		table.setFont(new Font("SansSerif", Font.PLAIN, 14));
-			//table.getTableHeader().setBackground(UIHelper.COLOR_BOTON_SECUNDARIO);
-		table.getTableHeader().setForeground(UIHelper.COLOR_TEXTO);
-		table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 14));
-
-		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-		centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-		table.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-		table.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
-
-		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setBounds(80, 105, 740, 350);
-		scrollPane.setBorder(new LineBorder(UIHelper.COLOR_BORDE, 1));
-		scrollPane.getViewport().setBackground(new Color(25, 12, 35));
-		panel.add(scrollPane);
-
-		// Botones
-		JButton btnPlay = new JButton("▶ Jugar");
-		btnPlay.setFont(new Font("SansSerif", Font.BOLD, 14));
-		btnPlay.setBounds(300, 480, 130, 40);
-		//btnPlay.setBackground(UIHelper.COLOR_BOTON_PRIMARIO);
-		btnPlay.setForeground(UIHelper.COLOR_TEXTO);
-		btnPlay.setFocusPainted(false);
-		btnPlay.setBorder(new LineBorder(UIHelper.COLOR_BORDE, 1, true));
-		panel.add(btnPlay);
-
-		JButton btnRemove = new JButton("Quitar");
-		btnRemove.setFont(new Font("SansSerif", Font.BOLD, 14));
-		btnRemove.setBounds(470, 480, 130, 40);
-		//btnRemove.setBackground(UIHelper.COLOR_BOTON_SECUNDARIO);
-		btnRemove.setForeground(UIHelper.COLOR_TEXTO);
-		btnRemove.setFocusPainted(false);
-		btnRemove.setBorder(new LineBorder(UIHelper.COLOR_BORDE, 1, true));
-		panel.add(btnRemove);
-
-		btnPlay.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+	private void seleccionarFila(JPanel filaElegida, JuegoDTO juego) {
+		for (JPanel fila : filasJuegos) {
+			if (fila == filaElegida) {
+				fila.setBorder(new CompoundBorder(new LineBorder(UIHelper.COLOR_ACENTO, 2, true), new EmptyBorder(10, 10, 10, 10)));
+			} else {
+				fila.setBorder(new CompoundBorder(new LineBorder(UIHelper.COLOR_BORDE, 2, true), new EmptyBorder(10, 10, 10, 10)));
 			}
+		}
+		juegoSeleccionado = juego;
+	}
+
+	private void mostrarInfoJuego(JuegoDTO juego) {
+		String historia = "";
+		
+		if (juego.getId() == 1) { 
+			historia = "El World Warrior Tournament sigue en pie, pero la paz es frágil: cuatro jefes malignos aún controlan el submundo del combate.\n Nuevos retadores llegan para desafiar al orden, y tú eres uno de ellos. \n Tu misión: derrotar a Balrog, Vega, Sagat y M. Bison, y reclamar el trono.";
+		} else if (juego.getId() == 2) {
+			historia = "En el año 2145, fuiste enviado a una instalación de investigación en el planeta Marte.\n Un experimento fallido abrió un portal al infierno y tu misión es lograr sobrevivir a la invasión demoníaca.\n Hallar la salida por el planeta del polvo mezclado con destrucción y eliminando a quien se cruce.";
+		} else if (juego.getId() == 3) { 
+			historia = "Atrapado tras las oscuras líneas enemigas en plena guerra nazi, tomas el papel del espía aliado B.J. Blazkowicz.\n Tu misión comienza como un desesperado escape de los lúgubres calabozos del Castillo Wolfenstein, pero rápidamente se convierte en una cacería contrarreloj.\n Armado sólo con lo que logres arrebatarle a tus captores, deberás sobrevivir a laberintos plagados de tropas implacables.";
+		} else if (juego.getId() == 4) {
+			historia = "Unas merecidas vacaciones en la misteriosa Isla de los Dinosaurios se transforman en una nueva misión de rescate cuando el despiadado Bowser secuestra a la Princesa Peach.\n Montado por primera vez en tu fiel y hambriento amigo Yoshi, y usando el poder de vuelo de la capa mágica, deberás descubrir salidas secretas.";
+		} else {
+			historia = "Historia no disponible para este título.";
+		}
+		
+		javax.swing.JOptionPane.showMessageDialog(this, historia, "Historia: " + juego.getTitulo(), javax.swing.JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	private JButton crearBotonAccion(String texto, boolean relleno) {
+		final JButton boton = new JButton(texto);
+		boton.setFont(UIHelper.FONT_BOTON);
+		boton.setFocusPainted(false);
+		boton.setOpaque(true);
+		boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+		final Color colorNormal = relleno ? UIHelper.COLOR_ACENTO : UIHelper.COLOR_CONTENIDO;
+		final Color colorHover = relleno ? UIHelper.COLOR_ACENTO_HOVER : UIHelper.COLOR_TARJETA_HOVER;
+
+		boton.setForeground(relleno ? UIHelper.COLOR_FONDO : UIHelper.COLOR_TEXTO);
+		
+		if (relleno) {
+			boton.setBorder(new EmptyBorder(8, 20, 8, 20));
+		} else {
+			boton.setBorder(new CompoundBorder(new LineBorder(UIHelper.COLOR_ACENTO, 2, true), new EmptyBorder(6, 18, 6, 18)));
+		}
+		
+		boton.setBackground(colorNormal);
+
+		boton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) { boton.setBackground(colorHover); }
+			@Override
+			public void mouseExited(MouseEvent e) { boton.setBackground(colorNormal); }
 		});
+
+		return boton;
 	}
 }

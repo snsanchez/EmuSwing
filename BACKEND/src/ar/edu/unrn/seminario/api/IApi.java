@@ -46,7 +46,13 @@ public interface IApi {
 
 	public String getUrlJuegoByTitulo(String titulo);
 
-
+	// para los juegos favoritos
+	void agregarAFavoritos(Integer idJuego);
+	void quitarDeFavoritos(Integer idJuego);
+	
+	List<JuegoDTO> obtenerJuegosFavoritos() throws CatalogoVacioException;
+	
+	List<JuegoDTO> obtenerJuegosBiblioteca() throws CatalogoVacioException;
 
 	List<JuegoDTO> obtenerJuegos() throws CatalogoVacioException;
 }
