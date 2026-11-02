@@ -11,6 +11,7 @@ import ar.edu.unrn.seminario.dto.JuegoDTO;
 
 public interface IApi {
 
+	// Declara el registro de usuarios y las posibles excepciones.
 	void registrarUsuario(String username, String password, String email, String nombre, Integer rol)
 	        throws UsuarioExistenteException, RolNoEncontradoException;
 	
@@ -57,6 +58,14 @@ public interface IApi {
 	boolean obtenerEstadoSuscripcion(String username);
 	
 	
+
+	// para los juegos favoritos
+	void agregarAFavoritos(Integer idJuego);
+	void quitarDeFavoritos(Integer idJuego);
+	
+	List<JuegoDTO> obtenerJuegosFavoritos() throws CatalogoVacioException;
+	
+	List<JuegoDTO> obtenerJuegosBiblioteca() throws CatalogoVacioException;
 
 	List<JuegoDTO> obtenerJuegos() throws CatalogoVacioException;
 }

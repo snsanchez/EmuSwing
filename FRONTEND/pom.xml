@@ -26,6 +26,15 @@
     <build>
         <sourceDirectory>src</sourceDirectory>
         <outputDirectory>bin</outputDirectory>
+        <resources>
+            <resource>
+                <directory>src</directory>
+                <includes>
+                    <include>img/**</include>
+                    <include>fonts/**</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 
 </project>

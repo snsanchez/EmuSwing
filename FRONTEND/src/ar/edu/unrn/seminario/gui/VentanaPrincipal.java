@@ -86,7 +86,21 @@ public class VentanaPrincipal extends JFrame {
         panelMenu.setOpaque(false);
 
         panelMenu.add(crearBotonMenu("Mi Perfil"));
-        panelMenu.add(crearBotonMenu("Biblioteca"));
+        
+     // --- BOTÓN BIBLIOTECA CON SU CONEXIÓN Y LISTENER ---
+        JButton btnMenuBiblioteca = crearBotonMenu("Biblioteca");
+        btnMenuBiblioteca.addActionListener(e -> {
+            try {
+                Biblioteca ventanaBiblioteca = new Biblioteca(api);
+                ventanaBiblioteca.setVisible(true);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this, 
+                    "Error al abrir la biblioteca.", 
+                    "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        panelMenu.add(btnMenuBiblioteca);
         
      // Botón Registrar Usuario
         JButton btnRegistrarUsuario = crearBotonMenu("Registrar Usuario");
