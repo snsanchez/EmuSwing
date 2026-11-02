@@ -34,8 +34,10 @@ public class RegistrarUsuario {
     private JTextField textFieldRol;
     private JTextField textFieldUsuario;
 
+    // Guardo la API que utiliza el sistema.
     private IApi api;
 
+    // Recibo la misma API que utiliza VentanaPrincipal.
     public RegistrarUsuario(IApi api) {
         this.api = api;
         initialize();
@@ -47,6 +49,8 @@ public class RegistrarUsuario {
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         frame.getContentPane().setLayout(null);
+
+        // Uso los colores definidos en UIHelper.
         frame.getContentPane().setBackground(UIHelper.COLOR_FONDO);
 
         // JMenuBar centrado estilo Home
@@ -60,6 +64,7 @@ public class RegistrarUsuario {
         mnPerfil.setFont(new Font("SansSerif", Font.PLAIN, 13));
         menuBar.add(mnPerfil);
 
+        // Abro la ventana Mi Perfil.
         mnPerfil.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -73,6 +78,7 @@ public class RegistrarUsuario {
         mnBiblioteca.setFont(new Font("SansSerif", Font.PLAIN, 13));
         menuBar.add(mnBiblioteca);
 
+        // Abro la ventana Biblioteca.
         mnBiblioteca.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -85,6 +91,7 @@ public class RegistrarUsuario {
         mnJuegos.setFont(new Font("SansSerif", Font.PLAIN, 13));
         menuBar.add(mnJuegos);
 
+        // Abro Juegos pasando la misma API.
         mnJuegos.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -98,6 +105,7 @@ public class RegistrarUsuario {
         mnTienda.setFont(new Font("SansSerif", Font.PLAIN, 13));
         menuBar.add(mnTienda);
 
+        // Abro la ventana Tienda.
         mnTienda.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -116,6 +124,7 @@ public class RegistrarUsuario {
         mnAjustes.setFont(new Font("SansSerif", Font.PLAIN, 13));
         menuBar.add(mnAjustes);
 
+        // Abro la ventana Configuración.
         mnAjustes.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -169,6 +178,7 @@ public class RegistrarUsuario {
         panel.add(textFieldNombre);
 
         // Campo: Nombre de usuario
+        // Agrego el campo para ingresar el username.
         JLabel lblUsuario = new JLabel("Nombre de usuario:");
         lblUsuario.setFont(new Font("SansSerif", Font.BOLD, 13));
         lblUsuario.setForeground(UIHelper.COLOR_TEXTO);
@@ -259,44 +269,50 @@ public class RegistrarUsuario {
         btnCancelar.setBorder(new LineBorder(UIHelper.COLOR_BORDE, 1));
         panel.add(btnCancelar);
 
+        // Cierro la ventana sin registrar nada.
         btnCancelar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 frame.dispose();
             }
         });
 
+        // Registro los datos cuando presionan Aceptar.
         btnAceptar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
+                // Obtengo los datos ingresados en el formulario.
                 String nombre = textFieldNombre.getText().trim();
                 String username = textFieldUsuario.getText().trim();
                 String password = new String(textFieldContrasena.getPassword());
                 String email = textFieldMail.getText().trim();
                 String rolTexto = textFieldRol.getText().trim();
 
+                // Compruebo que no haya campos vacíos.
                 if (nombre.isEmpty() || username.isEmpty() || password.isEmpty()
                         || email.isEmpty() || rolTexto.isEmpty()) {
-
                     JOptionPane.showMessageDialog(frame, "Complete todos los campos.");
                     return;
                 }
 
                 Integer rol;
-
                 try {
+                    // Convierto el código del rol a un entero.
                     rol = Integer.parseInt(rolTexto);
 
                 } catch (NumberFormatException ex) {
+                    // Muestro un error si el rol no es numérico.
                     JOptionPane.showMessageDialog(frame, "Ingrese un código de rol válido.");
                     return;
                 }
 
                 try {
+                    // Envío los datos a la API para registrar.
                     api.registrarUsuario(username, password, email, nombre, rol);
 
+                    // Muestro la confirmación del registro.
                     JOptionPane.showMessageDialog(frame, "Usuario registrado correctamente.");
 
-                    // Limpiar los campos del formulario
+                    // Limpio los campos después de registrar.
                     textFieldNombre.setText("");
                     textFieldUsuario.setText("");
                     textFieldContrasena.setText("");
@@ -304,17 +320,22 @@ public class RegistrarUsuario {
                     textFieldRol.setText("");
 
                 } catch (UsuarioExistenteException ex) {
+                    // Muestro el error si el username ya existe.
                     JOptionPane.showMessageDialog(frame, ex.getMessage());
 
                 } catch (RolNoEncontradoException ex) {
+                    // Muestro el error si el rol no existe.
                     JOptionPane.showMessageDialog(frame, ex.getMessage());
 
                 } catch (IllegalArgumentException ex) {
+                    // Muestro el error si los datos son inválidos.
                     JOptionPane.showMessageDialog(frame, ex.getMessage());
                 }
             }
         });
     }
+
+    // Muestro la ventana desde VentanaPrincipal.
     public void mostrar() {
         frame.setVisible(true);
     }

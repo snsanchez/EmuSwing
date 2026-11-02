@@ -11,6 +11,7 @@ import ar.edu.unrn.seminario.dto.JuegoDTO;
 
 public interface IApi {
 
+	// Declara el registro de usuarios y las posibles excepciones.
 	void registrarUsuario(String username, String password, String email, String nombre, Integer rol)
 	        throws UsuarioExistenteException, RolNoEncontradoException;
 	
