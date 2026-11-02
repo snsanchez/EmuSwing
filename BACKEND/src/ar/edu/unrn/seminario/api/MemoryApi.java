@@ -326,6 +326,8 @@ public class MemoryApi implements IApi {
 	        return registrosSimulados.get(username).getHoras();
 	    }
 	    return 0;
+	}
+	
 	public void agregarAFavoritos(Integer idJuego) {
 		if (idJuego != null) {
 			this.juegosFavoritosIds.add(idJuego);
