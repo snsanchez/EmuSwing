@@ -2,7 +2,6 @@ package ar.edu.unrn.seminario.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.Font;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -39,20 +38,7 @@ public class VentanaConfiguracion extends JFrame {
 	
 	private JLabel lblNewLabel_1;
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaConfiguracion frame = new VentanaConfiguracion();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	public VentanaConfiguracion() {
+	public VentanaConfiguracion(ar.edu.unrn.seminario.api.IApi api, String username) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 767, 452);
 		
@@ -148,7 +134,7 @@ public class VentanaConfiguracion extends JFrame {
 		
 		panelPrincipal = new JPanel();
 		panelPrincipal.setBackground(COLOR_FONDO);
-		panelPrincipal.setPreferredSize(new Dimension(520, 893));
+		panelPrincipal.setPreferredSize(new Dimension(520, 930));
 		scrollPane.setViewportView(panelPrincipal);
 		panelPrincipal.setLayout(null);
 		
@@ -248,7 +234,7 @@ public class VentanaConfiguracion extends JFrame {
 		lblNewLabel_4.setBounds(15, 25, 300, 14);
 		panel_3.add(lblNewLabel_4);
 		
-		@SuppressWarnings({ "rawtypes", "unchecked" }) //Elimina advertencias visuales por prolijidad.
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		JComboBox comboBox = new JComboBox();
 		comboBox.setBackground(Color.WHITE);
 		comboBox.setForeground(Color.BLACK);
@@ -278,24 +264,6 @@ public class VentanaConfiguracion extends JFrame {
 		btnNewButton_6.setFocusPainted(false);
 		btnNewButton_6.setBounds(350, 25, 125, 25);
 		panel_4.add(btnNewButton_6);
-		
-		JButton btnNewButton_5 = new JButton("Cancelar");
-		btnNewButton_5.setBackground(COLOR_FONDO);
-		btnNewButton_5.setForeground(COLOR_TEXTO);
-		btnNewButton_5.setBorder(new LineBorder(COLOR_ACENTO, 1));
-		btnNewButton_5.setFont(FONT_BOTON);
-		btnNewButton_5.setFocusPainted(false);
-		btnNewButton_5.setBounds(245, 807, 110, 28);
-		panelPrincipal.add(btnNewButton_5);
-		
-		JButton btnNewButton_4 = new JButton("Aplicar Cambios");
-		btnNewButton_4.setBackground(COLOR_FONDO);
-		btnNewButton_4.setForeground(COLOR_TEXTO);
-		btnNewButton_4.setBorder(new LineBorder(COLOR_ACENTO, 1));
-		btnNewButton_4.setFont(FONT_BOTON);
-		btnNewButton_4.setFocusPainted(false);
-		btnNewButton_4.setBounds(365, 807, 140, 28);
-		panelPrincipal.add(btnNewButton_4);
 		
 		JPanel panel_5 = new JPanel();
 		panel_5.setBackground(COLOR_CONTENIDO);
@@ -340,5 +308,60 @@ public class VentanaConfiguracion extends JFrame {
 		btnNewButton_8.setFocusPainted(false);
 		btnNewButton_8.setBounds(324, 41, 156, 23);
 		panel_6.add(btnNewButton_8);
+
+		JPanel panel_7 = new JPanel();
+		panel_7.setBackground(COLOR_CONTENIDO);
+		panel_7.setBorder(BorderFactory.createTitledBorder(new LineBorder(COLOR_ACENTO, 1), "Estado de Cuenta", TitledBorder.LEADING, TitledBorder.TOP, FONT_SECCION, COLOR_TEXTO));
+		panel_7.setBounds(15, 770, 490, 70);
+		panelPrincipal.add(panel_7);
+		panel_7.setLayout(null);
+		
+		JButton btnVerEstado = new JButton("Ver estado de mi suscripción");
+		btnVerEstado.setBackground(COLOR_FONDO);
+		btnVerEstado.setForeground(COLOR_TEXTO);
+		btnVerEstado.setBorder(new LineBorder(COLOR_ACENTO, 1));
+		btnVerEstado.setFont(FONT_BOTON);
+		btnVerEstado.setFocusPainted(false);
+		btnVerEstado.setBounds(15, 25, 460, 30);
+		panel_7.add(btnVerEstado);
+		
+		btnVerEstado.addActionListener(new java.awt.event.ActionListener() {
+		    public void actionPerformed(java.awt.event.ActionEvent e) {
+		        boolean esGanador = api.otorgarSuscripcionAutomatico(username);		//consulta los datos y estado de la suscripcion en la API
+		        Integer horas = api.obtenerHorasJugadas(username);
+		        boolean estado = api.obtenerEstadoSuscripcion(username);
+		        
+		        String mensaje = "Usuario: " + username + "\n";			//arma un reporte para mostrar el cartel
+		        mensaje += "Estado actual: " + (estado ? "Suscrito" : "No suscrito") + "\n";
+		        mensaje += "Horas jugadas: " + horas + " hrs\n";
+		        mensaje += "Tiempo de suscripción: 1 mes (Simulación)\n\n";
+		        
+		        if (esGanador) {		//agrega el premio si es el jugador que lidera el ranking
+		            mensaje += "¡Felicitaciones por ser el primero del ranking!\nSe te ha otorgado la suscripción automática.\n\n";
+		        }
+		        
+		        mensaje += "Gracias por elegir EmuSwing.";
+		        
+		        javax.swing.JOptionPane.showMessageDialog(contentPane, mensaje, "Estado de mi Suscripción", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+		    }
+		});
+
+		JButton btnNewButton_5 = new JButton("Cancelar");
+		btnNewButton_5.setBackground(COLOR_FONDO);
+		btnNewButton_5.setForeground(COLOR_TEXTO);
+		btnNewButton_5.setBorder(new LineBorder(COLOR_ACENTO, 1));
+		btnNewButton_5.setFont(FONT_BOTON);
+		btnNewButton_5.setFocusPainted(false);
+		btnNewButton_5.setBounds(245, 850, 110, 28);
+		panelPrincipal.add(btnNewButton_5);
+		
+		JButton btnNewButton_4 = new JButton("Aplicar Cambios");
+		btnNewButton_4.setBackground(COLOR_FONDO);
+		btnNewButton_4.setForeground(COLOR_TEXTO);
+		btnNewButton_4.setBorder(new LineBorder(COLOR_ACENTO, 1));
+		btnNewButton_4.setFont(FONT_BOTON);
+		btnNewButton_4.setFocusPainted(false);
+		btnNewButton_4.setBounds(365, 850, 140, 28);
+		panelPrincipal.add(btnNewButton_4);
 	}
 }

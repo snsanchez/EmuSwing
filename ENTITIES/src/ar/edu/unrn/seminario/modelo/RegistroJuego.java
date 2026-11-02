@@ -2,7 +2,7 @@ package ar.edu.unrn.seminario.modelo;
 
 public class RegistroJuego {
     private Integer idJuego;
-    private Integer horas;
+    private Integer horas;		
 
     public RegistroJuego(){}
 
@@ -32,6 +32,10 @@ public class RegistroJuego {
         RegistroJuego registroJuego = (RegistroJuego) obj;
         return idJuego.equals(registroJuego.idJuego);
     }
+    
+    public Integer getHoras() {
+		return horas;
+}
 
     
 }

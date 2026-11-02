@@ -46,6 +46,18 @@ public interface IApi {
 	public String getUrlJuegoById(Integer idJuego);
 
 	public String getUrlJuegoByTitulo(String titulo);
+	
+	// Requerimiento otorgarSuscripcionAutomatica
+	
+	String getGanador();
+	
+	Integer obtenerHorasJugadas(String username);
+	
+	boolean otorgarSuscripcionAutomatico(String username);
+	
+	boolean obtenerEstadoSuscripcion(String username);
+	
+	
 
 	// para los juegos favoritos
 	void agregarAFavoritos(Integer idJuego);

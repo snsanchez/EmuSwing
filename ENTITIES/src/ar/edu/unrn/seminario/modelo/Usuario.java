@@ -20,6 +20,14 @@ public class Usuario {
 		this.email = email;
 		this.rol = rol;
 	}
+	
+	public boolean isEstadoSuscripcion() {
+	    return estadoSuscripcion;
+	}
+
+	public void setEstadoSuscripcion(boolean estadoSuscripcion) {
+	    this.estadoSuscripcion = estadoSuscripcion;
+	}
 
 	public String getUsuario() {
 		return usuario;

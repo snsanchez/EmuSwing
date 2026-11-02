@@ -131,6 +131,12 @@ public class VentanaPrincipal extends JFrame {
         panelMenu.add(crearBotonMenu("Soporte"));
 
         JButton btnAjustes = crearBotonMenu("Ajustes");
+        btnAjustes.addActionListener(e -> {
+        	String usuarioGanador = api.getGanador();		//uso la api para obtener el usuario con mas horas
+        	
+            VentanaConfiguracion ventanaConfig = new VentanaConfiguracion(api, usuarioGanador);		//aca abre ajustes pasando el usuario ganador
+            ventanaConfig.setVisible(true);
+        });
         panelMenu.add(btnAjustes);
 
         menuBar.add(panelMenu);
