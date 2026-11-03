@@ -6,7 +6,11 @@ public class Usuario {
 	private String nombre;
 	private String email;
 	private Rol rol;
+	// rol es necesario?
 	private boolean activo;
+	// activo es necesario?
+	private boolean estadoSuscripcion;
+	// agregar UserStats
 
 	public Usuario(String usuario, String contrasena, String nombre, String email, Rol rol) {
 
@@ -15,6 +19,14 @@ public class Usuario {
 		this.nombre = nombre;
 		this.email = email;
 		this.rol = rol;
+	}
+	
+	public boolean isEstadoSuscripcion() {
+	    return estadoSuscripcion;
+	}
+
+	public void setEstadoSuscripcion(boolean estadoSuscripcion) {
+	    this.estadoSuscripcion = estadoSuscripcion;
 	}
 
 	public String getUsuario() {
@@ -61,8 +73,8 @@ public class Usuario {
 		return activo;
 	}
 
-	public String obtenerEstado() {
-		return isActivo() ? "ACTIVO" : "INACTIVO";
+	public boolean obtenerEstado() {
+		return isActivo();
 	}
 
 	public void activar() {
@@ -98,6 +110,10 @@ public class Usuario {
 		} else if (!usuario.equals(other.usuario))
 			return false;
 		return true;
+	}
+
+	public Boolean getEstadoSuscripcion(){
+	    return estadoSuscripcion;
 	}
 
 }
