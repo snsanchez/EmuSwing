@@ -4,6 +4,7 @@
 package ar.edu.unrn.seminario.gui;
 
 import ar.edu.unrn.seminario.helpers.UIHelper;
+import ar.edu.unrn.seminario.helpers.ImagenHelper;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -218,7 +219,8 @@ public class VentanaPrincipal extends JFrame {
         // estos son solo datos de prueba, despues habria que cargarlos desde IApi
         // pasando por una base de datos
         String[] nombresJuegos = { "Super Street Fighter II", "Super Mario World", "Doom" };
-        String[] imagenesJuegos = { "/img/Street-Fighter-II-USA_cover_1024x705.jpg",
+        // "https://dn721803.ca.archive.org/0/items/Super_Street_Fighter_II_USA.md/00_coverscreenshot.png", funciona pero buscar otra mejor
+        String[] imagenesJuegos = { "https://dn721803.ca.archive.org/0/items/Super_Street_Fighter_II_USA.md/00_coverscreenshot.png",
                 "/img/Super-Mario-Word_1990_cover_474x332.jpg", "/img/doom_1993_cover_720x1080.jpg" };
         // GridLayout mantiene las tres tarjetas del mismo tamaño
         JPanel panelTarjetas = new JPanel(new GridLayout(1, 3, 20, 0));
@@ -399,40 +401,44 @@ public class VentanaPrincipal extends JFrame {
 
         lblPortada.setPreferredSize(new Dimension(UIHelper.ANCHO_PORTADA, UIHelper.ALTO_PORTADA));
 
-        URL urlImagen = getClass().getResource(rutaImagen);
-
-        if (urlImagen != null) {
-
-            ImageIcon iconoOriginal = new ImageIcon(urlImagen);
-
-            Image imagenOriginal = iconoOriginal.getImage();
-
-            int anchoOriginal = imagenOriginal.getWidth(null);
-
-            int altoOriginal = imagenOriginal.getHeight(null);
-
-            // Ajustamos la imagen para que entre dentro del espacio disponible sin
-            // deformarla y sin recortar partes de la portada.
-            // Tambien podriamos recortarla fisicamente manteniendo la relacion de aspecto.
-            // 3:4?
-            double escala = Math.min((double) UIHelper.ANCHO_PORTADA / anchoOriginal,
-                    (double) UIHelper.ALTO_PORTADA / altoOriginal);
-
-            int anchoEscalado = (int) (anchoOriginal * escala);
-
-            int altoEscalado = (int) (altoOriginal * escala);
-
-            Image imagenEscalada = imagenOriginal.getScaledInstance(anchoEscalado, altoEscalado, Image.SCALE_SMOOTH);
-
-            lblPortada.setIcon(new ImageIcon(imagenEscalada));
-
+        if (rutaImagen.startsWith("https://")) {
+            ImagenHelper.cargarImagen(rutaImagen, lblPortada, UIHelper.ANCHO_PORTADA, UIHelper.ALTO_PORTADA);
         } else {
+            URL urlImagen = getClass().getResource(rutaImagen);
 
-            lblPortada.setText("Sin imagen");
+            if (urlImagen != null) {
 
-            lblPortada.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
+                ImageIcon iconoOriginal = new ImageIcon(urlImagen);
 
-            System.out.println("No se encontró la imagen: " + rutaImagen);
+                Image imagenOriginal = iconoOriginal.getImage();
+
+                int anchoOriginal = imagenOriginal.getWidth(null);
+
+                int altoOriginal = imagenOriginal.getHeight(null);
+
+                // Ajustamos la imagen para que entre dentro del espacio disponible sin
+                // deformarla y sin recortar partes de la portada.
+                // Tambien podriamos recortarla fisicamente manteniendo la relacion de aspecto.
+                // 3:4?
+                double escala = Math.min((double) UIHelper.ANCHO_PORTADA / anchoOriginal,
+                        (double) UIHelper.ALTO_PORTADA / altoOriginal);
+
+                int anchoEscalado = (int) (anchoOriginal * escala);
+
+                int altoEscalado = (int) (altoOriginal * escala);
+
+                Image imagenEscalada = imagenOriginal.getScaledInstance(anchoEscalado, altoEscalado, Image.SCALE_SMOOTH);
+
+                lblPortada.setIcon(new ImageIcon(imagenEscalada));
+
+            } else {
+
+                lblPortada.setText("Sin imagen");
+
+                lblPortada.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
+
+                System.out.println("No se encontró la imagen: " + rutaImagen);
+            }
         }
 
         // ---------- NOMBRE
