@@ -26,6 +26,7 @@ Mostrar una imagen predeterminada si falla la descarga.
 
 EJEMPLO DE COVER PARA CARGAR: 
     https://dn721803.ca.archive.org/0/items/Super_Street_Fighter_II_USA.md/00_coverscreenshot.png [FUNCIONA]
+    https://dn710107.ca.archive.org/0/items/street-fighter-ii-snes-hiresscans/Street%20Fighter%20II%20-%20Box%20Front.jpg
     https://upload.wikimedia.org/wikipedia/en/1/1d/SF2_JPN_flyer.jpg [TIRA ERROR 403]
     https://en.wikipedia.org/w/index.php?curid=10642320%22
 

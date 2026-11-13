@@ -220,7 +220,7 @@ public class VentanaPrincipal extends JFrame {
         // pasando por una base de datos
         String[] nombresJuegos = { "Super Street Fighter II", "Super Mario World", "Doom" };
         // "https://dn721803.ca.archive.org/0/items/Super_Street_Fighter_II_USA.md/00_coverscreenshot.png", funciona pero buscar otra mejor
-        String[] imagenesJuegos = { "https://dn721803.ca.archive.org/0/items/Super_Street_Fighter_II_USA.md/00_coverscreenshot.png",
+        String[] imagenesJuegos = { "https://dn710107.ca.archive.org/0/items/street-fighter-ii-snes-hiresscans/Street%20Fighter%20II%20-%20Box%20Front.jpg",
                 "/img/Super-Mario-Word_1990_cover_474x332.jpg", "/img/doom_1993_cover_720x1080.jpg" };
         // GridLayout mantiene las tres tarjetas del mismo tamaño
         JPanel panelTarjetas = new JPanel(new GridLayout(1, 3, 20, 0));
@@ -398,6 +398,10 @@ public class VentanaPrincipal extends JFrame {
         lblPortada.setHorizontalAlignment(SwingConstants.CENTER);
 
         lblPortada.setVerticalAlignment(SwingConstants.CENTER);
+
+        lblPortada.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
+
+        lblPortada.setFont(UIHelper.FONT_LABEL);
 
         lblPortada.setPreferredSize(new Dimension(UIHelper.ANCHO_PORTADA, UIHelper.ALTO_PORTADA));
 
