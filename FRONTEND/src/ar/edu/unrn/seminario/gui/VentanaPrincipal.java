@@ -221,7 +221,7 @@ public class VentanaPrincipal extends JFrame {
         String[] nombresJuegos = { "Super Street Fighter II", "Super Mario World", "Doom" };
         // "https://dn721803.ca.archive.org/0/items/Super_Street_Fighter_II_USA.md/00_coverscreenshot.png", funciona pero buscar otra mejor
         String[] imagenesJuegos = { "https://dn710107.ca.archive.org/0/items/street-fighter-ii-snes-hiresscans/Street%20Fighter%20II%20-%20Box%20Front.jpg",
-                "/img/Super-Mario-Word_1990_cover_474x332.jpg", "/img/doom_1993_cover_720x1080.jpg" };
+                "https://dn721906.ca.archive.org/0/items/super-mario-world-usa_202406/Screenshot%202024-06-01%20235151.png", "https://dn710106.ca.archive.org/0/items/doom1.21/Cover.jpg" };
         // GridLayout mantiene las tres tarjetas del mismo tamaño
         JPanel panelTarjetas = new JPanel(new GridLayout(1, 3, 20, 0));
 
