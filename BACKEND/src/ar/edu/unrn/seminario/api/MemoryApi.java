@@ -13,6 +13,7 @@ import ar.edu.unrn.seminario.modelo.Juego;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.dto.JuegoDTO;
+import ar.edu.unrn.seminario.mappers.JuegoMapper;
 import ar.edu.unrn.seminario.exception.CatalogoVacioException;
 import ar.edu.unrn.seminario.exception.UsuarioExistenteException;
 import ar.edu.unrn.seminario.exception.RolNoEncontradoException;
@@ -47,10 +48,10 @@ public class MemoryApi implements IApi {
 	}
 
 	private void inicializarJuegos() {
-		this.juegos.add(new Juego(1, "Super Street Fighter II", "Lucha", "Capcom", "SNES", 1993));
-		this.juegos.add(new Juego(2, "DOOM", "FPS", "id Software", "MS-DOS", 1993));
-		this.juegos.add(new Juego(3, "Wolfenstein 3D", "FPS", "id Software", "MS-DOS", 1992));
-		this.juegos.add(new Juego(4, "Super Mario World", "Plataformas", "Nintendo", "NES", 1985));
+		this.juegos.add(new Juego(1, "Super Street Fighter II", "Lucha", "Capcom", "SNES", 1993, "https://placehold.co/300x400?text=Super+Street+Fighter+II"));
+		this.juegos.add(new Juego(2, "DOOM", "FPS", "id Software", "MS-DOS", 1993, "https://placehold.co/300x400?text=DOOM"));
+		this.juegos.add(new Juego(3, "Wolfenstein 3D", "FPS", "id Software", "MS-DOS", 1992, "https://placehold.co/300x400?text=Wolfenstein+3D"));
+		this.juegos.add(new Juego(4, "Super Mario World", "Plataformas", "Nintendo", "NES", 1985, "https://placehold.co/300x400?text=Super+Mario+World"));
 		
 		// agrego un link a cada juego
 		this.juegosLinks.put(1, "https://archive.org/embed/Super_Street_Fighter_II_USA.md");
@@ -242,14 +243,7 @@ public class MemoryApi implements IApi {
 		
 		List<JuegoDTO> dtos = new ArrayList<>();
 		for (Juego j : this.juegos) {
-			dtos.add(new JuegoDTO(
-				j.getId(),
-				j.getTitulo(), 
-				j.getGenero(), 
-				j.getDesarrollador(), 
-				j.getConsola(), 
-				j.getAño()
-			));
+			dtos.add(JuegoMapper.transform(j));
 		}
 		return dtos;
 	}
@@ -261,14 +255,7 @@ public class MemoryApi implements IApi {
 		// Simulamos que el usuario tiene los juegos 1 y 2 en su biblioteca
 		for (Juego j : this.juegos) {
 			if (j.getId() == 1 || j.getId() == 2) {
-				dtos.add(new JuegoDTO(
-					j.getId(),
-					j.getTitulo(), 
-					j.getGenero(), 
-					j.getDesarrollador(), 
-					j.getConsola(), 
-					j.getAño()
-				));
+				dtos.add(JuegoMapper.transform(j));
 			}
 		}
 
@@ -348,14 +335,7 @@ public class MemoryApi implements IApi {
 		// Recorremos todos los juegos y filtramos los que están en la lista de favoritos
 		for (Juego j : this.juegos) {
 			if (this.juegosFavoritosIds.contains(j.getId())) {
-				dtos.add(new JuegoDTO(
-					j.getId(),
-					j.getTitulo(), 
-					j.getGenero(), 
-					j.getDesarrollador(), 
-					j.getConsola(), 
-					j.getAño()
-				));
+				dtos.add(JuegoMapper.transform(j));
 			}
 		}
 
