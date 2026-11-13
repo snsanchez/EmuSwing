@@ -1,42 +1,40 @@
-/*  TIRA ERROR 
+package ar.edu.unrn.seminario.mappers;
 
-ackage ar.edu.unrn.seminario.mappers;
-
-import ar.edu.unrn.seminario.dto.RegistroJuegoDTO;
-import ar.edu.unrn.seminario.modelo.RegistroJuego;
+import ar.edu.unrn.seminario.dto.JuegoDTO;
+import ar.edu.unrn.seminario.modelo.Juego;
 
 
 public class JuegoMapper {
 
     // Transforma una Entidad de Dominio a un DTO (para enviar hacia la interfaz/vista)
-    public static RegistroJuegoDTO transform(RegistroJuego juego) {
+    public static JuegoDTO transform(Juego juego) {
         if (juego == null) {
             return null;
         }
-        return new RegistroJuegoDTO(
+        return new JuegoDTO(
                     juego.getId(),
                     juego.getTitulo(),
                     juego.getGenero(),
                     juego.getDesarrollador(),
                     juego.getConsola(),
-                    juego.getAño()
+                    juego.getAño(),
+                    juego.getUrlPortada()
                 );
     }
 
     // Transforma un DTO a una Entidad de Dominio (cuando ingresan datos nuevos)
-    public static RegistroJuego transform(RegistroJuegoDTO dto) {
+    public static Juego transform(JuegoDTO dto) {
         if (dto == null) {
             return null;
         }
-        return new RegistroJuego(
+        return new Juego(
                     dto.getId(),
                     dto.getTitulo(),
                     dto.getGenero(),
                     dto.getDesarrollador(),
                     dto.getConsola(),
-                    dto.getAño()
+                    dto.getAño(),
+                    dto.getUrlPortada()
                 );
     }
 }
-
-*/
