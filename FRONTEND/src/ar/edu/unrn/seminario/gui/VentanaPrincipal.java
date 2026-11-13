@@ -405,8 +405,8 @@ public class VentanaPrincipal extends JFrame {
 
         lblPortada.setPreferredSize(new Dimension(UIHelper.ANCHO_PORTADA, UIHelper.ALTO_PORTADA));
 
-        if (rutaImagen.startsWith("https://")) {
-            ImagenHelper.cargarImagen(rutaImagen, lblPortada, UIHelper.ANCHO_PORTADA, UIHelper.ALTO_PORTADA);
+        if (rutaImagen == null || rutaImagen.trim().isEmpty() || rutaImagen.startsWith("https://")) {
+            ImagenHelper.cargarImagen(rutaImagen, nombreJuego, lblPortada, UIHelper.ANCHO_PORTADA, UIHelper.ALTO_PORTADA);
         } else {
             URL urlImagen = getClass().getResource(rutaImagen);
 
