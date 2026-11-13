@@ -48,10 +48,10 @@ public class MemoryApi implements IApi {
 	}
 
 	private void inicializarJuegos() {
-		this.juegos.add(new Juego(1, "Super Street Fighter II", "Lucha", "Capcom", "SNES", 1993, "https://placehold.co/300x400?text=Super+Street+Fighter+II"));
-		this.juegos.add(new Juego(2, "DOOM", "FPS", "id Software", "MS-DOS", 1993, "https://placehold.co/300x400?text=DOOM"));
-		this.juegos.add(new Juego(3, "Wolfenstein 3D", "FPS", "id Software", "MS-DOS", 1992, "https://placehold.co/300x400?text=Wolfenstein+3D"));
-		this.juegos.add(new Juego(4, "Super Mario World", "Plataformas", "Nintendo", "NES", 1985, "https://placehold.co/300x400?text=Super+Mario+World"));
+		this.juegos.add(new Juego(1, "Super Street Fighter II", "Lucha", "Capcom", "SNES", 1993, "https://dn721803.ca.archive.org/0/items/Super_Street_Fighter_II_USA.md/00_coverscreenshot.png"));
+		this.juegos.add(new Juego(2, "DOOM", "FPS", "id Software", "MS-DOS", 1993));
+		this.juegos.add(new Juego(3, "Wolfenstein 3D", "FPS", "id Software", "MS-DOS", 1992));
+		this.juegos.add(new Juego(4, "Super Mario World", "Plataformas", "Nintendo", "NES", 1985, "https://dn721906.ca.archive.org/0/items/super-mario-world-usa_202406/Screenshot%202024-06-01%20235151.png"));
 		
 		// agrego un link a cada juego
 		this.juegosLinks.put(1, "https://archive.org/embed/Super_Street_Fighter_II_USA.md");
