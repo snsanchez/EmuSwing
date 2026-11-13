@@ -1,14 +1,20 @@
 package ar.edu.unrn.seminario.api;
+import ar.edu.unrn.seminario.exception.CatalogoVacioException;
+import ar.edu.unrn.seminario.exception.UsuarioExistenteException;
+import ar.edu.unrn.seminario.exception.RolNoEncontradoException;
 
 import java.util.List;
 
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
+import ar.edu.unrn.seminario.dto.JuegoDTO;
 
 public interface IApi {
 
-	void registrarUsuario(String username, String password, String email, String nombre, Integer rol);
-
+	// Declara el registro de usuarios y las posibles excepciones.
+	void registrarUsuario(String username, String password, String email, String nombre, Integer rol)
+	        throws UsuarioExistenteException, RolNoEncontradoException;
+	
 	UsuarioDTO obtenerUsuario(String username);
 
 	void eliminarUsuario(String username);
@@ -30,4 +36,36 @@ public interface IApi {
 	void activarUsuario(String username); // recuperar el objeto Usuario, implementar el comportamiento de estado.
 
 	void desactivarUsuario(String username); // recuperar el objeto Usuario, implementar el comportamiento de estado.
+
+	// el requerimiento cargarJuego
+
+	// el metodo cargarJuego no va en el backend porque maneja frontend
+
+	public Integer getIdJuegoPorTitulo(String titulo); // recuperar el id del juego a partir de su titulo.
+
+	public String getUrlJuegoById(Integer idJuego);
+
+	public String getUrlJuegoByTitulo(String titulo);
+	
+	// Requerimiento otorgarSuscripcionAutomatica
+	
+	String getGanador();
+	
+	Integer obtenerHorasJugadas(String username);
+	
+	boolean otorgarSuscripcionAutomatico(String username);
+	
+	boolean obtenerEstadoSuscripcion(String username);
+	
+	
+
+	// para los juegos favoritos
+	void agregarAFavoritos(Integer idJuego);
+	void quitarDeFavoritos(Integer idJuego);
+	
+	List<JuegoDTO> obtenerJuegosFavoritos() throws CatalogoVacioException;
+	
+	List<JuegoDTO> obtenerJuegosBiblioteca() throws CatalogoVacioException;
+
+	List<JuegoDTO> obtenerJuegos() throws CatalogoVacioException;
 }

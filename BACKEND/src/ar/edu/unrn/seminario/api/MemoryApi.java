@@ -1,17 +1,39 @@
 package ar.edu.unrn.seminario.api;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-
+import java.util.Map;
+import java.util.Set;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
+import ar.edu.unrn.seminario.modelo.Juego;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
+import ar.edu.unrn.seminario.dto.JuegoDTO;
+import ar.edu.unrn.seminario.exception.CatalogoVacioException;
+import ar.edu.unrn.seminario.exception.UsuarioExistenteException;
+import ar.edu.unrn.seminario.exception.RolNoEncontradoException;
+import ar.edu.unrn.seminario.modelo.RegistroJuego;
+
+
+
 
 public class MemoryApi implements IApi {
 
+	// estos son objetos de dominio, cuando se expongan hay que pasarlos a DTO
 	private ArrayList<Rol> roles = new ArrayList();
 	private ArrayList<Usuario> usuarios = new ArrayList<>();
+	private List<RegistroJuego> registrosJuegos = new ArrayList<>();
+	
+	private Set<Juego> juegos = new HashSet<>();
+	private Map<Integer, String> juegosLinks = new HashMap<>();
+	private Map<String, RegistroJuego> registrosSimulados = new HashMap<>();
+	
+	// --- Coleccion para favoritos ---
+	private Set<Integer> juegosFavoritosIds = new HashSet<>();
 
 	public MemoryApi() {
 
@@ -19,25 +41,68 @@ public class MemoryApi implements IApi {
 		this.roles.add(new Rol(1, "ADMIN"));
 		this.roles.add(new Rol(2, "ESTUDIANTE"));
 		this.roles.add(new Rol(3, "INVITADO"));
+		inicializarJuegos();
 		inicializarUsuarios();
+		inicializarRegistrosJuego();
+	}
+
+	private void inicializarJuegos() {
+		this.juegos.add(new Juego(1, "Super Street Fighter II", "Lucha", "Capcom", "SNES", 1993));
+		this.juegos.add(new Juego(2, "DOOM", "FPS", "id Software", "MS-DOS", 1993));
+		this.juegos.add(new Juego(3, "Wolfenstein 3D", "FPS", "id Software", "MS-DOS", 1992));
+		this.juegos.add(new Juego(4, "Super Mario World", "Plataformas", "Nintendo", "NES", 1985));
+		
+		// agrego un link a cada juego
+		this.juegosLinks.put(1, "https://archive.org/embed/Super_Street_Fighter_II_USA.md");
+		this.juegosLinks.put(2, "https://archive.org/embed/msdos_DOOM_1993");
+		this.juegosLinks.put(3, "https://archive.org/embed/Wolfenstein3d");
+		this.juegosLinks.put(4, "https://archive.org/embed/super-mario-world-usa_202406");
 	}
 
 	private void inicializarUsuarios() {
-		registrarUsuario("admin", "1234", "admin@unrn.edu.ar", "Admin", 1);
-		registrarUsuario("ldifabio", "4", "ldifabio@unrn.edu.ar", "Lucas", 2);
-		registrarUsuario("bjgorosito", "1234", "bjgorosito@unrn.edu.ar", "Bruno", 3);
-
+	    registrarUsuario("admin", "1234", "admin@unrn.edu.ar", "Admin", 1);
+	    registrarUsuario("ldifabio", "4", "ldifabio@unrn.edu.ar", "Lucas", 2);				
+	    registrarUsuario("bjgorosito", "1234", "bjgorosito@unrn.edu.ar", "Bruno", 3);		//crearle un registro de juego a alguno de estos usuarios con ciertas cantidades de horas
 	}
+	
+	private void inicializarRegistrosJuego() {
+		registrosSimulados.put("admin", new RegistroJuego(1, 10));
+        registrosSimulados.put("ldifabio", new RegistroJuego(2, 45));
+		registrosSimulados.put("bjgorosito", new RegistroJuego(3, 120)); // bjgorosito es el que mas horas acumulo
+	}
+	
+	
 
 	@Override
-	public void registrarUsuario(String username, String password, String email, String nombre, Integer rol) {
+	public void registrarUsuario(String username, String password,
+	        String email, String nombre, Integer rol)
+	        throws UsuarioExistenteException, RolNoEncontradoException {
+		
+		// Verificar que los datos estén completos
+		if (username == null || username.trim().isEmpty()  || password == null || password.trim().isEmpty() || email == null || email.trim().isEmpty()  || nombre == null || nombre.trim().isEmpty() || rol == null) {
 
-		Rol role = this.buscarRol(rol);
-		Usuario usuario = new Usuario(username, password, nombre, email, role);
-		this.usuarios.add(usuario);
+		    throw new IllegalArgumentException("Complete todos los campos.");
+		}
 
+	    // Verificar que el nombre de usuario no exista
+	    for (Usuario u : usuarios) {
+
+	        if (u.getUsuario().equalsIgnoreCase(username)) {
+	        	throw new UsuarioExistenteException("El nombre de usuario ya existe.");	        }
+	    }
+
+	 // Buscar el rol seleccionado
+	    Rol role = this.buscarRol(rol);
+
+	 // Verificar que el rol exista
+	    if (role == null) {
+	        throw new RolNoEncontradoException("El rol seleccionado no existe.");
+	    }
+
+	    // Crear y guardar el usuario
+	    Usuario usuario = new Usuario(username, password, nombre, email, role);
+	    this.usuarios.add(usuario);
 	}
-
 	@Override
 	public List<UsuarioDTO> obtenerUsuarios() {
 		List<UsuarioDTO> dtos = new ArrayList<>();
@@ -50,14 +115,29 @@ public class MemoryApi implements IApi {
 
 	@Override
 	public UsuarioDTO obtenerUsuario(String username) {
-		// TODO Auto-generated method stub
-		return null;
+	    return this.usuarios
+					.stream()
+					.filter(u -> u.getUsuario().equals(username))
+					.map(u->new UsuarioDTO(
+					    u.getUsuario(), u.getContrasena(),
+						u.getNombre(), u.getEmail(),
+						u.getRol().getNombre(),
+						u.isActivo(), u.obtenerEstado()))
+					.findFirst()
+					.orElse(null);
 	}
 
 	@Override
 	public void eliminarUsuario(String username) {
-		// TODO Auto-generated method stub
-
+	    Iterator<Usuario> iterator = this.usuarios.iterator();
+    	boolean encontrado = false;
+    	while (iterator.hasNext() && !encontrado) {
+            Usuario u = iterator.next();
+            	if (u.getUsuario().equals(username)) {
+                	iterator.remove();
+                    encontrado = true;
+                }
+       	    }
 	}
 
 	@Override
@@ -100,19 +180,40 @@ public class MemoryApi implements IApi {
 
 	@Override
 	public void desactivarRol(Integer codigo) {
-		// TODO Auto-generated method stub
+	//Se busca el rol mediante el codigo recibido.
+		    for (Rol rol : roles) {
 
+		        if (rol.getCodigo().equals(codigo)) {
+
+		        	//Invocacion al metodo "desactivar" de la clase rol, la cual se encarga del proceso.
+		            rol.desactivar();
+
+		            //Una vez encontrado y modificado se deja de recorrer el ArrayList.
+		            break;
+		        }
+		    }
 	}
 
 	@Override
 	public void activarUsuario(String usuario) {
-		Usuario user = this.buscarUsuario(usuario);
-		user.activar();
+		for (Usuario u : this.usuarios) {
+			// usamos equalsIgnoreCase por si hay diferencias de MAYUS/MINUS
+			if (u.getUsuario().equalsIgnoreCase(usuario)) {
+				u.activar();
+				break; 
+			}
+		}
 	}
 
 	@Override
 	public void desactivarUsuario(String usuario) {
-		// TODO: desactivar usuario
+		for (Usuario u : this.usuarios) {
+			// usamos equalsIgnoreCase por si hay diferencias de MAYUS/MINUS
+			if (u.getUsuario().equalsIgnoreCase(usuario)) {
+				u.desactivar();
+				break; 
+			}
+		}
 	}
 
 	private Rol buscarRol(Integer codigo) {
@@ -123,11 +224,157 @@ public class MemoryApi implements IApi {
 		return null;
 	}
 
-	private Usuario buscarUsuario(String usuario) {
-		for (Usuario user : usuarios) {
-			if (user.getUsuario().equals(usuario))
-				return user;
+	public Integer getIdJuegoPorTitulo(String nombre) {
+		return this.juegos
+				.stream()
+				.filter(j -> j.getTitulo().equals(nombre))
+				.findFirst()
+				.map(Juego::getId)
+				.orElse(null);
+	}
+	
+	@Override
+	public List<JuegoDTO> obtenerJuegos() throws CatalogoVacioException {
+		if (this.juegos.isEmpty()){
+			throw new CatalogoVacioException("No hay juegos registrados en el catálogo en este momento.");
+			
+		}
+		
+		List<JuegoDTO> dtos = new ArrayList<>();
+		for (Juego j : this.juegos) {
+			dtos.add(new JuegoDTO(
+				j.getId(),
+				j.getTitulo(), 
+				j.getGenero(), 
+				j.getDesarrollador(), 
+				j.getConsola(), 
+				j.getAño()
+			));
+		}
+		return dtos;
+	}
+
+	@Override
+	public List<JuegoDTO> obtenerJuegosBiblioteca() throws CatalogoVacioException {
+		List<JuegoDTO> dtos = new ArrayList<>();
+		
+		// Simulamos que el usuario tiene los juegos 1 y 2 en su biblioteca
+		for (Juego j : this.juegos) {
+			if (j.getId() == 1 || j.getId() == 2) {
+				dtos.add(new JuegoDTO(
+					j.getId(),
+					j.getTitulo(), 
+					j.getGenero(), 
+					j.getDesarrollador(), 
+					j.getConsola(), 
+					j.getAño()
+				));
+			}
+		}
+
+		if (dtos.isEmpty()) {
+			throw new CatalogoVacioException("Tu biblioteca está vacía. ¡Agregá algunos juegos desde el catálogo!");
+		}
+		
+		return dtos;
+	}
+	
+	public String getUrlJuegoById(Integer idJuego){
+		// ejemplo: this.juegosLinks.put(3, "https://archive.org/embed/super-castlevania-iv-usa_202301");
+		// si le uso getUrlJuegoById(3) me devuelve "https://archive.org/embed/super-castlevania-iv-usa_202301"
+	    return this.juegosLinks.get(idJuego);
+	}
+
+	public String getUrlJuegoByTitulo(String titulo){
+		Integer idJuego = this.getIdJuegoPorTitulo(titulo);
+		if(idJuego != null){
+			return this.getUrlJuegoById(idJuego);
 		}
 		return null;
 	}
+	
+	@Override
+	public String getGanador() {		//busca y retorna el usuario con mayor cantidad de horas
+	    String usernameMax = null;
+	    int maxHoras = -1;
+	    for (Map.Entry<String, RegistroJuego> entry : registrosSimulados.entrySet()) {
+	        if (entry.getValue().getHoras() != null && entry.getValue().getHoras() > maxHoras) {
+	            maxHoras = entry.getValue().getHoras();
+	            usernameMax = entry.getKey();
+	        }
+	    }
+	    return usernameMax;
+	}
+
+	@Override
+	public boolean otorgarSuscripcionAutomatico(String username) {		//Valida si es el ganador y activa la suscripcion
+	    String ganador = getGanador();
+	    if (ganador != null && ganador.equals(username)) {
+	        for (Usuario u : this.usuarios) {
+	            if (u.getUsuario().equals(username)) {
+	                u.setEstadoSuscripcion(true);
+	                return true;
+	            }
+	        }
+	    }
+	    return false;
+	}
+
+	@Override
+	public Integer obtenerHorasJugadas(String username) {		// Retortna las horas acumuladas del usuario
+	    if (registrosSimulados.containsKey(username)) {
+	        return registrosSimulados.get(username).getHoras();
+	    }
+	    return 0;
+	}
+	
+	public void agregarAFavoritos(Integer idJuego) {
+		if (idJuego != null) {
+			this.juegosFavoritosIds.add(idJuego);
+		}
+	}
+
+	@Override
+	public void quitarDeFavoritos(Integer idJuego) {
+		if (idJuego != null) {
+			this.juegosFavoritosIds.remove(idJuego);
+		}
+	}
+
+	@Override
+	public List<JuegoDTO> obtenerJuegosFavoritos() throws CatalogoVacioException {
+		List<JuegoDTO> dtos = new ArrayList<>();
+		
+		// Recorremos todos los juegos y filtramos los que están en la lista de favoritos
+		for (Juego j : this.juegos) {
+			if (this.juegosFavoritosIds.contains(j.getId())) {
+				dtos.add(new JuegoDTO(
+					j.getId(),
+					j.getTitulo(), 
+					j.getGenero(), 
+					j.getDesarrollador(), 
+					j.getConsola(), 
+					j.getAño()
+				));
+			}
+		}
+
+		if (dtos.isEmpty()) {
+			throw new CatalogoVacioException("No tenés juegos marcados como favoritos aún.");
+		}
+		
+		return dtos;
+	}
+
+	@Override
+	public boolean obtenerEstadoSuscripcion(String username) {		//Devuelve si el usuario tiene la suscripcion activa
+	    for (Usuario u : this.usuarios) {
+	        if (u.getUsuario().equals(username)) {
+	            return u.isEstadoSuscripcion();
+	        }
+	    }
+	    return false;
+	}
 }
+
+

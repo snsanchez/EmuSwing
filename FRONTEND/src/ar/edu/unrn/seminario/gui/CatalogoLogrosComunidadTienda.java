@@ -17,17 +17,12 @@ import javax.swing.JScrollPane;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 
+import ar.edu.unrn.seminario.helpers.UIHelper;
+
 public class CatalogoLogrosComunidadTienda extends JFrame {
 
 	private JPanel contentPane;
-
-	// Colores definidos EmuSwing
-	 private final Color COLOR_FONDO_MAIN = new Color(24, 10, 32);   
-	 private final Color COLOR_PANEL_BOX  = new Color(50, 22, 66);   
-	 private final Color COLOR_BORDE_NEON = new Color(169, 65, 196);   
-	 private final Color COLOR_LETRAS = new Color(245, 240, 247);     
-	 private final Color COLOR_PUNTOS = new Color(255, 255, 0); 
-
+     
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -48,7 +43,7 @@ public class CatalogoLogrosComunidadTienda extends JFrame {
 		setLocationRelativeTo(null);
 
 		contentPane = new JPanel();
-		contentPane.setBackground(COLOR_FONDO_MAIN);
+		contentPane.setBackground(UIHelper.COLOR_FONDO);
 		contentPane.setBorder(new EmptyBorder(20, 20, 20, 20));
 		contentPane.setLayout(new BorderLayout(0, 15));
 		setContentPane(contentPane);
@@ -59,13 +54,14 @@ public class CatalogoLogrosComunidadTienda extends JFrame {
 		panelHeader.setLayout(new BoxLayout(panelHeader, BoxLayout.Y_AXIS));
 
 		JLabel lblTitulo = new JLabel("CATÁLOGO DE LOGROS");
-		lblTitulo.setFont(new Font("Public Pixel", Font.PLAIN, 40)); 
-		lblTitulo.setForeground(COLOR_LETRAS);
+		lblTitulo.setFont (UIHelper.FONT_TITULO); 
+		lblTitulo.setForeground(UIHelper.COLOR_TEXTO);
 		lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+		lblTitulo.setFont(UIHelper.FONT_TITULO.deriveFont(40f));	
 
 		JLabel lblSubtitulo = new JLabel("Comunidad y Tienda");
-		lblSubtitulo.setFont(new Font("Public Pixel", Font.PLAIN, 20)); 
-		lblSubtitulo.setForeground(COLOR_BORDE_NEON);
+		lblSubtitulo.setFont(UIHelper.FONT_TITULO); 
+		lblSubtitulo.setForeground(UIHelper.COLOR_BORDE);
 		lblSubtitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		panelHeader.add(lblTitulo);
@@ -75,7 +71,7 @@ public class CatalogoLogrosComunidadTienda extends JFrame {
 
 		// 2. CONTENEDOR PRINCIPAL CON SCROLL
 		JPanel panelListaLogros = new JPanel();
-		panelListaLogros.setBackground(COLOR_FONDO_MAIN);
+		panelListaLogros.setBackground(UIHelper.COLOR_FONDO);
 		panelListaLogros.setLayout(new BoxLayout(panelListaLogros, BoxLayout.Y_AXIS));
 		
 		// Corre los logros 100 pixeles hacia abajo (queda mejor visualmente)
@@ -86,9 +82,9 @@ public class CatalogoLogrosComunidadTienda extends JFrame {
 		// ==========================================
 		
 		JLabel lblTituloInteraccion = new JLabel("INTERACCIÓN SOCIAL");
-		lblTituloInteraccion.setFont(new Font("Public Pixel", Font.PLAIN, 20));
-		lblTituloInteraccion.setForeground(COLOR_BORDE_NEON);
-		lblTituloInteraccion.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, COLOR_BORDE_NEON));
+		lblTituloInteraccion.setFont(UIHelper.FONT_TITULO);
+		lblTituloInteraccion.setForeground(UIHelper.COLOR_BORDE);
+		lblTituloInteraccion.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, UIHelper.COLOR_BORDE));
 		lblTituloInteraccion.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblTituloInteraccion.setMaximumSize(new Dimension(800, 30));
 		panelListaLogros.add(lblTituloInteraccion);
@@ -97,24 +93,24 @@ public class CatalogoLogrosComunidadTienda extends JFrame {
 
 		// --- TARJETA: NO ESTOY SOLO ---
 		JPanel panelLogroSolo = new JPanel(new BorderLayout(5, 5));
-		panelLogroSolo.setBackground(COLOR_PANEL_BOX);
-		panelLogroSolo.setBorder(new CompoundBorder(BorderFactory.createLineBorder(COLOR_BORDE_NEON, 1), new EmptyBorder(10, 15, 10, 15)));
+		panelLogroSolo.setBackground(UIHelper.COLOR_CONTENIDO);
+		panelLogroSolo.setBorder(new CompoundBorder(BorderFactory.createLineBorder(UIHelper.COLOR_BORDE, 1), new EmptyBorder(10, 15, 10, 15)));
 		panelLogroSolo.setMaximumSize(new Dimension(800, 70));
 		panelLogroSolo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		JPanel panelSupSolo = new JPanel(new BorderLayout());
 		panelSupSolo.setOpaque(false);
 		JLabel lblTitSolo = new JLabel("No estoy solo");
-		lblTitSolo.setFont(new Font("Public Pixel", Font.PLAIN, 18));
-		lblTitSolo.setForeground(COLOR_LETRAS);
+		lblTitSolo.setFont(UIHelper.FONT_MENU.deriveFont(18f)); 
+		lblTitSolo.setForeground(UIHelper.COLOR_TEXTO);
 		panelSupSolo.add(lblTitSolo, BorderLayout.WEST);
 		JLabel lblPtsSolo = new JLabel("15 PTS");
-		lblPtsSolo.setFont(new Font("Public Pixel", Font.PLAIN, 12));
-		lblPtsSolo.setForeground(COLOR_PUNTOS);
+		lblPtsSolo.setFont(UIHelper.FONT_TEXTFIELDS);
+		lblPtsSolo.setForeground(UIHelper.COLOR_PUNTOS);
 		panelSupSolo.add(lblPtsSolo, BorderLayout.EAST);
 		JLabel lblDescSolo = new JLabel("Agregar tu primer amigo.");
-		lblDescSolo.setFont(new Font("Public Pixel", Font.PLAIN, 12));
-		lblDescSolo.setForeground(new Color(200, 190, 210));
+		lblDescSolo.setFont(UIHelper.FONT_TEXTFIELDS);
+		lblDescSolo.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
 		
 		panelLogroSolo.add(panelSupSolo, BorderLayout.NORTH);
 		panelLogroSolo.add(lblDescSolo, BorderLayout.CENTER);
@@ -123,24 +119,24 @@ public class CatalogoLogrosComunidadTienda extends JFrame {
 
 		// --- TARJETA: SOCIAL MEDIA ---
 		JPanel panelLogroSocial = new JPanel(new BorderLayout(5, 5));
-		panelLogroSocial.setBackground(COLOR_PANEL_BOX);
-		panelLogroSocial.setBorder(new CompoundBorder(BorderFactory.createLineBorder(COLOR_BORDE_NEON, 1), new EmptyBorder(10, 15, 10, 15)));
+		panelLogroSocial.setBackground(UIHelper.COLOR_CONTENIDO);
+		panelLogroSocial.setBorder(new CompoundBorder(BorderFactory.createLineBorder(UIHelper.COLOR_BORDE, 1), new EmptyBorder(10, 15, 10, 15)));
 		panelLogroSocial.setMaximumSize(new Dimension(800, 70));
 		panelLogroSocial.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		JPanel panelSupSocial = new JPanel(new BorderLayout());
 		panelSupSocial.setOpaque(false);
 		JLabel lblTitSocial = new JLabel("Social Media");
-		lblTitSocial.setFont(new Font("Public Pixel", Font.PLAIN, 18));
-		lblTitSocial.setForeground(COLOR_LETRAS);
+		lblTitSocial.setFont(UIHelper.FONT_MENU.deriveFont(18f));
+		lblTitSocial.setForeground(UIHelper.COLOR_TEXTO);
 		panelSupSocial.add(lblTitSocial, BorderLayout.WEST);
 		JLabel lblPtsSocial = new JLabel("35 PTS");
-		lblPtsSocial.setFont(new Font("Public Pixel", Font.PLAIN, 12));
-		lblPtsSocial.setForeground(COLOR_PUNTOS);
+		lblPtsSocial.setFont(UIHelper.FONT_TEXTFIELDS);
+		lblPtsSocial.setForeground(UIHelper.COLOR_PUNTOS);
 		panelSupSocial.add(lblPtsSocial, BorderLayout.EAST);
 		JLabel lblDescSocial = new JLabel("Agregar 5 amigos.");
-		lblDescSocial.setFont(new Font("Public Pixel", Font.PLAIN, 12));
-		lblDescSocial.setForeground(new Color(200, 190, 210));
+		lblDescSocial.setFont(UIHelper.FONT_TEXTFIELDS);
+		lblDescSocial.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
 		
 		panelLogroSocial.add(panelSupSocial, BorderLayout.NORTH);
 		panelLogroSocial.add(lblDescSocial, BorderLayout.CENTER);
@@ -152,9 +148,9 @@ public class CatalogoLogrosComunidadTienda extends JFrame {
 		// ==========================================
 		
 		JLabel lblTituloTienda = new JLabel("ESPECIALES Y TIENDA");
-		lblTituloTienda.setFont(new Font("Public Pixel", Font.PLAIN, 20));
-		lblTituloTienda.setForeground(COLOR_BORDE_NEON);
-		lblTituloTienda.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, COLOR_BORDE_NEON));
+		lblTituloTienda.setFont(UIHelper.FONT_TITULO);
+		lblTituloTienda.setForeground(UIHelper.COLOR_BORDE);
+		lblTituloTienda.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, UIHelper.COLOR_BORDE));
 		lblTituloTienda.setAlignmentX(Component.CENTER_ALIGNMENT);
 		lblTituloTienda.setMaximumSize(new Dimension(800, 30));
 		panelListaLogros.add(lblTituloTienda);
@@ -163,24 +159,24 @@ public class CatalogoLogrosComunidadTienda extends JFrame {
 
 		// --- TARJETA: CLIENTE FRECUENTE ---
 		JPanel panelLogroCliente = new JPanel(new BorderLayout(5, 5));
-		panelLogroCliente.setBackground(COLOR_PANEL_BOX);
-		panelLogroCliente.setBorder(new CompoundBorder(BorderFactory.createLineBorder(COLOR_BORDE_NEON, 1), new EmptyBorder(10, 15, 10, 15)));
+		panelLogroCliente.setBackground(UIHelper.COLOR_CONTENIDO);
+		panelLogroCliente.setBorder(new CompoundBorder(BorderFactory.createLineBorder(UIHelper.COLOR_BORDE, 1), new EmptyBorder(10, 15, 10, 15)));
 		panelLogroCliente.setMaximumSize(new Dimension(800, 70));
 		panelLogroCliente.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		JPanel panelSupCliente = new JPanel(new BorderLayout());
 		panelSupCliente.setOpaque(false);
 		JLabel lblTitCliente = new JLabel("Cliente Frecuente");
-		lblTitCliente.setFont(new Font("Public Pixel", Font.PLAIN, 18));
-		lblTitCliente.setForeground(COLOR_LETRAS);
+		lblTitCliente.setFont(UIHelper.FONT_MENU.deriveFont(18f));
+		lblTitCliente.setForeground(UIHelper.COLOR_TEXTO);
 		panelSupCliente.add(lblTitCliente, BorderLayout.WEST);
 		JLabel lblPtsCliente = new JLabel("50 PTS");
-		lblPtsCliente.setFont(new Font("Public Pixel", Font.PLAIN, 12));
-		lblPtsCliente.setForeground(COLOR_PUNTOS);
+		lblPtsCliente.setFont(UIHelper.FONT_TEXTFIELDS);
+		lblPtsCliente.setForeground(UIHelper.COLOR_PUNTOS);
 		panelSupCliente.add(lblPtsCliente, BorderLayout.EAST);
 		JLabel lblDescCliente = new JLabel("Renovar la Suscripción (Mes 2).");
-		lblDescCliente.setFont(new Font("Public Pixel", Font.PLAIN, 12));
-		lblDescCliente.setForeground(new Color(200, 190, 210));
+		lblDescCliente.setFont(UIHelper.FONT_TEXTFIELDS);
+		lblDescCliente.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
 		
 		panelLogroCliente.add(panelSupCliente, BorderLayout.NORTH);
 		panelLogroCliente.add(lblDescCliente, BorderLayout.CENTER);

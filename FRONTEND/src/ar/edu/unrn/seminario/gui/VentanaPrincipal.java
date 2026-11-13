@@ -86,12 +86,57 @@ public class VentanaPrincipal extends JFrame {
         panelMenu.setOpaque(false);
 
         panelMenu.add(crearBotonMenu("Mi Perfil"));
-        panelMenu.add(crearBotonMenu("Biblioteca"));
-        panelMenu.add(crearBotonMenu("Juegos"));
+        
+     // --- BOTÓN BIBLIOTECA CON SU CONEXIÓN Y LISTENER ---
+        JButton btnMenuBiblioteca = crearBotonMenu("Biblioteca");
+        btnMenuBiblioteca.addActionListener(e -> {
+            try {
+                Biblioteca ventanaBiblioteca = new Biblioteca(api);
+                ventanaBiblioteca.setVisible(true);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this, 
+                    "Error al abrir la biblioteca.", 
+                    "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        panelMenu.add(btnMenuBiblioteca);
+        
+     // Botón Registrar Usuario
+        JButton btnRegistrarUsuario = crearBotonMenu("Registrar Usuario");
+
+        btnRegistrarUsuario.addActionListener(e -> {
+            RegistrarUsuario ventana = new RegistrarUsuario(api);
+            ventana.mostrar();
+        });
+
+        panelMenu.add(btnRegistrarUsuario);
+        
+        // -- BOTON JUEGOS PARA LA CONEXION CON LISTADO JUEGOS --
+        JButton btnMenuJuegos = crearBotonMenu("Juegos");
+        btnMenuJuegos.addActionListener(e -> {
+            try {
+                ListadoJuegos ventanaListado = new ListadoJuegos(api);
+                ventanaListado.setVisible(true);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this, 
+                    "Error al abrir el catálogo de juegos.", 
+                    "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        panelMenu.add(btnMenuJuegos);
+        
         panelMenu.add(crearBotonMenu("Tienda"));
         panelMenu.add(crearBotonMenu("Soporte"));
 
         JButton btnAjustes = crearBotonMenu("Ajustes");
+        btnAjustes.addActionListener(e -> {
+        	String usuarioGanador = api.getGanador();		//uso la api para obtener el usuario con mas horas
+        	
+            VentanaConfiguracion ventanaConfig = new VentanaConfiguracion(api, usuarioGanador);		//aca abre ajustes pasando el usuario ganador
+            ventanaConfig.setVisible(true);
+        });
         panelMenu.add(btnAjustes);
 
         menuBar.add(panelMenu);
@@ -201,10 +246,41 @@ public class VentanaPrincipal extends JFrame {
         // el \u25B6 es Unicode para el icono de jugar
         JButton btnJugar = crearBotonAccion("\u25B6  Jugar", true);
 
+        // --- LISTENER DEL BOTÓN JUGAR 
+     		btnJugar.addActionListener(e -> {
+     			// Verificamos que el usuario haya hecho clic en alguna tarjeta
+     			if (juegoSeleccionado == null) {
+     				javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this, 
+     						"Por favor, seleccioná un juego primero.", 
+     						"Atención", javax.swing.JOptionPane.WARNING_MESSAGE);
+     				return;
+     			}
+
+     			// Buscamos la URL del juego usando el método getUrlJuegoByTitulo
+     			String urlJuego = api.getUrlJuegoByTitulo(juegoSeleccionado);
+
+     			if (urlJuego != null) {
+     				try {
+     					// Lanzamos el emulador web real
+     					VentanaJuego ventana = new VentanaJuego(urlJuego);
+     					ventana.setVisible(true);
+     				} catch (Exception ex) {
+     					ex.printStackTrace();
+     					javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this, 
+     						"Error al intentar iniciar el juego.", 
+     						"Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+     				}
+     			} else {
+     				javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this, 
+     						"El enlace para este juego no está disponible en la base de datos.", 
+     						"Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+     			}
+     		});
+     		// ------------------------------------------------
+        
         panelAcciones.add(btnDetalles);
         panelAcciones.add(btnJugar);
         panelContenido.add(panelAcciones, BorderLayout.SOUTH);
-        // no le pongo ningun listener aun porque por ahora solo es visual
 
     }
 
