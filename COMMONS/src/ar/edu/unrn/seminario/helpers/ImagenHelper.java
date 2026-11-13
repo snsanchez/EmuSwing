@@ -4,8 +4,12 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.awt.Color;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -40,19 +44,23 @@ public final class ImagenHelper {
     }
 
     public static void cargarImagen(String urlImagen, JLabel etiqueta, int ancho, int alto) {
-        etiqueta.setIcon(null);
-        etiqueta.setText("Cargando...");
+        cargarImagen(urlImagen, "Portada no disponible", etiqueta, ancho, alto);
+    }
 
-        if (urlImagen == null || urlImagen.trim().isEmpty()) {
-            etiqueta.setText("No se pudo cargar la imagen");
-            return;
-        }
+    public static void cargarImagen(String urlImagen, String nombreJuego, JLabel etiqueta, int ancho, int alto) {
+        etiqueta.setIcon(null);
+
+        boolean portadaAusente = urlImagen == null || urlImagen.trim().isEmpty();
+        final String urlACargar = portadaAusente
+            ? crearUrlPlaceholder(nombreJuego, ancho, alto)
+            : urlImagen;
+        mostrarPlaceholderLocal(nombreJuego, etiqueta);
 
         new SwingWorker<ImageIcon, Void>() {
 
             @Override
             protected ImageIcon doInBackground() throws Exception {
-                URL url = new URL(urlImagen);
+                URL url = URI.create(urlACargar).toURL();
                 if (!"https".equalsIgnoreCase(url.getProtocol())) {
                     throw new IOException("Solo se permiten URL HTTPS");
                 }
@@ -93,13 +101,36 @@ public final class ImagenHelper {
             protected void done() {
                 try {
                     etiqueta.setIcon(get());
+                    etiqueta.setOpaque(false);
                     etiqueta.setText("");
                 } catch (Exception e) {
-                    etiqueta.setIcon(null);
-                    etiqueta.setText("No se pudo cargar la imagen");
+                    mostrarPlaceholderLocal(nombreJuego, etiqueta);
                     System.err.println("No se pudo cargar la portada: " + e.getMessage());
                 }
             }
         }.execute();
+    }
+
+    private static String crearUrlPlaceholder(String nombreJuego, int ancho, int alto) {
+        String texto = nombreJuego == null || nombreJuego.trim().isEmpty()
+                ? "Portada no disponible"
+                : nombreJuego.trim();
+        try {
+            texto = URLEncoder.encode(texto, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalStateException("No se pudo codificar el título del juego.", e);
+        }
+        return "https://placehold.co/" + ancho + "x" + alto + "?text=" + texto;
+    }
+
+    private static void mostrarPlaceholderLocal(String nombreJuego, JLabel etiqueta) {
+        etiqueta.setIcon(null);
+        etiqueta.setOpaque(true);
+        etiqueta.setBackground(new Color(31, 41, 55));
+        etiqueta.setForeground(Color.WHITE);
+        etiqueta.setHorizontalAlignment(JLabel.CENTER);
+        etiqueta.setText(nombreJuego == null || nombreJuego.trim().isEmpty()
+                ? "Portada no disponible"
+                : nombreJuego.trim());
     }
 }
