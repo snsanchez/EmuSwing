@@ -18,7 +18,8 @@ public class JuegoMapper {
                     juego.getDesarrollador(),
                     juego.getConsola(),
                     juego.getAño(),
-                    juego.getUrlPortada()
+                    juego.getUrlPortada(),
+                    juego.getUrlEmulador()
                 );
     }
 
@@ -34,7 +35,8 @@ public class JuegoMapper {
                     dto.getDesarrollador(),
                     dto.getConsola(),
                     dto.getAño(),
-                    dto.getUrlPortada()
+                    dto.getUrlPortada(),
+                    dto.getUrlEmulador()
                 );
     }
 }

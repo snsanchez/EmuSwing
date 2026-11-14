@@ -14,12 +14,17 @@ public class Juego implements Comparable<Juego> {
     private String consola;
     private Integer año;
     private String urlPortada;
+    private String urlEmulador;
 
     public Juego(Integer id, String titulo, String genero, String desarrollador, String consola, Integer año) {
         this(id, titulo, genero, desarrollador, consola, año, null);
     }
 
     public Juego(Integer id, String titulo, String genero, String desarrollador, String consola, Integer año, String urlPortada) {
+        this(id, titulo, genero, desarrollador, consola, año, urlPortada, null);
+    }
+
+    public Juego(Integer id, String titulo, String genero, String desarrollador, String consola, Integer año, String urlPortada, String urlEmulador) {
         this.id = id;
         this.titulo = titulo;
         this.genero = genero;
@@ -27,6 +32,7 @@ public class Juego implements Comparable<Juego> {
         this.consola = consola;
         this.año = año;
         this.urlPortada = validarUrlPortada(urlPortada);
+        this.urlEmulador = validarUrlEmulador(urlEmulador);
     
     }
     @Override
@@ -75,6 +81,14 @@ public class Juego implements Comparable<Juego> {
         this.urlPortada = validarUrlPortada(urlPortada);
     }
 
+    public String getUrlEmulador() {
+        return urlEmulador;
+    }
+
+    public void setUrlEmulador(String urlEmulador) {
+        this.urlEmulador = validarUrlEmulador(urlEmulador);
+    }
+
     private String validarUrlPortada(String urlPortada) {
         if (urlPortada == null) {
             return null;
@@ -96,6 +110,29 @@ public class Juego implements Comparable<Juego> {
             }
         } catch (URISyntaxException e) {
             throw new PortadaIncorrectaException("La URL de la portada no es válida.", e);
+        }
+
+        return urlNormalizada;
+    }
+
+    private String validarUrlEmulador(String urlEmulador) {
+        if (urlEmulador == null) {
+            return null;
+        }
+
+        String urlNormalizada = urlEmulador.trim();
+        try {
+            URI uri = new URI(urlNormalizada);
+            String host = uri.getHost();
+            String hostNormalizado = host == null ? "" : host.toLowerCase(Locale.ROOT);
+
+            if (!"https".equalsIgnoreCase(uri.getScheme())
+                    || !(hostNormalizado.equals("archive.org") || hostNormalizado.endsWith(".archive.org"))) {
+                throw new PortadaIncorrectaException(
+                        "La URL del emulador debe ser HTTPS y pertenecer a archive.org.");
+            }
+        } catch (URISyntaxException e) {
+            throw new PortadaIncorrectaException("La URL del emulador no es válida.", e);
         }
 
         return urlNormalizada;
