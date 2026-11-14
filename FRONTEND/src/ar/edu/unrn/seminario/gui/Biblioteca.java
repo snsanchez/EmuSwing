@@ -162,7 +162,7 @@ public class Biblioteca extends JFrame {
 				javax.swing.JOptionPane.showMessageDialog(this, "Seleccioná un juego primero.", "Atención", javax.swing.JOptionPane.WARNING_MESSAGE);
 				return;
 			}
-			
+			try {
 			// Llamamos al método del backend para guardar el ID
 			api.agregarAFavoritos(juegoSeleccionado.getId());
 			
@@ -170,7 +170,14 @@ public class Biblioteca extends JFrame {
 				"¡" + juegoSeleccionado.getTitulo() + " se agregó a tus favoritos!", 
 				"Éxito", 
 				javax.swing.JOptionPane.INFORMATION_MESSAGE);
-		});
+		} catch (IllegalArgumentException ex) {
+			// Capturamos el error indicado por el líder si el argumento es nulo o inválido
+			javax.swing.JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de validación", javax.swing.JOptionPane.WARNING_MESSAGE);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			javax.swing.JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado al agregar a favoritos.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+		}
+	});
 
 		panelAcciones.add(btnVerFavoritos);
 		panelAcciones.add(btnInfo);

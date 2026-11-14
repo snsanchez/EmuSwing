@@ -142,6 +142,7 @@ public class BibliotecaFavoritos extends JFrame {
 				return;
 			}
 			
+			try {
 			// Quitamos el ID de la memoria
 			api.quitarDeFavoritos(juegoSeleccionado.getId());
 			
@@ -150,7 +151,14 @@ public class BibliotecaFavoritos extends JFrame {
 			// Recargamos la interfaz para que desaparezca visualmente
 			juegoSeleccionado = null;
 			recargarLista();
-		});
+		} catch (IllegalArgumentException ex) {
+			// Capturamos la excepción recomendada por el líder
+			javax.swing.JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de validación", javax.swing.JOptionPane.WARNING_MESSAGE);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			javax.swing.JOptionPane.showMessageDialog(this, "Ocurrió un error inesperado al quitar de favoritos.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+		}
+	});
 		
 		// Logica volver hacia atras (ventana biblitoca)
 		btnVolver.addActionListener(e -> {

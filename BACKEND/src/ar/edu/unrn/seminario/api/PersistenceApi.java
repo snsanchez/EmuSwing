@@ -1,6 +1,10 @@
 package ar.edu.unrn.seminario.api;
 import java.util.List;
+
 import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import ar.edu.unrn.seminario.dao.JuegoDAO;
 import ar.edu.unrn.seminario.dto.JuegoDTO;
@@ -15,6 +19,9 @@ import ar.edu.unrn.seminario.modelo.Juego;
 public class PersistenceApi implements IApi{
     private JuegoDAO juegoDAO;
     // agregar los demas DAOs
+    
+    private Set<Integer> juegosFavoritosIds = new HashSet<>();
+    
 
     public PersistenceApi(JuegoDAO juegoDAO) {
         this.juegoDAO = juegoDAO;
@@ -169,26 +176,51 @@ public class PersistenceApi implements IApi{
 
 	@Override
 	public void agregarAFavoritos(Integer idJuego) {
-		// TODO Auto-generated method stub
+		if (idJuego != null) {
+			this.juegosFavoritosIds.add(idJuego);
+		}
 		
 	}
 
 	@Override
 	public void quitarDeFavoritos(Integer idJuego) {
-		// TODO Auto-generated method stub
-		
+		if (idJuego != null) {
+			this.juegosFavoritosIds.remove(idJuego);
+		}
 	}
 
 	@Override
 	public List<JuegoDTO> obtenerJuegosFavoritos() throws CatalogoVacioException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Juego> juegosDb = juegoDAO.findAll();
+		List<JuegoDTO> dtos = new ArrayList<>();
+		
+		for (Juego j : juegosDb) {
+			if (this.juegosFavoritosIds.contains(j.getId())) {
+				dtos.add(JuegoMapper.transform(j));
+			}
+		}
+
+		if (dtos.isEmpty()) {
+			throw new CatalogoVacioException("No tenés juegos marcados como favoritos aún.");
+		}
+		
+		return dtos;
 	}
 
 	@Override
 	public List<JuegoDTO> obtenerJuegosBiblioteca() throws CatalogoVacioException {
-		// TODO Auto-generated method stub
-		return null;
+		// Por ahora, si la biblioteca muestra todos los de la base de datos o filtra por algo:
+		List<Juego> juegosDb = juegoDAO.findAll();
+		
+		if (juegosDb == null || juegosDb.isEmpty()) {
+			throw new CatalogoVacioException("Tu biblioteca está vacía.");
+		}
+		
+		List<JuegoDTO> dtos = new ArrayList<>();
+		for (Juego j : juegosDb) {
+			dtos.add(JuegoMapper.transform(j));
+		}
+		return dtos;
 	}
 
 	
