@@ -207,22 +207,6 @@ public class PersistenceApi implements IApi{
 		return dtos;
 	}
 
-	@Override
-	public List<JuegoDTO> obtenerJuegosBiblioteca() throws CatalogoVacioException {
-		// Por ahora, si la biblioteca muestra todos los de la base de datos o filtra por algo:
-		List<Juego> juegosDb = juegoDAO.findAll();
-		
-		if (juegosDb == null || juegosDb.isEmpty()) {
-			throw new CatalogoVacioException("Tu biblioteca está vacía.");
-		}
-		
-		List<JuegoDTO> dtos = new ArrayList<>();
-		for (Juego j : juegosDb) {
-			dtos.add(JuegoMapper.transform(j));
-		}
-		return dtos;
-	}
-
 	
 
 

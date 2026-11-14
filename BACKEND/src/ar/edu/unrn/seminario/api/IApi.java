@@ -65,8 +65,6 @@ public interface IApi {
 	void quitarDeFavoritos(Integer idJuego);
 	
 	List<JuegoDTO> obtenerJuegosFavoritos() throws CatalogoVacioException;
-	
-	List<JuegoDTO> obtenerJuegosBiblioteca() throws CatalogoVacioException;
 
 	List<JuegoDTO> obtenerJuegos() throws CatalogoVacioException;
 
