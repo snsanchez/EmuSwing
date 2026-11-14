@@ -2,6 +2,7 @@ package ar.edu.unrn.seminario.dao;
 
 import ar.edu.unrn.seminario.exception.JuegoDAOException;
 import ar.edu.unrn.seminario.modelo.Juego;
+import java.util.ArrayList;
 import java.util.List;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,8 +18,8 @@ public class JuegoDAOJDBC implements JuegoDAO {
         }
 		try (Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn
-					.prepareStatement("INSERT INTO juegos(id, titulo, genero, desarrollador, consola, anio, urlPortada) "
-							+ "VALUES (?, ?, ?, ?, ?, ?, ?)");) {
+                        .prepareStatement("INSERT INTO juegos(id, titulo, genero, desarrollador, consola, anio, urlPortada, urlEmulador) "
+                            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");) {
 
 			
 
@@ -29,6 +30,7 @@ public class JuegoDAOJDBC implements JuegoDAO {
 			statement.setString(5, juego.getConsola());
 			statement.setInt(6, juego.getAño());
 			statement.setString(7, juego.getUrlPortada());
+                        statement.setString(8, juego.getUrlEmulador());
 			int cantidad = statement.executeUpdate();
 			if (cantidad > 0) {
 				// System.out.println("Modificando " + cantidad + " registros");
@@ -53,14 +55,15 @@ public class JuegoDAOJDBC implements JuegoDAO {
         }
 
     try(Connection conn = ConnectionManager.getConnection();
-        PreparedStatement statement = conn.prepareStatement("UPDATE juegos SET titulo = ?, genero = ?, desarrollador = ?, consola = ?, anio = ?, urlPortada = ? WHERE id = ?");){    
+        PreparedStatement statement = conn.prepareStatement("UPDATE juegos SET titulo = ?, genero = ?, desarrollador = ?, consola = ?, anio = ?, urlPortada = ?, urlEmulador = ? WHERE id = ?");){
             statement.setString(1, juego.getTitulo());
             statement.setString(2, juego.getGenero());
             statement.setString(3, juego.getDesarrollador());
             statement.setString(4, juego.getConsola());
             statement.setInt(5, juego.getAño());
             statement.setString(6, juego.getUrlPortada());
-            statement.setInt(7, juego.getId());
+            statement.setString(7, juego.getUrlEmulador());
+            statement.setInt(8, juego.getId());
 
             int cantidad = statement.executeUpdate();
             if (cantidad > 0) {
@@ -128,7 +131,7 @@ public class JuegoDAOJDBC implements JuegoDAO {
 
             try(ResultSet rs = statement.executeQuery()) {
                 if (rs.next()) {
-                    juego = new Juego(rs.getInt("id"), rs.getString("titulo"), rs.getString("genero"), rs.getString("desarrollador"), rs.getString("consola"), rs.getInt("anio"), rs.getString("urlPortada"));
+                    juego = new Juego(rs.getInt("id"), rs.getString("titulo"), rs.getString("genero"), rs.getString("desarrollador"), rs.getString("consola"), rs.getInt("anio"), rs.getString("urlPortada"), rs.getString("urlEmulador"));
                 }
             }
 		} catch (SQLException e) {
@@ -141,24 +144,23 @@ public class JuegoDAOJDBC implements JuegoDAO {
 
     @Override
     public List<Juego> findAll() {
-        List<Juego> juegos = new ArrayList<Juego>();
-		try (Connection conn = ConnectionManager.getConnection();
-			PreparedStatement statement = conn.prepareStatement( "SELECT j.*  " + "FROM juegos j");) 
-        {
-			try(ResultSet rs = statement.executeQuery()) {
-				while (rs.next()) {
-
-				Juego juego = new Juego(rs.getInt("id"), rs.getString("titulo"), rs.getString("genero"), rs.getString("desarrollador"), rs.getString("consola"), rs.getInt("anio"), rs.getString("urlPortada"));
-
-				juegos.add(juego);
-			}
-		} catch (SQLException e) {
-			throw new JuegoDAOException("Error al listar los juegos.", e.getSQLState(), e);
-		} catch (IllegalArgumentException e) {
-			throw new JuegoDAOException("Los datos recibidos al listar los juegos no son válidos.", e);
-		}
-		return juegos;
-	}
+        List<Juego> juegos = new ArrayList<>();
+        try (Connection conn = ConnectionManager.getConnection();
+             PreparedStatement statement = conn.prepareStatement("SELECT j.* FROM juegos j");
+             ResultSet rs = statement.executeQuery()) {
+            while (rs.next()) {
+                Juego juego = new Juego(rs.getInt("id"), rs.getString("titulo"), rs.getString("genero"),
+                        rs.getString("desarrollador"), rs.getString("consola"), rs.getInt("anio"),
+                        rs.getString("urlPortada"), rs.getString("urlEmulador"));
+                juegos.add(juego);
+            }
+        } catch (SQLException e) {
+            throw new JuegoDAOException("Error al listar los juegos.", e.getSQLState(), e);
+        } catch (IllegalArgumentException e) {
+            throw new JuegoDAOException("Los datos recibidos al listar los juegos no son válidos.", e);
+        }
+        return juegos;
+    }
 }
 
 

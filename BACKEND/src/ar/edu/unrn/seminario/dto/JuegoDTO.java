@@ -8,12 +8,17 @@ public class JuegoDTO {
     private String consola;
     private Integer año;
 	private String urlPortada;
+	private String urlEmulador;
 
     public JuegoDTO(Integer id, String titulo, String genero, String desarrollador, String consola, Integer año) {
 		this(id, titulo, genero, desarrollador, consola, año, null);
 	}
 
 	public JuegoDTO(Integer id, String titulo, String genero, String desarrollador, String consola, Integer año, String urlPortada) {
+		this(id, titulo, genero, desarrollador, consola, año, urlPortada, null);
+	}
+
+	public JuegoDTO(Integer id, String titulo, String genero, String desarrollador, String consola, Integer año, String urlPortada, String urlEmulador) {
         this.id = id;
         this.titulo = titulo;
         this.genero = genero;
@@ -21,6 +26,7 @@ public class JuegoDTO {
         this.consola = consola;
         this.año = año;
 		this.urlPortada = urlPortada;
+		this.urlEmulador = urlEmulador;
     }
     
     
@@ -79,6 +85,14 @@ public class JuegoDTO {
 
 	public void setUrlPortada(String urlPortada) {
 		this.urlPortada = urlPortada;
+	}
+
+	public String getUrlEmulador() {
+		return urlEmulador;
+	}
+
+	public void setUrlEmulador(String urlEmulador) {
+		this.urlEmulador = urlEmulador;
 	}
 
 	
