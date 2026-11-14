@@ -191,20 +191,13 @@ public class PersistenceApi implements IApi{
 
 	@Override
 	public List<JuegoDTO> obtenerJuegosFavoritos() throws CatalogoVacioException {
-		List<Juego> juegosDb = juegoDAO.findAll();
-		List<JuegoDTO> dtos = new ArrayList<>();
-		
-		for (Juego j : juegosDb) {
-			if (this.juegosFavoritosIds.contains(j.getId())) {
-				dtos.add(JuegoMapper.transform(j));
-			}
-		}
-
-		if (dtos.isEmpty()) {
-			throw new CatalogoVacioException("No tenés juegos marcados como favoritos aún.");
-		}
-		
-		return dtos;
+	    List<JuegoDTO> favoritos = this.obtenerJuegos().stream()
+	            .filter(j -> this.juegosFavoritosIds.contains(j.getId()))
+	            .collect(Collectors.toList());
+	    if (favoritos.isEmpty()) {
+	        throw new CatalogoVacioException("No tenés juegos marcados como favoritos aún.");
+	    }
+	    return favoritos;
 	}
 
 	

@@ -240,24 +240,6 @@ public class MemoryApi implements IApi {
 		}
 		return dtos;
 	}
-
-	@Override
-	public List<JuegoDTO> obtenerJuegosBiblioteca() throws CatalogoVacioException {
-		List<JuegoDTO> dtos = new ArrayList<>();
-		
-		// Simulamos que el usuario tiene los juegos 1 y 2 en su biblioteca
-		for (Juego j : this.juegos) {
-			if (j.getId() == 1 || j.getId() == 2) {
-				dtos.add(JuegoMapper.transform(j));
-			}
-		}
-
-		if (dtos.isEmpty()) {
-			throw new CatalogoVacioException("Tu biblioteca está vacía. ¡Agregá algunos juegos desde el catálogo!");
-		}
-		
-		return dtos;
-	}
 	
 	public String getUrlJuegoById(Integer idJuego){
 		return this.juegos.stream()
