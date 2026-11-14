@@ -350,6 +350,52 @@ public class MemoryApi implements IApi {
 	    }
 	    return false;
 	}
+
+	@Override
+	public void registrarJuego(Juego juego) {
+		if (juego == null) {
+			throw new IllegalArgumentException("El juego no puede ser nulo.");
+		}
+		this.juegos.add(juego);
+	}
+
+	@Override
+	public JuegoDTO getJuegoPorId(Integer idJuego) {
+		if (idJuego == null) {
+			throw new IllegalArgumentException("El ID del juego no puede ser nulo.");
+		}
+		return this.juegos
+				.stream()
+				.filter(j -> j.getId().equals(idJuego))
+				.findFirst()
+				.map(JuegoMapper::transform)
+				.orElse(null);
+	}
+
+	@Override
+	public void eliminarJuego(Juego juego) {
+		if (juego == null) {
+			throw new IllegalArgumentException("El juego no puede ser nulo.");
+		}
+		this.juegos.remove(juego);
+	}
+
+	@Override
+	public void eliminarJuegoPorId(Integer idJuego) {
+		if (idJuego == null) {
+			throw new IllegalArgumentException("El ID del juego no puede ser nulo.");
+		}
+		this.juegos.removeIf(j -> j.getId().equals(idJuego));
+	}
+
+	@Override
+	public void actualizarJuego(Juego juego) {
+		if (juego == null) {
+			throw new IllegalArgumentException("El juego no puede ser nulo.");
+		}
+		this.juegos.removeIf(j -> j.getId().equals(juego.getId()));
+		this.juegos.add(juego);
+	}
 }
 
 
