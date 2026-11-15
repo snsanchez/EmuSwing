@@ -42,7 +42,7 @@ public class Biblioteca extends JFrame {
 	public static void main(String[] args) {
 		java.awt.EventQueue.invokeLater(() -> {
 			try {
-				IApi apiPrueba = new ar.edu.unrn.seminario.api.MemoryApi();
+				IApi apiPrueba = new ar.edu.unrn.seminario.api.PersistenceApi(new ar.edu.unrn.seminario.dao.JuegoDAOJDBC());
 				Biblioteca frame = new Biblioteca(apiPrueba);
 				frame.setVisible(true);
 			} catch (Exception e) {
@@ -131,8 +131,7 @@ public class Biblioteca extends JFrame {
 				javax.swing.JOptionPane.showMessageDialog(this, "Seleccioná un juego primero.", "Atención", javax.swing.JOptionPane.WARNING_MESSAGE);
 				return;
 			}
-			String urlJuego = api.getUrlJuegoByTitulo(juegoSeleccionado.getTitulo());
-			// reemplazar por String urlJuego = juegoSeleccionado.getUrlEmulador();
+			String urlJuego = juegoSeleccionado.getUrlEmulador();
 
 			if (urlJuego != null) {
 				try {
@@ -171,7 +170,7 @@ public class Biblioteca extends JFrame {
 				"Éxito", 
 				javax.swing.JOptionPane.INFORMATION_MESSAGE);
 		} catch (IllegalArgumentException ex) {
-			// Capturamos el error indicado por el líder si el argumento es nulo o inválido
+			// Caputuramos el error 
 			javax.swing.JOptionPane.showMessageDialog(this, ex.getMessage(), "Error de validación", javax.swing.JOptionPane.WARNING_MESSAGE);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -219,20 +218,32 @@ public class Biblioteca extends JFrame {
 		JLabel lblPortada = new JLabel();
 		lblPortada.setPreferredSize(new Dimension(80, 100)); 
 		
-		String nombreArchivo = "esw-logo.png"; 
-		if (juego.getId().equals(api.getIdJuegoPorTitulo("Super Street Fighter II"))) nombreArchivo = "Street-Fighter-II-USA_cover_1024x705.jpg";
-		else if (juego.getId().equals(api.getIdJuegoPorTitulo("DOOM"))) nombreArchivo = "doom_1993_cover_720x1080.jpg"; 
-		else if (juego.getId().equals(api.getIdJuegoPorTitulo("Wolfenstein 3D"))) nombreArchivo = "Wolfenstein 3D (PC Version).jpg";
-		else if (juego.getId().equals(api.getIdJuegoPorTitulo("Super Mario World"))) nombreArchivo = "Super-Mario-Word_1990_cover_474x332.jpg"; 
+		ImageIcon iconoFinal = null;
+		if (juego.getUrlPortada() != null && !juego.getUrlPortada().trim().isEmpty()) {
+		    try {
+		    	URL urlExterna = new java.net.URI(juego.getUrlPortada()).toURL();
+		        Image img = javax.imageio.ImageIO.read(urlExterna);
+		        if (img != null) {
+		            iconoFinal = new ImageIcon(img.getScaledInstance(80, 100, Image.SCALE_SMOOTH));
+		        }
+		    } catch (Exception e) {
+		      
+		    }
+		}
 
-		URL imgURL = getClass().getResource("/img/" + nombreArchivo);
-		if (imgURL != null) {
-			ImageIcon iconOriginal = new ImageIcon(imgURL);
-			Image imagenEscalada = iconOriginal.getImage().getScaledInstance(80, 100, Image.SCALE_SMOOTH);
-			lblPortada.setIcon(new ImageIcon(imagenEscalada));
+		if (iconoFinal == null) {
+		    URL imgLocal = getClass().getResource("/img/esw-logo.png");
+		    if (imgLocal != null) {
+		        ImageIcon iconOriginal = new ImageIcon(imgLocal);
+		        iconoFinal = new ImageIcon(iconOriginal.getImage().getScaledInstance(80, 100, Image.SCALE_SMOOTH));
+		    }
+		}
+
+		if (iconoFinal != null) {
+		    lblPortada.setIcon(iconoFinal);
 		} else {
-			lblPortada.setText("Sin IMG");
-			lblPortada.setForeground(Color.GRAY);
+		    lblPortada.setText("Sin IMG");
+		    lblPortada.setForeground(Color.GRAY);
 		}
 		fila.add(lblPortada, BorderLayout.WEST);
 
@@ -276,21 +287,13 @@ public class Biblioteca extends JFrame {
 	}
 
 	private void mostrarInfoJuego(JuegoDTO juego) {
-		String historia = "";
-		
-		if (juego.getId() == 1) { 
-			historia = "El World Warrior Tournament sigue en pie, pero la paz es frágil: cuatro jefes malignos aún controlan el submundo del combate.\n Nuevos retadores llegan para desafiar al orden, y tú eres uno de ellos. \n Tu misión: derrotar a Balrog, Vega, Sagat y M. Bison, y reclamar el trono.";
-		} else if (juego.getId() == 2) {
-			historia = "En el año 2145, fuiste enviado a una instalación de investigación en el planeta Marte.\n Un experimento fallido abrió un portal al infierno y tu misión es lograr sobrevivir a la invasión demoníaca.\n Hallar la salida por el planeta del polvo mezclado con destrucción y eliminando a quien se cruce.";
-		} else if (juego.getId() == 3) { 
-			historia = "Atrapado tras las oscuras líneas enemigas en plena guerra nazi, tomas el papel del espía aliado B.J. Blazkowicz.\n Tu misión comienza como un desesperado escape de los lúgubres calabozos del Castillo Wolfenstein, pero rápidamente se convierte en una cacería contrarreloj.\n Armado sólo con lo que logres arrebatarle a tus captores, deberás sobrevivir a laberintos plagados de tropas implacables.";
-		} else if (juego.getId() == 4) {
-			historia = "Unas merecidas vacaciones en la misteriosa Isla de los Dinosaurios se transforman en una nueva misión de rescate cuando el despiadado Bowser secuestra a la Princesa Peach.\n Montado por primera vez en tu fiel y hambriento amigo Yoshi, y usando el poder de vuelo de la capa mágica, deberás descubrir salidas secretas.";
-		} else {
-			historia = "Historia no disponible para este título.";
-		}
-		
-		javax.swing.JOptionPane.showMessageDialog(this, historia, "Historia: " + juego.getTitulo(), javax.swing.JOptionPane.INFORMATION_MESSAGE);
+	    String info = "Título: " + juego.getTitulo() + "\n"
+	                + "Género: " + (juego.getGenero() != null ? juego.getGenero() : "N/D") + "\n"
+	                + "Desarrollador: " + (juego.getDesarrollador() != null ? juego.getDesarrollador() : "N/D") + "\n"
+	                + "Consola: " + (juego.getConsola() != null ? juego.getConsola() : "N/D") + "\n"
+	                + "Año: " + (juego.getAño() != null ? juego.getAño() : "N/D");
+
+	    javax.swing.JOptionPane.showMessageDialog(this, info, "Ficha Técnica: " + juego.getTitulo(), javax.swing.JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	private JButton crearBotonAccion(String texto, boolean relleno) {

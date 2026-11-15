@@ -40,7 +40,7 @@ public class BibliotecaFavoritos extends JFrame {
 	public static void main(String[] args) {
 	    java.awt.EventQueue.invokeLater(() -> {
 	        try {
-	            IApi apiPrueba = new ar.edu.unrn.seminario.api.MemoryApi();
+	            IApi apiPrueba = new ar.edu.unrn.seminario.api.PersistenceApi(new ar.edu.unrn.seminario.dao.JuegoDAOJDBC());
 	            BibliotecaFavoritos frame = new BibliotecaFavoritos(apiPrueba);
 	            frame.setVisible(true);
 	        } catch (Exception e) {
@@ -111,8 +111,7 @@ public class BibliotecaFavoritos extends JFrame {
 				javax.swing.JOptionPane.showMessageDialog(this, "Seleccioná un juego primero.", "Atención", javax.swing.JOptionPane.WARNING_MESSAGE);
 				return;
 			}
-			String urlJuego = api.getUrlJuegoByTitulo(juegoSeleccionado.getTitulo());
-			// reeemplazar por String urlJuego = juegoSeleccionado.getUrlEmulador();
+			String urlJuego = juegoSeleccionado.getUrlEmulador();
 			if (urlJuego != null) {
 				try {
 					VentanaJuego ventana = new VentanaJuego(urlJuego);
@@ -214,20 +213,32 @@ public class BibliotecaFavoritos extends JFrame {
 		JLabel lblPortada = new JLabel();
 		lblPortada.setPreferredSize(new Dimension(80, 100)); 
 		
-		String nombreArchivo = "esw-logo.png"; 
-		if (juego.getId() == 1) nombreArchivo = "Street-Fighter-II-USA_cover_1024x705.jpg";
-		else if (juego.getId() == 2) nombreArchivo = "doom_1993_cover_720x1080.jpg"; 
-		else if (juego.getId() == 3) nombreArchivo = "Wolfenstein 3D (PC Version).jpg";
-		else if (juego.getId() == 4) nombreArchivo = "Super-Mario-Word_1990_cover_474x332.jpg"; 
+		ImageIcon iconoFinal = null;
+		if (juego.getUrlPortada() != null && !juego.getUrlPortada().trim().isEmpty()) {
+		    try {
+		    	URL urlExterna = new java.net.URI(juego.getUrlPortada()).toURL();
+		        Image img = javax.imageio.ImageIO.read(urlExterna);
+		        if (img != null) {
+		            iconoFinal = new ImageIcon(img.getScaledInstance(80, 100, Image.SCALE_SMOOTH));
+		        }
+		    } catch (Exception e) {
+		      
+		    }
+		}
 
-		URL imgURL = getClass().getResource("/img/" + nombreArchivo);
-		if (imgURL != null) {
-			ImageIcon iconOriginal = new ImageIcon(imgURL);
-			Image imagenEscalada = iconOriginal.getImage().getScaledInstance(80, 100, Image.SCALE_SMOOTH);
-			lblPortada.setIcon(new ImageIcon(imagenEscalada));
+		if (iconoFinal == null) {
+		    URL imgLocal = getClass().getResource("/img/esw-logo.png");
+		    if (imgLocal != null) {
+		        ImageIcon iconOriginal = new ImageIcon(imgLocal);
+		        iconoFinal = new ImageIcon(iconOriginal.getImage().getScaledInstance(80, 100, Image.SCALE_SMOOTH));
+		    }
+		}
+
+		if (iconoFinal != null) {
+		    lblPortada.setIcon(iconoFinal);
 		} else {
-			lblPortada.setText("Sin IMG");
-			lblPortada.setForeground(Color.GRAY);
+		    lblPortada.setText("Sin IMG");
+		    lblPortada.setForeground(Color.GRAY);
 		}
 		fila.add(lblPortada, BorderLayout.WEST);
 
@@ -270,14 +281,13 @@ public class BibliotecaFavoritos extends JFrame {
 	}
 
 	private void mostrarInfoJuego(JuegoDTO juego) {
-		String historia = "";
-		if (juego.getId() == 1) historia = "El World Warrior Tournament sigue en pie...";
-		else if (juego.getId() == 2) historia = "En el año 2145, fuiste enviado a Marte...";
-		else if (juego.getId() == 3) historia = "Atrapado tras las oscuras líneas enemigas...";
-		else if (juego.getId() == 4) historia = "Unas merecidas vacaciones en la misteriosa Isla...";
-		else historia = "Historia no disponible.";
-		
-		javax.swing.JOptionPane.showMessageDialog(this, historia, "Historia: " + juego.getTitulo(), javax.swing.JOptionPane.INFORMATION_MESSAGE);
+	    String info = "Título: " + juego.getTitulo() + "\n"
+	                + "Género: " + (juego.getGenero() != null ? juego.getGenero() : "N/D") + "\n"
+	                + "Desarrollador: " + (juego.getDesarrollador() != null ? juego.getDesarrollador() : "N/D") + "\n"
+	                + "Consola: " + (juego.getConsola() != null ? juego.getConsola() : "N/D") + "\n"
+	                + "Año: " + (juego.getAño() != null ? juego.getAño() : "N/D");
+
+	    javax.swing.JOptionPane.showMessageDialog(this, info, "Ficha Técnica: " + juego.getTitulo(), javax.swing.JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	private JButton crearBotonAccion(String texto, boolean relleno) {
