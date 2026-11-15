@@ -194,6 +194,8 @@ public class Biblioteca extends JFrame {
 				return;
 			}
 			String urlJuego = api.getUrlJuegoByTitulo(juegoSeleccionado.getTitulo());
+			// reemplazar por String urlJuego = juegoSeleccionado.getUrlEmulador();
+
 			if (urlJuego != null) {
 				try {
 					VentanaJuego ventana = new VentanaJuego(urlJuego);

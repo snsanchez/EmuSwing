@@ -13,6 +13,7 @@ import ar.edu.unrn.seminario.modelo.Juego;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.dto.JuegoDTO;
+import ar.edu.unrn.seminario.mappers.JuegoMapper;
 import ar.edu.unrn.seminario.exception.CatalogoVacioException;
 import ar.edu.unrn.seminario.exception.UsuarioExistenteException;
 import ar.edu.unrn.seminario.exception.RolNoEncontradoException;
@@ -29,7 +30,6 @@ public class MemoryApi implements IApi {
 	private List<RegistroJuego> registrosJuegos = new ArrayList<>();
 	
 	private Set<Juego> juegos = new HashSet<>();
-	private Map<Integer, String> juegosLinks = new HashMap<>();
 	private Map<String, RegistroJuego> registrosSimulados = new HashMap<>();
 	
 	// --- Coleccion para favoritos ---
@@ -47,16 +47,10 @@ public class MemoryApi implements IApi {
 	}
 
 	private void inicializarJuegos() {
-		this.juegos.add(new Juego(1, "Super Street Fighter II", "Lucha", "Capcom", "SNES", 1993));
-		this.juegos.add(new Juego(2, "DOOM", "FPS", "id Software", "MS-DOS", 1993));
-		this.juegos.add(new Juego(3, "Wolfenstein 3D", "FPS", "id Software", "MS-DOS", 1992));
-		this.juegos.add(new Juego(4, "Super Mario World", "Plataformas", "Nintendo", "NES", 1985));
-		
-		// agrego un link a cada juego
-		this.juegosLinks.put(1, "https://archive.org/embed/Super_Street_Fighter_II_USA.md");
-		this.juegosLinks.put(2, "https://archive.org/embed/msdos_DOOM_1993");
-		this.juegosLinks.put(3, "https://archive.org/embed/Wolfenstein3d");
-		this.juegosLinks.put(4, "https://archive.org/embed/super-mario-world-usa_202406");
+		this.juegos.add(new Juego(1, "Super Street Fighter II", "Lucha", "Capcom", "SNES", 1993, "https://dn721803.ca.archive.org/0/items/Super_Street_Fighter_II_USA.md/00_coverscreenshot.png", "https://archive.org/embed/Super_Street_Fighter_II_USA.md"));
+		this.juegos.add(new Juego(2, "DOOM", "FPS", "id Software", "MS-DOS", 1993, null, "https://archive.org/embed/msdos_DOOM_1993"));
+		this.juegos.add(new Juego(3, "Wolfenstein 3D", "FPS", "id Software", "MS-DOS", 1992, null, "https://archive.org/embed/Wolfenstein3d"));
+		this.juegos.add(new Juego(4, "Super Mario World", "Plataformas", "Nintendo", "NES", 1985, "https://dn721906.ca.archive.org/0/items/super-mario-world-usa_202406/Screenshot%202024-06-01%20235151.png", "https://archive.org/embed/super-mario-world-usa_202406"));
 	}
 
 	private void inicializarUsuarios() {
@@ -242,14 +236,7 @@ public class MemoryApi implements IApi {
 		
 		List<JuegoDTO> dtos = new ArrayList<>();
 		for (Juego j : this.juegos) {
-			dtos.add(new JuegoDTO(
-				j.getId(),
-				j.getTitulo(), 
-				j.getGenero(), 
-				j.getDesarrollador(), 
-				j.getConsola(), 
-				j.getAño()
-			));
+			dtos.add(JuegoMapper.transform(j));
 		}
 		return dtos;
 	}
@@ -261,14 +248,7 @@ public class MemoryApi implements IApi {
 		// Simulamos que el usuario tiene los juegos 1 y 2 en su biblioteca
 		for (Juego j : this.juegos) {
 			if (j.getId() == 1 || j.getId() == 2) {
-				dtos.add(new JuegoDTO(
-					j.getId(),
-					j.getTitulo(), 
-					j.getGenero(), 
-					j.getDesarrollador(), 
-					j.getConsola(), 
-					j.getAño()
-				));
+				dtos.add(JuegoMapper.transform(j));
 			}
 		}
 
@@ -280,9 +260,11 @@ public class MemoryApi implements IApi {
 	}
 	
 	public String getUrlJuegoById(Integer idJuego){
-		// ejemplo: this.juegosLinks.put(3, "https://archive.org/embed/super-castlevania-iv-usa_202301");
-		// si le uso getUrlJuegoById(3) me devuelve "https://archive.org/embed/super-castlevania-iv-usa_202301"
-	    return this.juegosLinks.get(idJuego);
+		return this.juegos.stream()
+			.filter(j -> j.getId().equals(idJuego))
+			.findFirst()
+			.map(Juego::getUrlEmulador)
+			.orElse(null);
 	}
 
 	public String getUrlJuegoByTitulo(String titulo){
@@ -348,14 +330,7 @@ public class MemoryApi implements IApi {
 		// Recorremos todos los juegos y filtramos los que están en la lista de favoritos
 		for (Juego j : this.juegos) {
 			if (this.juegosFavoritosIds.contains(j.getId())) {
-				dtos.add(new JuegoDTO(
-					j.getId(),
-					j.getTitulo(), 
-					j.getGenero(), 
-					j.getDesarrollador(), 
-					j.getConsola(), 
-					j.getAño()
-				));
+				dtos.add(JuegoMapper.transform(j));
 			}
 		}
 
@@ -374,6 +349,52 @@ public class MemoryApi implements IApi {
 	        }
 	    }
 	    return false;
+	}
+
+	@Override
+	public void registrarJuego(Juego juego) {
+		if (juego == null) {
+			throw new IllegalArgumentException("El juego no puede ser nulo.");
+		}
+		this.juegos.add(juego);
+	}
+
+	@Override
+	public JuegoDTO getJuegoPorId(Integer idJuego) {
+		if (idJuego == null) {
+			throw new IllegalArgumentException("El ID del juego no puede ser nulo.");
+		}
+		return this.juegos
+				.stream()
+				.filter(j -> j.getId().equals(idJuego))
+				.findFirst()
+				.map(JuegoMapper::transform)
+				.orElse(null);
+	}
+
+	@Override
+	public void eliminarJuego(Juego juego) {
+		if (juego == null) {
+			throw new IllegalArgumentException("El juego no puede ser nulo.");
+		}
+		this.juegos.remove(juego);
+	}
+
+	@Override
+	public void eliminarJuegoPorId(Integer idJuego) {
+		if (idJuego == null) {
+			throw new IllegalArgumentException("El ID del juego no puede ser nulo.");
+		}
+		this.juegos.removeIf(j -> j.getId().equals(idJuego));
+	}
+
+	@Override
+	public void actualizarJuego(Juego juego) {
+		if (juego == null) {
+			throw new IllegalArgumentException("El juego no puede ser nulo.");
+		}
+		this.juegos.removeIf(j -> j.getId().equals(juego.getId()));
+		this.juegos.add(juego);
 	}
 }
 

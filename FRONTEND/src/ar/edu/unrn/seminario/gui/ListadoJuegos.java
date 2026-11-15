@@ -59,8 +59,7 @@ public class ListadoJuegos extends JFrame {
 							
 							@Override
 							public void mouseClicked(java.awt.event.MouseEvent evt) {
-								// Usamos el método getUrlJuegoByTitulo 
-								String urlJuego = api.getUrlJuegoByTitulo(j.getTitulo());
+								String urlJuego = j.getUrlEmulador();
 								
 								if (urlJuego != null) {
 									try {
