@@ -1,14 +1,15 @@
 package ar.edu.unrn.seminario.dao;
 
 import java.sql.Connection;
-import com.mysql.jdbc.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class ConnectionManager {
-    private static String DRIVER = "com.mysql.jdbc.Driver";
-	private static String URL_DB = "jdbc:mysql://localhost:3306/";
-	protected static String DB = "emuswing_db";
-	protected static String user = "seminario";
-	protected static String pass = "supermario";
+
+	private static final String DRIVER = "com.mysql.jdbc.Driver";
+    private static final String URL_DB = "jdbc:mysql://localhost:3306/emuswing_db";
+    private static final String USER = "emuswing";
+    private static final String PASS = "supermario";
 	protected static Connection conn = null;
 
 	public static void connect() {
@@ -24,7 +25,7 @@ public class ConnectionManager {
 	    if (conn != null) {
 				try{
 				conn.close();
-				conn = nul;
+				conn = null;
 			}catch (SQLException e){
 			    e.printStackTrace();
 			}
