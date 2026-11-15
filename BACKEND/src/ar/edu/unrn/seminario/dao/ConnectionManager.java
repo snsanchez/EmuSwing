@@ -14,9 +14,9 @@ public class ConnectionManager {
 
 	public static void connect() {
 	try {
-				conn = DriverManager.getConnection(URL_DB + DB, user, pass);
+				conn = DriverManager.getConnection(URL_DB, USER, PASS);
 			} catch (SQLException sqlEx) {
-				System.out.println("No se ha podido conectar a " + URL_DB + DB + ". " + sqlEx.getMessage());
+				System.out.println("No se ha podido conectar a " + URL_DB + ". " + sqlEx.getMessage());
 				System.out.println("Error al cargar el driver");
 			}
 		}
