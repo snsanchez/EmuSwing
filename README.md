@@ -261,3 +261,116 @@ La guía cubre la ejecución desde Eclipse; no describe la generación de un ins
 Las dependencias y los componentes nativos de JCEF pueden requerir descargas durante la primera ejecución. La disponibilidad de los juegos depende también de las URL utilizadas y del funcionamiento de los servicios externos.
 
 Los errores encontrados durante las pruebas pueden reportarse al equipo para facilitar su diagnóstico y corrección en futuras versiones.
+
+
+## Configuración de la base de datos
+
+EmuSwing utiliza MySQL para almacenar la información de la aplicación. Cada integrante debe tener un servidor MySQL instalado y ejecutar esta configuración **una sola vez en su computadora**.
+
+Todos utilizarán las mismas credenciales de conexión:
+
+| Parámetro | Valor |
+|---|---|
+| Base de datos | `emuswing_db` |
+| Usuario | `emuswing` |
+| Contraseña | `supermario` |
+| Host | `localhost` |
+| Puerto | `3306` |
+
+La cuenta `emuswing` tendrá permisos únicamente sobre la base de datos del proyecto. No debe utilizarse para administrar el servidor MySQL.
+
+### 1. Linux (Debian y derivados)
+
+1. Verificá que el servidor MySQL esté instalado y funcionando.
+2. Abrí una terminal y ejecutá:
+
+   ```bash
+   sudo mysql
+   ```
+
+   En instalaciones de MySQL configuradas con autenticación por socket, este comando permite acceder a la cuenta administrativa utilizando los permisos del sistema, sin ingresar una contraseña de root de MySQL.
+
+3. Dentro de la consola de MySQL, ejecutá:
+
+   ```sql
+   CREATE DATABASE IF NOT EXISTS emuswing_db
+       CHARACTER SET utf8mb4
+       COLLATE utf8mb4_unicode_ci;
+
+   CREATE USER IF NOT EXISTS 'emuswing'@'localhost'
+       IDENTIFIED BY 'supermario';
+
+   GRANT ALL PRIVILEGES ON emuswing_db.*
+       TO 'emuswing'@'localhost';
+
+   EXIT;
+   ```
+
+4. Comprobá que la conexión funcione:
+
+   ```bash
+   mysql -u emuswing -p emuswing_db
+   ```
+
+   Cuando solicite la contraseña, ingresá `supermario`. Luego podés verificar la conexión con:
+
+   ```sql
+   SELECT USER(), DATABASE();
+   ```
+
+   Deberías ver el usuario `emuswing` y la base `emuswing_db`. Para salir, ejecutá `exit;`.
+
+### 2. Windows 10/11
+
+1. Verificá que MySQL Server esté instalado y que el servicio de MySQL se encuentre iniciado.
+2. Abrí MySQL Workbench y conectate a la instancia local con una cuenta administrativa de MySQL (por ejemplo, `root`). Esta cuenta se utiliza solamente para la configuración inicial.
+3. Abrí una nueva pestaña SQL y ejecutá:
+
+   ```sql
+   CREATE DATABASE IF NOT EXISTS emuswing_db
+       CHARACTER SET utf8mb4
+       COLLATE utf8mb4_unicode_ci;
+
+   CREATE USER IF NOT EXISTS 'emuswing'@'localhost'
+       IDENTIFIED BY 'supermario';
+
+   GRANT ALL PRIVILEGES ON emuswing_db.*
+       TO 'emuswing'@'localhost';
+   ```
+
+4. Desconectate de la cuenta administrativa. En Workbench, creá una nueva conexión con estos datos:
+
+   - **Hostname:** `localhost`
+   - **Port:** `3306`
+   - **Username:** `emuswing`
+   - **Password:** `supermario`
+
+5. Probá la conexión y, una vez conectado, ejecutá:
+
+   ```sql
+   SELECT USER(), DATABASE();
+   ```
+
+   El resultado debe indicar el usuario `emuswing` y la base `emuswing_db`.
+
+### 3. Conexión desde EmuSwing
+
+Una vez creada la base y el usuario en cada computadora, la aplicación utiliza las mismas credenciales en `ConnectionManager`:
+
+```java
+private static final String URL_DB =
+        "jdbc:mysql://localhost:3306/emuswing_db";
+
+private static final String USER = "emuswing";
+private static final String PASS = "supermario";
+```
+
+No es necesario modificar estos valores entre integrantes.
+
+**Importante:**
+
+- La configuración se realiza una sola vez por computadora.
+- Cada integrante tendrá su propia base de datos local. Los datos no se comparten automáticamente entre computadoras.
+- La cuenta administrativa se necesita únicamente para crear el usuario y asignarle permisos. Para el uso cotidiano de EmuSwing se utiliza `emuswing`.
+- Si el usuario `emuswing` ya existía con otra contraseña, `CREATE USER IF NOT EXISTS` no la modifica. En ese caso, la contraseña debe actualizarse desde una cuenta administrativa.
+- Si todavía no existen scripts de creación de tablas o carga de datos, esta configuración solamente crea la base y el usuario. Las tablas y los datos deberán incorporarse mediante los scripts SQL correspondientes.
