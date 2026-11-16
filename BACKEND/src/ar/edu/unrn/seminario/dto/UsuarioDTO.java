@@ -7,10 +7,10 @@ public class UsuarioDTO {
 	private String email;
 	private String rol;
 	private boolean activo;
-	private String estado;
+	private boolean estado;
 
 	public UsuarioDTO(String username, String password, String nombre, String email, String rol, boolean activo,
-			String estado) {
+			boolean estado) {
 		super();
 		this.username = username;
 		this.password = password;
@@ -69,11 +69,11 @@ public class UsuarioDTO {
 		this.activo = activo;
 	}
 
-	public String getEstado() {
+	public boolean getEstado() {
 		return estado;
 	}
 
-	public void setEstado(String estado) {
+	public void setEstado(boolean estado) {
 		this.estado = estado;
 	}
 
