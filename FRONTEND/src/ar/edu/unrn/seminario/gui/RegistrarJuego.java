@@ -27,6 +27,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingWorker;
@@ -45,6 +46,10 @@ public class RegistrarJuego extends JFrame {
 	private IApi api;
 
 	private JTextField txtTitulo;
+	private JTextField txtGenero;
+	private JTextField txtDesarrollador;
+	private JTextField txtConsola;
+	private JTextField txtAnio;
 	private JTextField txtUrlEmulador;
 	private JTextField txtUrlPortada;
 
@@ -105,7 +110,31 @@ public class RegistrarJuego extends JFrame {
 		panelFormulario.add(txtTitulo);
 		panelFormulario.add(Box.createRigidArea(new Dimension(0, 20)));
 
-		// Campo 2: URL del emulador
+		panelFormulario.add(crearLabelCampo("Género"));
+		panelFormulario.add(Box.createRigidArea(new Dimension(0, 8)));
+		txtGenero = crearCampoTexto();
+		panelFormulario.add(txtGenero);
+		panelFormulario.add(Box.createRigidArea(new Dimension(0, 20)));
+
+		panelFormulario.add(crearLabelCampo("Desarrollador"));
+		panelFormulario.add(Box.createRigidArea(new Dimension(0, 8)));
+		txtDesarrollador = crearCampoTexto();
+		panelFormulario.add(txtDesarrollador);
+		panelFormulario.add(Box.createRigidArea(new Dimension(0, 20)));
+
+		panelFormulario.add(crearLabelCampo("Consola"));
+		panelFormulario.add(Box.createRigidArea(new Dimension(0, 8)));
+		txtConsola = crearCampoTexto();
+		panelFormulario.add(txtConsola);
+		panelFormulario.add(Box.createRigidArea(new Dimension(0, 20)));
+
+		panelFormulario.add(crearLabelCampo("Año"));
+		panelFormulario.add(Box.createRigidArea(new Dimension(0, 8)));
+		txtAnio = crearCampoTexto();
+		panelFormulario.add(txtAnio);
+		panelFormulario.add(Box.createRigidArea(new Dimension(0, 20)));
+
+		// URL del emulador
 		panelFormulario.add(crearLabelCampo("URL del emulador (Internet Archive)"));
 		panelFormulario.add(Box.createRigidArea(new Dimension(0, 8)));
 		txtUrlEmulador = crearCampoTexto();
@@ -169,7 +198,11 @@ public class RegistrarJuego extends JFrame {
 		panelPreview.add(panelTextosPreview, BorderLayout.CENTER);
 		panelFormulario.add(panelPreview);
 
-		contentPane.add(panelFormulario, BorderLayout.CENTER);
+		JScrollPane scrollFormulario = new JScrollPane(panelFormulario);
+		scrollFormulario.setBorder(null);
+		scrollFormulario.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollFormulario.getViewport().setBackground(UIHelper.COLOR_CONTENIDO);
+		contentPane.add(scrollFormulario, BorderLayout.CENTER);
 
 		// ---------- PANEL INFERIOR (BOTONES) ----------
 		JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 15));
@@ -249,20 +282,45 @@ public class RegistrarJuego extends JFrame {
 
 	private void registrarJuego() {
 		String titulo = txtTitulo.getText().trim();
+		String genero = txtGenero.getText().trim();
+		String desarrollador = txtDesarrollador.getText().trim();
+		String consola = txtConsola.getText().trim();
+		String anioTexto = txtAnio.getText().trim();
 		String urlEmulador = txtUrlEmulador.getText().trim();
 		String urlPortada = txtUrlPortada.getText().trim();
+		if (urlPortada.isEmpty()) {
+			urlPortada = null;
+		}
 
-		// Validación básica en frontend antes de armar el objeto
-		if (titulo.isEmpty() || urlEmulador.isEmpty()) {
+		if (titulo.isEmpty() || genero.isEmpty() || desarrollador.isEmpty() || consola.isEmpty()
+				|| anioTexto.isEmpty() || urlEmulador.isEmpty()) {
 			JOptionPane.showMessageDialog(this,
-					"El nombre del juego y la URL del emulador son obligatorios.",
+					"Completá el nombre, género, desarrollador, consola, año y URL del emulador.",
 					"Campos incompletos",
 					JOptionPane.WARNING_MESSAGE);
 			return;
 		}
 
+		int anio;
 		try {
-			Juego nuevoJuego = new Juego(null, titulo, null, null, null, null, urlPortada, urlEmulador);
+			anio = Integer.parseInt(anioTexto);
+		} catch (NumberFormatException ex) {
+			JOptionPane.showMessageDialog(this,
+					"El año debe ser un número entre 0 y 65535.",
+					"Valor inválido",
+					JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		if (anio < 0 || anio > 65535) {
+			JOptionPane.showMessageDialog(this,
+					"El año debe ser un número entre 0 y 65535.",
+					"Valor inválido",
+					JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+
+		try {
+			Juego nuevoJuego = new Juego(null, titulo, genero, desarrollador, consola, anio, urlPortada, urlEmulador);
 
 			api.registrarJuego(nuevoJuego);
 
@@ -290,6 +348,10 @@ public class RegistrarJuego extends JFrame {
 
 	private void limpiarFormulario() {
 		txtTitulo.setText("");
+		txtGenero.setText("");
+		txtDesarrollador.setText("");
+		txtConsola.setText("");
+		txtAnio.setText("");
 		txtUrlEmulador.setText("");
 		txtUrlPortada.setText("");
 		lblPreviewTitulo.setText("Título del juego...");
