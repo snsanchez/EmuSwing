@@ -8,8 +8,6 @@ CREATE USER IF NOT EXISTS 'emuswing'@'localhost'
 GRANT ALL PRIVILEGES ON emuswing_db.*
     TO 'emuswing'@'localhost';
 
-EXIT;
-
 USE emuswing_db;
 
 CREATE TABLE IF NOT EXISTS juegos (
