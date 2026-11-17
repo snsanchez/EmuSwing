@@ -1,5 +1,6 @@
 package ar.edu.unrn.seminario.api;
 import java.util.List;
+
 import java.util.stream.Collectors;
 
 import ar.edu.unrn.seminario.dao.JuegoDAO;
@@ -11,6 +12,7 @@ import ar.edu.unrn.seminario.exception.RolNoEncontradoException;
 import ar.edu.unrn.seminario.exception.UsuarioExistenteException;
 import ar.edu.unrn.seminario.mappers.JuegoMapper;
 import ar.edu.unrn.seminario.modelo.Juego;
+import ar.edu.unrn.seminario.exception.ConexionBaseDeDatosException;
 
 public class PersistenceApi implements IApi{
     private JuegoDAO juegoDAO;
@@ -21,6 +23,9 @@ public class PersistenceApi implements IApi{
     }
 
     public void registrarJuego(Juego juego) {
+        if (ConnectionManager.getConnection() == null) {
+            throw new ConexionBaseDeDatosException("No hay conexión disponible con la base de datos.");
+        }
         juegoDAO.create(juego);
     }
 
