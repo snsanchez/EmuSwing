@@ -1,7 +1,5 @@
 ![Logo de EmuSwing](FRONTEND/src/img/esw-logo-dark.jpeg)
 
-[![Ver video de presentación de EmuSwing](https://img.youtube.com/vi/f-X12u-gGX0/maxresdefault.jpg)](https://youtu.be/f-X12u-gGX0)
-
 <video src="https://github.com/user-attachments/assets/4f33efa2-5e75-4c8d-b4d1-214ccab7e475" width="100%" controls autoplay muted loop playsinline>
 </video>
 
