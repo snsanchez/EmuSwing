@@ -9,8 +9,7 @@ import java.util.List;
 import java.sql.Statement;
 import ar.edu.unrn.seminario.modelo.Rol;
 
-public class RolDaoJDBC implements RolDao {
-    @Override
+public class RolDaoJDBC implements RolDAO {
     @Override
 	public void create(Rol rol) {
 		if (rol == null) {
