@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 
 import ar.edu.unrn.seminario.dao.JuegoDAO;
+import ar.edu.unrn.seminario.dao.UsuarioDAO;
 import ar.edu.unrn.seminario.dto.JuegoDTO;
 import ar.edu.unrn.seminario.dao.RolDAO;
 import ar.edu.unrn.seminario.dto.RolDTO;
@@ -15,6 +16,18 @@ import ar.edu.unrn.seminario.exception.RolNoEncontradoException;
 import ar.edu.unrn.seminario.exception.UsuarioExistenteException;
 import ar.edu.unrn.seminario.mappers.JuegoMapper;
 import ar.edu.unrn.seminario.modelo.Juego;
+import ar.edu.unrn.seminario.modelo.Rol;
+import ar.edu.unrn.seminario.modelo.Usuario;
+
+public class PersistenceApi implements IApi{
+	private JuegoDAO juegoDAO;
+	private UsuarioDAO usuarioDAO;
+	// agregar los demas DAOs
+
+	public PersistenceApi(JuegoDAO juegoDAO, UsuarioDAO usuarioDAO) {
+	    this.juegoDAO = juegoDAO;
+	    this.usuarioDAO = usuarioDAO;
+	}
 import ar.edu.unrn.seminario.exception.ConexionBaseDeDatosException;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.dao.ConnectionManager;
@@ -66,12 +79,44 @@ public class PersistenceApi implements IApi {
 	}
 
 
-	@Override
-	public void registrarUsuario(String username, String password, String email, String nombre, Integer rol)
-			throws UsuarioExistenteException, RolNoEncontradoException {
-		// TODO Auto-generated method stub
+   @Override
+   public void registrarUsuario(String username, String password, String email, String nombre, Integer rol)
+           throws UsuarioExistenteException, RolNoEncontradoException {
 
-	}
+       // Compruebo que los datos estén completos.
+       if (username == null || username.trim().isEmpty()
+               || password == null || password.trim().isEmpty()
+               || email == null || email.trim().isEmpty()
+               || nombre == null || nombre.trim().isEmpty()
+               || rol == null) {
+
+           throw new IllegalArgumentException("Complete todos los campos.");
+       }
+
+       // Compruebo el formato básico del correo.
+       if (!email.matches("^[^\\s@]+@[^\\s@.]+(\\.[^\\s@.]+)+$")) {
+
+           throw new IllegalArgumentException(
+                   "Ingrese un correo electrónico con formato nombre@dominio.com.");
+       }
+
+       // Compruebo si el username ya está registrado.
+       if (usuarioDAO.find(username) != null) {
+           throw new UsuarioExistenteException(
+                   "El nombre de usuario ya existe.");
+       }
+
+       // Preparo el rol únicamente con el código recibido.
+       Rol rolUsuario = new Rol();
+       rolUsuario.setCodigo(rol);
+
+       // Creo el usuario con los datos recibidos.
+       Usuario usuario = new Usuario(
+               username, password, nombre, email, rolUsuario);
+
+       // Guardo el usuario mediante el DAO.
+       usuarioDAO.create(usuario);
+   }
 
 	@Override
 	public UsuarioDTO obtenerUsuario(String username) {
