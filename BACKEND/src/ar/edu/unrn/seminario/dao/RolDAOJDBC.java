@@ -6,16 +6,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.Statement;
 import ar.edu.unrn.seminario.modelo.Rol;
 
 public class RolDaoJDBC implements RolDao {
+    @Override
     @Override
 	public void create(Rol rol) {
 		if (rol == null) {
 			throw new IllegalArgumentException("El rol a insertar no puede ser nulo.");
 		}
 		try (Connection conn = ConnectionManager.getConnection();
-				PreparedStatement statement = conn.prepareStatement("INSERT INTO roles(nombre, activo) VALUES (?, ?)", java.sql.Statement.RETURN_GENERATED_KEYS);) {
+				PreparedStatement statement = conn.prepareStatement("INSERT INTO roles(nombre, activo) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);) {
 			statement.setString(1, rol.getNombre());
 			statement.setBoolean(2, rol.isActivo());
 			int cantidad = statement.executeUpdate();
@@ -28,6 +30,7 @@ public class RolDaoJDBC implements RolDao {
 					rol.setCodigo(rs.getInt(1));
 				}
 			}
+
 		} catch (SQLException e) {
 			throw new RuntimeException("Error al procesar la inserción del rol.", e);
 		}
