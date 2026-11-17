@@ -2,11 +2,13 @@
 
 # EmuSwing
 
-EmuSwing es un proyecto desarrollado en Java que busca ofrecer una plataforma de videojuegos clásicos y arcade, con una interfaz sencilla y accesible. La propuesta contempla un catálogo de juegos, una biblioteca personal y funcionalidades orientadas a la experiencia del usuario.
+EmuSwing es un software desarrollado en Java para ofrecer una plataforma de videojuegos clásicos y arcade, con una interfaz gráfica sencilla y accesible. Incluye catálogo de juegos, biblioteca personal, perfiles de usuario y ejecución de títulos compatibles dentro de la aplicación.
 
-El proyecto se encuentra en desarrollo y utiliza Java Swing para la interfaz gráfica, con una arquitectura organizada en módulos.
+El proyecto fue creado en un entorno académico como trabajo práctico integrador de la materia Seminario de Lenguajes. Actualmente se encuentra jugable, utilizable y estable para las pruebas realizadas.
 
-> **Estado actual: versión beta.** La aplicación fue ejecutada en Linux y Windows 11 desde Eclipse. Algunas funcionalidades todavía pueden estar en desarrollo.
+> **Contexto y responsabilidad:** EmuSwing es un proyecto académico. Se proporciona "tal cual", sin garantías de ningún tipo, incluyendo disponibilidad, compatibilidad, rendimiento o ausencia de errores.
+
+> La aplicación fue probada en Linux y Windows 11 desde Eclipse. No garantiza funcionar en todos los sistemas, distribuciones o configuraciones de hardware.
 
 ## Índice
 
@@ -16,6 +18,7 @@ El proyecto se encuentra en desarrollo y utiliza Java Swing para la interfaz gr�
 - [Ejecución en Eclipse](#ejecución-en-eclipse)
   - [Requisitos previos](#1-requisitos-previos)
   - [Clonar el repositorio](#2-clonar-el-repositorio)
+- [Configurar la base de datos](#configurar-la-base-de-datos)
   - [Configurar Java 8](#3-configurar-java-8-en-eclipse)
   - [Importar los módulos](#4-importar-y-configurar-los-módulos)
   - [Configurar Maven y JCEF](#5-importar-frontend-como-proyecto-maven-y-configurar-jcef)
@@ -40,6 +43,8 @@ Entre los objetivos del proyecto se encuentran:
 
 - **Java 8:** lenguaje y versión de compatibilidad del proyecto.
 - **Java Swing:** desarrollo de la interfaz gráfica.
+- **MySQL:** persistencia de juegos, usuarios y roles.
+- **JDBC:** comunicación entre la aplicación y la base de datos.
 - **Eclipse IDE:** entorno de desarrollo.
 - **Maven:** gestión de dependencias del módulo `FRONTEND`.
 - **JCEF (Java Chromium Embedded Framework):** integración del navegador Chromium para ejecutar juegos compatibles dentro de la interfaz.
@@ -69,6 +74,9 @@ EmuSwing/
 ├── FRONTEND/
 │   ├── pom.xml
 │   └── src/
+├── database/
+│   ├── schema.sql
+│   └── data.sql
 ├── LICENSE
 └── README.md
 ```
@@ -77,7 +85,7 @@ Cada módulo contiene su código fuente dentro de `src`. El módulo `FRONTEND` u
 
 ## Ejecución en Eclipse
 
-Esta guía describe cómo preparar y ejecutar la versión beta de EmuSwing desde Eclipse en **Linux y Windows 11**.
+Esta guía describe cómo preparar y ejecutar EmuSwing desde Eclipse en **Linux y Windows 11**.
 
 ### 1. Requisitos previos
 
@@ -85,6 +93,8 @@ Antes de comenzar, necesitás:
 
 - Eclipse IDE for Java Developers.
 - Un JDK 8 instalado.
+- MySQL Server disponible en `localhost:3306`.
+- Acceso a MySQL con permisos para crear una base de datos y un usuario.
 - Git.
 - Conexión a Internet para descargar las dependencias Maven y los componentes de JCEF.
 
@@ -99,7 +109,26 @@ git clone https://github.com/snsanchez/EmuSwing.git
 cd EmuSwing
 ```
 
-Si la versión beta todavía no está disponible en la rama principal, cambiá a la rama que contenga los cambios integrados y funcionales antes de continuar.
+Si una rama todavía no contiene los cambios integrados y funcionales, cambiá a la rama correspondiente antes de continuar.
+
+### Configurar la base de datos
+
+EmuSwing utiliza MySQL para cargar el catálogo de juegos y persistir otros datos. Antes de iniciar la aplicación ejecutá los scripts que están dentro de `/database`.
+
+El script `schema.sql` crea la base `emuswing_db`, el usuario `emuswing` con la contraseña `supermario`, las tablas y sus permisos. El script `data.sql` carga datos iniciales de roles, usuarios y juegos.
+
+Desde una terminal, dentro del directorio del proyecto, ejecutá:
+
+```bash
+mysql -u root -p < database/schema.sql
+mysql -u root -p < database/data.sql
+```
+
+También podés ejecutar ambos scripts desde una herramienta gráfica como MySQL Workbench. Es necesario ejecutar primero `schema.sql` y luego `data.sql`.
+
+Los parámetros de conexión se encuentran en `BACKEND/src/ar/edu/unrn/seminario/dao/ConnectionManager.java`. Si MySQL usa otra configuración local, ajustá el puerto, el usuario o la contraseña en esa clase antes de ejecutar la aplicación.
+
+Ejecutar los scripts es necesario para que el catálogo tenga juegos disponibles. Si la base se elimina o queda vacía, las secciones de juegos aparecerán sin datos hasta volver a insertar registros.
 
 ### 3. Configurar Java 8 en Eclipse
 
@@ -254,9 +283,15 @@ No reutilices el `jcef-bundle` de otra plataforma. Verificá también la arquite
 
 ## Estado del proyecto
 
-EmuSwing se encuentra en desarrollo. Esta versión beta está orientada a realizar pruebas de las funcionalidades implementadas y facilitar la integración entre los distintos módulos.
+EmuSwing es utilizable y estable dentro de las pruebas realizadas. Permite iniciar el catálogo, administrar los datos disponibles y ejecutar los juegos compatibles desde JCEF.
 
-La guía cubre la ejecución desde Eclipse; no describe la generación de un instalador independiente.
+Esta guía cubre la ejecución desde Eclipse; no describe la generación de un instalador independiente.
+
+## Aviso académico y de responsabilidad
+
+EmuSwing fue desarrollado con fines académicos. El software se entrega "tal cual" y no ofrece garantía expresa ni implícita de ningún tipo. Los autores no garantizan que el programa sea seguro, esté libre de errores, funcione sin interrupciones o resulte compatible con todos los entornos, sistemas operativos, navegadores, juegos, controladores o versiones de MySQL y Java.
+
+El uso del proyecto es responsabilidad de quien lo instala y ejecuta. Los desarrolladores no se hacen responsables por pérdidas de datos, fallos del sistema, incompatibilidades o daños derivados de su uso o de datos cargados desde servicios externos.
 
 Las dependencias y los componentes nativos de JCEF pueden requerir descargas durante la primera ejecución. La disponibilidad de los juegos depende también de las URL utilizadas y del funcionamiento de los servicios externos.
 
@@ -373,4 +408,4 @@ No es necesario modificar estos valores entre integrantes.
 - Cada integrante tendrá su propia base de datos local. Los datos no se comparten automáticamente entre computadoras.
 - La cuenta administrativa se necesita únicamente para crear el usuario y asignarle permisos. Para el uso cotidiano de EmuSwing se utiliza `emuswing`.
 - Si el usuario `emuswing` ya existía con otra contraseña, `CREATE USER IF NOT EXISTS` no la modifica. En ese caso, la contraseña debe actualizarse desde una cuenta administrativa.
-- Si todavía no existen scripts de creación de tablas o carga de datos, esta configuración solamente crea la base y el usuario. Las tablas y los datos deberán incorporarse mediante los scripts SQL correspondientes.
+- Después de crear la base y el usuario, ejecutá `database/schema.sql` y luego `database/data.sql`. El primero crea las tablas y el segundo carga los registros iniciales necesarios para probar el catálogo.
