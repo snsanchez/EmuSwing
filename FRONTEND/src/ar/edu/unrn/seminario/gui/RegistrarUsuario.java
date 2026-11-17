@@ -3,7 +3,8 @@ package ar.edu.unrn.seminario.gui;
 
 import ar.edu.unrn.seminario.helpers.UIHelper;
 
-import java.awt.Font;
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -25,6 +26,7 @@ import javax.swing.border.LineBorder;
 import ar.edu.unrn.seminario.exception.UsuarioExistenteException;
 import ar.edu.unrn.seminario.exception.RolNoEncontradoException;
 import ar.edu.unrn.seminario.exception.UsuarioDAOException;
+import ar.edu.unrn.seminario.exception.EmailInvalidoException;
 import ar.edu.unrn.seminario.api.IApi;
 
 public class RegistrarUsuario {
@@ -51,7 +53,7 @@ public class RegistrarUsuario {
         frame.setBounds(100, 100, 1280, 720);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setLocationRelativeTo(null);
-        frame.getContentPane().setLayout(null);
+        frame.getContentPane().setLayout(new GridBagLayout());
 
         // Uso los colores definidos en UIHelper.
         frame.getContentPane().setBackground(UIHelper.COLOR_FONDO);
@@ -65,7 +67,7 @@ public class RegistrarUsuario {
 
         JMenu mnPerfil = new JMenu("Mi Perfil");
         mnPerfil.setForeground(UIHelper.COLOR_TEXTO);
-        mnPerfil.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        mnPerfil.setFont(UIHelper.FONT_MENU.deriveFont(11f));
         menuBar.add(mnPerfil);
 
         // Abro la ventana Mi Perfil.
@@ -79,7 +81,7 @@ public class RegistrarUsuario {
 
         JMenu mnBiblioteca = new JMenu("Biblioteca");
         mnBiblioteca.setForeground(UIHelper.COLOR_TEXTO);
-        mnBiblioteca.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        mnBiblioteca.setFont(UIHelper.FONT_MENU.deriveFont(11f));
         menuBar.add(mnBiblioteca);
 
         // Abro la ventana Biblioteca.
@@ -92,7 +94,7 @@ public class RegistrarUsuario {
 
         JMenu mnJuegos = new JMenu("Juegos");
         mnJuegos.setForeground(UIHelper.COLOR_TEXTO);
-        mnJuegos.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        mnJuegos.setFont(UIHelper.FONT_MENU.deriveFont(11f));
         menuBar.add(mnJuegos);
 
         // Abro Juegos pasando la misma API.
@@ -106,7 +108,7 @@ public class RegistrarUsuario {
 
         JMenu mnTienda = new JMenu("Tienda");
         mnTienda.setForeground(UIHelper.COLOR_TEXTO);
-        mnTienda.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        mnTienda.setFont(UIHelper.FONT_MENU.deriveFont(11f));
         menuBar.add(mnTienda);
 
         // Abro la ventana Tienda.
@@ -120,12 +122,12 @@ public class RegistrarUsuario {
 
         JMenu mnSoporte = new JMenu("Soporte");
         mnSoporte.setForeground(UIHelper.COLOR_TEXTO);
-        mnSoporte.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        mnSoporte.setFont(UIHelper.FONT_MENU.deriveFont(11f));
         menuBar.add(mnSoporte);
 
         JMenu mnAjustes = new JMenu("Ajustes");
         mnAjustes.setForeground(UIHelper.COLOR_TEXTO);
-        mnAjustes.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        mnAjustes.setFont(UIHelper.FONT_MENU.deriveFont(11f));
         menuBar.add(mnAjustes);
 
         // Abro la ventana Configuración.
@@ -145,13 +147,13 @@ public class RegistrarUsuario {
         JPanel panel = new JPanel();
         panel.setBackground(UIHelper.COLOR_CONTENIDO);
         panel.setBorder(new LineBorder(UIHelper.COLOR_BORDE, 1, true));
-        panel.setBounds(390, 90, 500, 550);
+        panel.setPreferredSize(new Dimension(500, 550));
         panel.setLayout(null);
         frame.getContentPane().add(panel);
 
         // Título del formulario
         JLabel lblRegistrarUsuario = new JLabel("Crear Cuenta");
-        lblRegistrarUsuario.setFont(new Font("SansSerif", Font.BOLD, 24));
+        lblRegistrarUsuario.setFont(UIHelper.FONT_TITULO.deriveFont(18f));
         lblRegistrarUsuario.setForeground(UIHelper.COLOR_TEXTO);
         lblRegistrarUsuario.setHorizontalAlignment(SwingConstants.CENTER);
         lblRegistrarUsuario.setBounds(0, 30, 500, 35);
@@ -159,7 +161,7 @@ public class RegistrarUsuario {
 
         JLabel lblSubtitulo =
                 new JLabel("Ingresa los datos para registrar un usuario");
-        lblSubtitulo.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        lblSubtitulo.setFont(UIHelper.FONT_SUBTITULO.deriveFont(9f));
         lblSubtitulo.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
         lblSubtitulo.setHorizontalAlignment(SwingConstants.CENTER);
         lblSubtitulo.setBounds(0, 65, 500, 20);
@@ -167,7 +169,7 @@ public class RegistrarUsuario {
 
         // Campo: Nombre
         JLabel lblNombre = new JLabel("Nombre:");
-        lblNombre.setFont(new Font("SansSerif", Font.BOLD, 13));
+        lblNombre.setFont(UIHelper.FONT_LABEL.deriveFont(8f));
         lblNombre.setForeground(UIHelper.COLOR_TEXTO);
         lblNombre.setBounds(80, 115, 100, 20);
         panel.add(lblNombre);
@@ -177,7 +179,7 @@ public class RegistrarUsuario {
         textFieldNombre.setBackground(UIHelper.COLOR_TARJETA);
         textFieldNombre.setForeground(UIHelper.COLOR_TEXTO);
         textFieldNombre.setCaretColor(UIHelper.COLOR_TEXTO);
-        textFieldNombre.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        textFieldNombre.setFont(UIHelper.FONT_TEXTFIELDS.deriveFont(11f));
         textFieldNombre.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(UIHelper.COLOR_BORDE, 1),
                 BorderFactory.createEmptyBorder(0, 10, 0, 10)));
@@ -186,7 +188,7 @@ public class RegistrarUsuario {
         // Campo: Nombre de usuario
         // Agrego el campo para ingresar el username.
         JLabel lblUsuario = new JLabel("Nombre de usuario:");
-        lblUsuario.setFont(new Font("SansSerif", Font.BOLD, 13));
+        lblUsuario.setFont(UIHelper.FONT_LABEL.deriveFont(8f));
         lblUsuario.setForeground(UIHelper.COLOR_TEXTO);
         lblUsuario.setBounds(80, 180, 160, 20);
         panel.add(lblUsuario);
@@ -196,7 +198,7 @@ public class RegistrarUsuario {
         textFieldUsuario.setBackground(UIHelper.COLOR_TARJETA);
         textFieldUsuario.setForeground(UIHelper.COLOR_TEXTO);
         textFieldUsuario.setCaretColor(UIHelper.COLOR_TEXTO);
-        textFieldUsuario.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        textFieldUsuario.setFont(UIHelper.FONT_TEXTFIELDS.deriveFont(11f));
         textFieldUsuario.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(UIHelper.COLOR_BORDE, 1),
                 BorderFactory.createEmptyBorder(0, 10, 0, 10)));
@@ -204,7 +206,7 @@ public class RegistrarUsuario {
 
         // Campo: Contraseña
         JLabel lblContrasena = new JLabel("Contraseña:");
-        lblContrasena.setFont(new Font("SansSerif", Font.BOLD, 13));
+        lblContrasena.setFont(UIHelper.FONT_LABEL.deriveFont(8f));
         lblContrasena.setForeground(UIHelper.COLOR_TEXTO);
         lblContrasena.setBounds(80, 245, 100, 20);
         panel.add(lblContrasena);
@@ -214,7 +216,7 @@ public class RegistrarUsuario {
         textFieldContrasena.setBackground(UIHelper.COLOR_TARJETA);
         textFieldContrasena.setForeground(UIHelper.COLOR_TEXTO);
         textFieldContrasena.setCaretColor(UIHelper.COLOR_TEXTO);
-        textFieldContrasena.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        textFieldContrasena.setFont(UIHelper.FONT_TEXTFIELDS.deriveFont(11f));
         textFieldContrasena.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(UIHelper.COLOR_BORDE, 1),
                 BorderFactory.createEmptyBorder(0, 10, 0, 10)));
@@ -222,7 +224,7 @@ public class RegistrarUsuario {
 
         // Campo: Mail
         JLabel lblMail = new JLabel("Correo electrónico:");
-        lblMail.setFont(new Font("SansSerif", Font.BOLD, 13));
+        lblMail.setFont(UIHelper.FONT_LABEL.deriveFont(8f));
         lblMail.setForeground(UIHelper.COLOR_TEXTO);
         lblMail.setBounds(80, 310, 150, 20);
         panel.add(lblMail);
@@ -232,7 +234,7 @@ public class RegistrarUsuario {
         textFieldMail.setBackground(UIHelper.COLOR_TARJETA);
         textFieldMail.setForeground(UIHelper.COLOR_TEXTO);
         textFieldMail.setCaretColor(UIHelper.COLOR_TEXTO);
-        textFieldMail.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        textFieldMail.setFont(UIHelper.FONT_TEXTFIELDS.deriveFont(11f));
         textFieldMail.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(UIHelper.COLOR_BORDE, 1),
                 BorderFactory.createEmptyBorder(0, 10, 0, 10)));
@@ -240,7 +242,7 @@ public class RegistrarUsuario {
 
         // Campo: Rol
         JLabel lblRol = new JLabel("Rol:");
-        lblRol.setFont(new Font("SansSerif", Font.BOLD, 13));
+        lblRol.setFont(UIHelper.FONT_LABEL.deriveFont(8f));
         lblRol.setForeground(UIHelper.COLOR_TEXTO);
         lblRol.setBounds(80, 375, 100, 20);
         panel.add(lblRol);
@@ -255,7 +257,7 @@ public class RegistrarUsuario {
         textFieldRol.setBackground(UIHelper.COLOR_TARJETA);
         textFieldRol.setForeground(UIHelper.COLOR_TEXTO);
         textFieldRol.setCaretColor(UIHelper.COLOR_TEXTO);
-        textFieldRol.setFont(new Font("SansSerif", Font.PLAIN, 13));
+        textFieldRol.setFont(UIHelper.FONT_TEXTFIELDS.deriveFont(11f));
         textFieldRol.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(UIHelper.COLOR_BORDE, 1),
                 BorderFactory.createEmptyBorder(0, 10, 0, 10)));
@@ -263,7 +265,7 @@ public class RegistrarUsuario {
 
         // Botones
         JButton btnAceptar = new JButton("Aceptar");
-        btnAceptar.setFont(new Font("SansSerif", Font.BOLD, 13));
+        btnAceptar.setFont(UIHelper.FONT_BOTON.deriveFont(11f));
         btnAceptar.setBounds(80, 460, 160, 38);
         btnAceptar.setBackground(UIHelper.COLOR_ACENTO);
         btnAceptar.setForeground(UIHelper.COLOR_TEXTO);
@@ -272,7 +274,7 @@ public class RegistrarUsuario {
         panel.add(btnAceptar);
 
         JButton btnCancelar = new JButton("Cancelar");
-        btnCancelar.setFont(new Font("SansSerif", Font.BOLD, 13));
+        btnCancelar.setFont(UIHelper.FONT_BOTON.deriveFont(11f));
         btnCancelar.setBounds(260, 460, 160, 38);
         btnCancelar.setBackground(UIHelper.COLOR_TARJETA);
         btnCancelar.setForeground(UIHelper.COLOR_TEXTO);
@@ -301,19 +303,8 @@ public class RegistrarUsuario {
                 // Compruebo que no haya campos vacíos.
                 if (nombre.isEmpty() || username.isEmpty()
                         || password.isEmpty() || email.isEmpty()) {
-
                     JOptionPane.showMessageDialog(
                             frame, "Complete todos los campos.");
-                    return;
-                }
-
-                // Compruebo que el correo tenga un formato válido.
-                if (!email.matches(
-                        "^[^\\s@]+@[^\\s@.]+(\\.[^\\s@.]+)+$")) {
-
-                    JOptionPane.showMessageDialog(
-                            frame,
-                            "Ingrese un correo electrónico con formato nombre@dominio.com.");
                     return;
                 }
 
@@ -322,9 +313,14 @@ public class RegistrarUsuario {
 
                 try {
 
+                    // Valido el correo electrónico.
+                    if (!email.matches("^[^\\s@]+@[^\\s@.]+(\\.[^\\s@.]+)+$")) {
+                        throw new EmailInvalidoException(
+                                "Ingrese un correo electrónico con formato nombre@dominio.com.");
+                    }
+
                     // Envío los datos a la API para registrar.
-                    api.registrarUsuario(
-                            username, password, email, nombre, rol);
+                    api.registrarUsuario(username, password, email, nombre, rol);
 
                     // Muestro la confirmación del registro.
                     JOptionPane.showMessageDialog(
@@ -349,6 +345,10 @@ public class RegistrarUsuario {
                 } catch (UsuarioDAOException ex) {
 
                     // Muestro el error si falla el acceso a la base de datos.
+                    JOptionPane.showMessageDialog(frame, ex.getMessage());
+
+                } catch (EmailInvalidoException ex) {
+
                     JOptionPane.showMessageDialog(frame, ex.getMessage());
 
                 } catch (IllegalArgumentException ex) {
