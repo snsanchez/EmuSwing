@@ -8,7 +8,7 @@ import ar.edu.unrn.seminario.dao.JuegoDAO;
 import ar.edu.unrn.seminario.dto.JuegoDTO;
 import ar.edu.unrn.seminario.dao.RolDAO;
 import ar.edu.unrn.seminario.dto.RolDTO;
-import ar.edu.unrn.seminario.dao.RolDaoJDBC;
+import ar.edu.unrn.seminario.dao.RolDAOJDBC;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.exception.CatalogoVacioException;
 import ar.edu.unrn.seminario.exception.RolNoEncontradoException;
@@ -25,7 +25,7 @@ public class PersistenceApi implements IApi {
 
 	public PersistenceApi(JuegoDAO juegoDAO) {
 		this.juegoDAO = juegoDAO;
-		this.rolDAO = new RolDaoJDBC();
+		this.rolDAO = new RolDAOJDBC();
 	}
 
 	public PersistenceApi(JuegoDAO juegoDAO, RolDAO rolDAO) {
