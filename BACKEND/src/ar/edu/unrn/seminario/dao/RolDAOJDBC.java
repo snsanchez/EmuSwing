@@ -9,24 +9,29 @@ import java.util.List;
 import ar.edu.unrn.seminario.modelo.Rol;
 
 public class RolDaoJDBC implements RolDao {
-	@Override
+    @Override
 	public void create(Rol rol) {
 		if (rol == null) {
 			throw new IllegalArgumentException("El rol a insertar no puede ser nulo.");
 		}
 		try (Connection conn = ConnectionManager.getConnection();
-			PreparedStatement statement = conn.prepareStatement("INSERT INTO roles(codigo, nombre, activo) VALUES (?, ?, ?)");) {
-			statement.setInt(1, rol.getCodigo());
-			statement.setString(2, rol.getNombre());
-			statement.setBoolean(3, rol.isActivo());
+				PreparedStatement statement = conn.prepareStatement("INSERT INTO roles(nombre, activo) VALUES (?, ?)", java.sql.Statement.RETURN_GENERATED_KEYS);) {
+			statement.setString(1, rol.getNombre());
+			statement.setBoolean(2, rol.isActivo());
 			int cantidad = statement.executeUpdate();
+
 			if (cantidad == 0) {
 				throw new RuntimeException("No se pudo insertar el rol.");
 			}
+			try (ResultSet rs = statement.getGeneratedKeys()) {
+				if (rs.next()) {
+					rol.setCodigo(rs.getInt(1));
+				}
+			}
 		} catch (SQLException e) {
 			throw new RuntimeException("Error al procesar la inserción del rol.", e);
-		    }
-	    }
+		}
+	}
 
 	@Override
 		public void update(Rol rol) {
