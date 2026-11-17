@@ -1,6 +1,6 @@
 ![Logo de EmuSwing](FRONTEND/src/img/esw-logo-dark.jpeg)
 
-<video src="https://github.com/user-attachments/assets/4f33efa2-5e75-4c8d-b4d1-214ccab7e475" width="100%" controls autoplay muted loop playsinline>
+<video src="https://github.com/user-attachments/assets/29bbad71-f09e-48ee-b64c-bfc643dc9172" width="100%" controls autoplay muted loop playsinline>
 </video>
 
 
