@@ -1,4 +1,4 @@
-![Logo de EmuSwing](FRONTEND/src/img/esw-logo.png)
+![Logo de EmuSwing](FRONTEND/src/img/esw-logo-dark.jpeg)
 
 # EmuSwing
 
