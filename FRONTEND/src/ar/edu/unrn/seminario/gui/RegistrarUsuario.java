@@ -2,6 +2,7 @@
 package ar.edu.unrn.seminario.gui;
 
 import ar.edu.unrn.seminario.helpers.UIHelper;
+
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -23,6 +24,7 @@ import javax.swing.border.LineBorder;
 
 import ar.edu.unrn.seminario.exception.UsuarioExistenteException;
 import ar.edu.unrn.seminario.exception.RolNoEncontradoException;
+import ar.edu.unrn.seminario.exception.UsuarioDAOException;
 import ar.edu.unrn.seminario.api.IApi;
 
 public class RegistrarUsuario {
@@ -44,6 +46,7 @@ public class RegistrarUsuario {
     }
 
     private void initialize() {
+
         frame = new JFrame("Registrar Usuario - EmuSwing");
         frame.setBounds(100, 100, 1280, 720);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -56,7 +59,8 @@ public class RegistrarUsuario {
         // JMenuBar centrado estilo Home
         JMenuBar menuBar = new JMenuBar();
         menuBar.setBackground(UIHelper.COLOR_FONDO);
-        menuBar.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, UIHelper.COLOR_CONTENIDO));
+        menuBar.setBorder(BorderFactory.createMatteBorder(
+                0, 0, 1, 0, UIHelper.COLOR_CONTENIDO));
         menuBar.add(javax.swing.Box.createHorizontalGlue());
 
         JMenu mnPerfil = new JMenu("Mi Perfil");
@@ -128,7 +132,8 @@ public class RegistrarUsuario {
         mnAjustes.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                VentanaConfiguracion ventana = new VentanaConfiguracion(api,"bjgorosito");
+                VentanaConfiguracion ventana =
+                        new VentanaConfiguracion(api, "bjgorosito");
                 ventana.setVisible(true);
             }
         });
@@ -152,7 +157,8 @@ public class RegistrarUsuario {
         lblRegistrarUsuario.setBounds(0, 30, 500, 35);
         panel.add(lblRegistrarUsuario);
 
-        JLabel lblSubtitulo = new JLabel("Ingresa los datos para registrar un usuario");
+        JLabel lblSubtitulo =
+                new JLabel("Ingresa los datos para registrar un usuario");
         lblSubtitulo.setFont(new Font("SansSerif", Font.PLAIN, 12));
         lblSubtitulo.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
         lblSubtitulo.setHorizontalAlignment(SwingConstants.CENTER);
@@ -240,6 +246,11 @@ public class RegistrarUsuario {
         panel.add(lblRol);
 
         textFieldRol = new JTextField();
+
+        // Rol predeterminado, no editable.
+        textFieldRol.setText("Usuario");
+        textFieldRol.setEditable(false);
+
         textFieldRol.setBounds(80, 398, 340, 32);
         textFieldRol.setBackground(UIHelper.COLOR_TARJETA);
         textFieldRol.setForeground(UIHelper.COLOR_TEXTO);
@@ -283,51 +294,65 @@ public class RegistrarUsuario {
                 // Obtengo los datos ingresados en el formulario.
                 String nombre = textFieldNombre.getText().trim();
                 String username = textFieldUsuario.getText().trim();
-                String password = new String(textFieldContrasena.getPassword());
+                String password =
+                        new String(textFieldContrasena.getPassword());
                 String email = textFieldMail.getText().trim();
-                String rolTexto = textFieldRol.getText().trim();
 
                 // Compruebo que no haya campos vacíos.
-                if (nombre.isEmpty() || username.isEmpty() || password.isEmpty()
-                        || email.isEmpty() || rolTexto.isEmpty()) {
-                    JOptionPane.showMessageDialog(frame, "Complete todos los campos.");
+                if (nombre.isEmpty() || username.isEmpty()
+                        || password.isEmpty() || email.isEmpty()) {
+
+                    JOptionPane.showMessageDialog(
+                            frame, "Complete todos los campos.");
                     return;
                 }
 
-                Integer rol;
-                try {
-                    // Convierto el código del rol a un entero.
-                    rol = Integer.parseInt(rolTexto);
+                // Compruebo que el correo tenga un formato válido.
+                if (!email.matches(
+                        "^[^\\s@]+@[^\\s@.]+(\\.[^\\s@.]+)+$")) {
 
-                } catch (NumberFormatException ex) {
-                    // Muestro un error si el rol no es numérico.
-                    JOptionPane.showMessageDialog(frame, "Ingrese un código de rol válido.");
+                    JOptionPane.showMessageDialog(
+                            frame,
+                            "Ingrese un correo electrónico con formato nombre@dominio.com.");
                     return;
                 }
 
+                // El rol se asigna automáticamente.
+                Integer rol = 2;
+
                 try {
+
                     // Envío los datos a la API para registrar.
-                    api.registrarUsuario(username, password, email, nombre, rol);
+                    api.registrarUsuario(
+                            username, password, email, nombre, rol);
 
                     // Muestro la confirmación del registro.
-                    JOptionPane.showMessageDialog(frame, "Usuario registrado correctamente.");
+                    JOptionPane.showMessageDialog(
+                            frame, "Usuario registrado correctamente.");
 
                     // Limpio los campos después de registrar.
                     textFieldNombre.setText("");
                     textFieldUsuario.setText("");
                     textFieldContrasena.setText("");
                     textFieldMail.setText("");
-                    textFieldRol.setText("");
 
                 } catch (UsuarioExistenteException ex) {
+
                     // Muestro el error si el username ya existe.
                     JOptionPane.showMessageDialog(frame, ex.getMessage());
 
                 } catch (RolNoEncontradoException ex) {
+
                     // Muestro el error si el rol no existe.
                     JOptionPane.showMessageDialog(frame, ex.getMessage());
 
+                } catch (UsuarioDAOException ex) {
+
+                    // Muestro el error si falla el acceso a la base de datos.
+                    JOptionPane.showMessageDialog(frame, ex.getMessage());
+
                 } catch (IllegalArgumentException ex) {
+
                     // Muestro el error si los datos son inválidos.
                     JOptionPane.showMessageDialog(frame, ex.getMessage());
                 }
