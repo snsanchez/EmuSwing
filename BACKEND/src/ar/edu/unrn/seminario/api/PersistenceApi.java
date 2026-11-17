@@ -18,34 +18,34 @@ import ar.edu.unrn.seminario.mappers.JuegoMapper;
 import ar.edu.unrn.seminario.modelo.Juego;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
-
-public class PersistenceApi implements IApi{
-	private JuegoDAO juegoDAO;
-	private UsuarioDAO usuarioDAO;
-	// agregar los demas DAOs
-
-	public PersistenceApi(JuegoDAO juegoDAO, UsuarioDAO usuarioDAO) {
-	    this.juegoDAO = juegoDAO;
-	    this.usuarioDAO = usuarioDAO;
-	}
+import ar.edu.unrn.seminario.dao.UsuarioDAOJDBC;
 import ar.edu.unrn.seminario.exception.ConexionBaseDeDatosException;
-import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.dao.ConnectionManager;
 
-public class PersistenceApi implements IApi {
-	private JuegoDAO juegoDAO;
-	private RolDAO rolDAO;
 
-	public PersistenceApi(JuegoDAO juegoDAO) {
-		this.juegoDAO = juegoDAO;
-		this.rolDAO = new RolDAOJDBC();
-	}
+public class PersistenceApi implements IApi{
+    private JuegoDAO juegoDAO;
+    private UsuarioDAO usuarioDAO;
+    private RolDAO rolDAO;
+    // agregar los demas DAOs
 
-	public PersistenceApi(JuegoDAO juegoDAO, RolDAO rolDAO) {
-		this.juegoDAO = juegoDAO;
-		this.rolDAO = rolDAO;
-	}
-	//Agregar los demas DAO
+    public PersistenceApi(JuegoDAO juegoDAO) {
+        this.juegoDAO = juegoDAO;
+        this.rolDAO = new RolDAOJDBC();
+        this.usuarioDAO = new UsuarioDAOJDBC();
+    }
+
+    public PersistenceApi(JuegoDAO juegoDAO, RolDAO rolDAO) {
+        this.juegoDAO = juegoDAO;
+        this.rolDAO = rolDAO;
+        this.usuarioDAO = new UsuarioDAOJDBC();
+    }
+
+    public PersistenceApi(JuegoDAO juegoDAO, UsuarioDAO usuarioDAO) {
+        this.juegoDAO = juegoDAO;
+        this.usuarioDAO = usuarioDAO;
+        this.rolDAO = new RolDAOJDBC();
+    }
 
     public void registrarJuego(Juego juego) {
         if (ConnectionManager.getConnection() == null) {
@@ -93,13 +93,6 @@ public class PersistenceApi implements IApi {
            throw new IllegalArgumentException("Complete todos los campos.");
        }
 
-       // Compruebo el formato básico del correo.
-       if (!email.matches("^[^\\s@]+@[^\\s@.]+(\\.[^\\s@.]+)+$")) {
-
-           throw new IllegalArgumentException(
-                   "Ingrese un correo electrónico con formato nombre@dominio.com.");
-       }
-
        // Compruebo si el username ya está registrado.
        if (usuarioDAO.find(username) != null) {
            throw new UsuarioExistenteException(
@@ -118,17 +111,47 @@ public class PersistenceApi implements IApi {
        usuarioDAO.create(usuario);
    }
 
-	@Override
-	public UsuarioDTO obtenerUsuario(String username) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+   @Override
+   public UsuarioDTO obtenerUsuario(String username) {
 
-	@Override
-	public void eliminarUsuario(String username) {
-		// TODO Auto-generated method stub
+       if (username == null || username.trim().isEmpty()) {
+           throw new IllegalArgumentException("Ingrese un nombre de usuario válido.");
+       }
 
-	}
+       Usuario usuario = usuarioDAO.find(username);
+
+       if (usuario == null) {
+           throw new IllegalArgumentException("El usuario no existe.");
+       }
+
+       return new UsuarioDTO(
+               usuario.getUsuario(),
+               null,
+               usuario.getNombre(),
+               usuario.getEmail(),
+               usuario.getRol() != null
+                       ? String.valueOf(usuario.getRol().getCodigo())
+                       : "",
+               usuario.isActivo(),
+               usuario.isEstadoSuscripcion()
+       );
+   }
+
+   @Override
+   public void eliminarUsuario(String username) {
+
+       if (username == null || username.trim().isEmpty()) {
+           throw new IllegalArgumentException("Ingrese un nombre de usuario válido.");
+       }
+
+       Usuario usuario = usuarioDAO.find(username);
+
+       if (usuario == null) {
+           throw new IllegalArgumentException("El usuario no existe.");
+       }
+
+       usuarioDAO.remove(username);
+   }
 
 	@Override
 	public List<RolDTO> obtenerRoles() {
@@ -146,62 +169,90 @@ public class PersistenceApi implements IApi {
 				.collect(Collectors.toList());
 	}
 
-		@Override
-		public void guardarRol(Integer codigo, String descripcion, boolean estado) {
-			Rol rol = new Rol(codigo, descripcion);
-			rol.setActivo(estado);
-			if (codigo != null && rolDAO.find(codigo) != null) {
-				rolDAO.update(rol);
-			} else {
-				rolDAO.create(rol);
-			}
-		}
-
-		@Override
-		public RolDTO obtenerRolPorCodigo(Integer codigo) {
-			Rol rol = rolDAO.find(codigo);
-			if (rol == null) {
-				return null;
-			}
-			return new RolDTO(rol.getCodigo(), rol.getNombre(), rol.isActivo());
-		}
-
-		@Override
-		public void activarRol(Integer codigo) {
-			Rol rol = rolDAO.find(codigo);
-			if (rol != null) {
-				rol.activar();
-				rolDAO.update(rol);
-			}
-		}
-
-		@Override
-		public void desactivarRol(Integer codigo) {
-			Rol rol = rolDAO.find(codigo);
-			if (rol != null) {
-				rol.desactivar();
-				rolDAO.update(rol);
-			}
-		}
-
 	@Override
-	public List<UsuarioDTO> obtenerUsuarios() {
-		// TODO Auto-generated method stub
-		return null;
+	public void guardarRol(Integer codigo, String descripcion, boolean estado) {
+		Rol rol = new Rol(codigo, descripcion);
+		rol.setActivo(estado);
+		if (codigo != null && rolDAO.find(codigo) != null) {
+			rolDAO.update(rol);
+		} else {
+			rolDAO.create(rol);
+		}
 	}
 
 	@Override
-	public void activarUsuario(String username) {
-		// TODO Auto-generated method stub
+	public RolDTO obtenerRolPorCodigo(Integer codigo) {
+		Rol rol = rolDAO.find(codigo);
+		if (rol == null) {
+			return null;
+		}
+		return new RolDTO(rol.getCodigo(), rol.getNombre(), rol.isActivo());
+	}
 
+	@Override
+	public void activarRol(Integer codigo) {
+		Rol rol = rolDAO.find(codigo);
+		if (rol != null) {
+			rol.activar();
+			rolDAO.update(rol);
+		}
+	}
+
+	@Override
+	public void desactivarRol(Integer codigo) {
+		Rol rol = rolDAO.find(codigo);
+		if (rol != null) {
+			rol.desactivar();
+			rolDAO.update(rol);
+		}
+	}
+
+
+	@Override
+	public List<UsuarioDTO> obtenerUsuarios() {
+
+		return usuarioDAO.findAll()
+				.stream()
+				.map(usuario -> new UsuarioDTO(
+						usuario.getUsuario(),
+						null,
+						usuario.getNombre(),
+						usuario.getEmail(),
+						usuario.getRol() != null
+                            ? String.valueOf(usuario.getRol().getCodigo())
+                            		: "",
+                            		usuario.isActivo(),
+                            		usuario.isEstadoSuscripcion()
+						))
+				.collect(Collectors.toList());
+	}	
+
+	@Override
+	public void activarUsuario(String username) {
+
+		Usuario usuario = usuarioDAO.find(username);
+
+		if (usuario == null) {
+			throw new IllegalArgumentException("El usuario no existe.");
+		}
+
+		usuario.activar();
+		usuarioDAO.update(usuario);
 	}
 
 	@Override
 	public void desactivarUsuario(String username) {
-		// TODO Auto-generated method stub
 
+		Usuario usuario = usuarioDAO.find(username);
+
+		if (usuario == null) {
+			throw new IllegalArgumentException("El usuario no existe.");
+		}
+
+		usuario.desactivar();
+		usuarioDAO.update(usuario);
 	}
-
+	
 	@Override
 	public Integer getIdJuegoPorTitulo(String titulo) {
 		return juegoDAO.findAll().stream()
