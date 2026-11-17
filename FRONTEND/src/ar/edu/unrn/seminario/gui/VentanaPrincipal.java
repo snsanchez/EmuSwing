@@ -33,6 +33,7 @@ import javax.swing.border.LineBorder;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.api.PersistenceApi;
+import ar.edu.unrn.seminario.dao.ConnectionManager;
 import ar.edu.unrn.seminario.dao.JuegoDAOJDBC;
 import ar.edu.unrn.seminario.dto.JuegoDTO;
 import ar.edu.unrn.seminario.exception.CatalogoVacioException;
@@ -50,11 +51,17 @@ public class VentanaPrincipal extends JFrame {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
+                    ConnectionManager.getConnection();
                     IApi api = new PersistenceApi(new JuegoDAOJDBC());
 
                     VentanaPrincipal frame = new VentanaPrincipal(api);
                     frame.setVisible(true);
 
+                } catch (ar.edu.unrn.seminario.exception.ConexionBaseDeDatosException e) {
+                    javax.swing.JOptionPane.showMessageDialog(null,
+                            e.getMessage(),
+                            "Error de conexión",
+                            javax.swing.JOptionPane.ERROR_MESSAGE);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -234,6 +241,8 @@ public class VentanaPrincipal extends JFrame {
             }
         } catch (CatalogoVacioException e) {
             System.out.println(e.getMessage());
+        } catch (ar.edu.unrn.seminario.exception.ConexionBaseDeDatosException e) {
+            throw e;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -282,24 +291,28 @@ public class VentanaPrincipal extends JFrame {
      			}
 
      			// Buscamos la URL del juego usando el método getUrlJuegoByTitulo
-     			String urlJuego = api.getUrlJuegoByTitulo(juegoSeleccionado);
+                try {
+                    String urlJuego = api.getUrlJuegoByTitulo(juegoSeleccionado);
 
-     			if (urlJuego != null) {
-     				try {
-     					// Lanzamos el emulador web real
-     					VentanaJuego ventana = new VentanaJuego(urlJuego);
-     					ventana.setVisible(true);
-     				} catch (Exception ex) {
-     					ex.printStackTrace();
-     					javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this,
-     						"Error al intentar iniciar el juego.",
-     						"Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-     				}
-     			} else {
-     				javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this,
-     						"El enlace para este juego no está disponible en la base de datos.",
-     						"Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-     			}
+                    if (urlJuego != null) {
+                        VentanaJuego ventana = new VentanaJuego(urlJuego);
+                        ventana.setVisible(true);
+                    } else {
+                        javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this,
+                                "El enlace para este juego no está disponible en la base de datos.",
+                                "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (ar.edu.unrn.seminario.exception.ConexionBaseDeDatosException ex) {
+                    javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this,
+                            ex.getMessage(),
+                            "Error de conexión",
+                            javax.swing.JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this,
+                            "Error al intentar iniciar el juego.",
+                            "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                }
      		});
      		// ------------------------------------------------
 
