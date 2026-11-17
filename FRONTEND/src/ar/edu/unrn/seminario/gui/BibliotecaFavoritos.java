@@ -186,7 +186,7 @@ public class BibliotecaFavoritos extends JFrame {
 
 	private void cargarJuegos() {
 		try {
-			List<JuegoDTO> misFavoritos = api.obtenerJuegosFavoritos();
+			List<JuegoDTO> misFavoritos = api.obtenerJuegos();
 			for (JuegoDTO j : misFavoritos) {
 				JPanel filaJuego = crearFilaJuego(j);
 				panelListaJuegos.add(filaJuego);
