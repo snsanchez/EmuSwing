@@ -25,6 +25,14 @@ CREATE TABLE IF NOT EXISTS juegos (
     CONSTRAINT pk_juegos PRIMARY KEY (id)
 );
 
+CREATE TABLE IF NOT EXISTS roles (
+    codigo INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(80) NOT NULL,
+    activo TINYINT(1) NOT NULL DEFAULT 1,
+    CONSTRAINT pk_roles PRIMARY KEY (codigo),
+    CONSTRAINT uq_roles_nombre UNIQUE (nombre)
+);
+
 CREATE TABLE IF NOT EXISTS usuarios (
     usuario VARCHAR(100) NOT NULL,
     contrasena VARCHAR(255) NOT NULL,
