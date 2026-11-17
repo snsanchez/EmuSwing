@@ -3,6 +3,7 @@ import java.util.List;
 
 import java.util.stream.Collectors;
 
+import ar.edu.unrn.seminario.dao.ConnectionManager;
 import ar.edu.unrn.seminario.dao.JuegoDAO;
 import ar.edu.unrn.seminario.dto.JuegoDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
