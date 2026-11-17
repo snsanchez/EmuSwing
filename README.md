@@ -1,5 +1,15 @@
 ![Logo de EmuSwing](FRONTEND/src/img/esw-logo-dark.jpeg)
 
+## Capturas de pantalla
+
+### Pantalla principal
+
+![Pantalla principal de EmuSwing](FRONTEND/src/img/screenshots/home.png)
+
+### Juego DOOM
+
+![DOOM ejecutándose en EmuSwing](FRONTEND/src/img/screenshots/doom.png)
+
 # EmuSwing
 
 EmuSwing es un software desarrollado en Java para ofrecer una plataforma de videojuegos clásicos y arcade, con una interfaz gráfica sencilla y accesible. Incluye catálogo de juegos, biblioteca personal, perfiles de usuario y ejecución de títulos compatibles dentro de la aplicación.
