@@ -1,5 +1,7 @@
 ![Logo de EmuSwing](FRONTEND/src/img/esw-logo-dark.jpeg)
 
+[![Ver video de presentación de EmuSwing](https://img.youtube.com/vi/f-X12u-gGX0/maxresdefault.jpg)](https://youtu.be/f-X12u-gGX0)
+
 ## Capturas de pantalla
 
 ### Pantalla principal
