@@ -142,7 +142,7 @@ public class RegistrarJuego extends JFrame {
 		panelFormulario.add(Box.createRigidArea(new Dimension(0, 20)));
 
 		// Campo 3: URL de portada
-		panelFormulario.add(crearLabelCampo("URL de portada"));
+		panelFormulario.add(crearLabelCampo("URL de portada (.png o .jpg)"));
 		panelFormulario.add(Box.createRigidArea(new Dimension(0, 8)));
 		txtUrlPortada = crearCampoTexto();
 		panelFormulario.add(txtUrlPortada);
@@ -332,11 +332,15 @@ public class RegistrarJuego extends JFrame {
 			limpiarFormulario();
 
 		} catch (IllegalArgumentException ex) {
-			// Capturamos la excepción recomendada por el líder
 			JOptionPane.showMessageDialog(this,
 					ex.getMessage(),
 					"Error de validación",
 					JOptionPane.WARNING_MESSAGE);
+		} catch (ar.edu.unrn.seminario.exception.ConexionBaseDeDatosException ex) {
+			JOptionPane.showMessageDialog(this, 
+					ex.getMessage(),
+					"Sin Conexion a la base de datos", 
+					JOptionPane.ERROR_MESSAGE);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(this,
