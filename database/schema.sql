@@ -8,8 +8,6 @@ CREATE USER IF NOT EXISTS 'emuswing'@'localhost'
 GRANT ALL PRIVILEGES ON emuswing_db.*
     TO 'emuswing'@'localhost';
 
-EXIT;
-
 USE emuswing_db;
 
 CREATE TABLE IF NOT EXISTS juegos (
@@ -23,6 +21,14 @@ CREATE TABLE IF NOT EXISTS juegos (
     urlEmulador VARCHAR(2048),
 
     CONSTRAINT pk_juegos PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS roles (
+    codigo INT NOT NULL AUTO_INCREMENT,
+    nombre VARCHAR(80) NOT NULL,
+    activo TINYINT(1) NOT NULL DEFAULT 1,
+    CONSTRAINT pk_roles PRIMARY KEY (codigo),
+    CONSTRAINT uq_roles_nombre UNIQUE (nombre)
 );
 
 CREATE TABLE IF NOT EXISTS usuarios (

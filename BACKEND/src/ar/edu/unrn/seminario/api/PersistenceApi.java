@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 
 import ar.edu.unrn.seminario.dao.JuegoDAO;
+import ar.edu.unrn.seminario.dao.JuegoDAOJDBC;
 import ar.edu.unrn.seminario.dao.UsuarioDAO;
 import ar.edu.unrn.seminario.dto.JuegoDTO;
 import ar.edu.unrn.seminario.dao.RolDAO;
@@ -18,36 +19,30 @@ import ar.edu.unrn.seminario.mappers.JuegoMapper;
 import ar.edu.unrn.seminario.modelo.Juego;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
-import ar.edu.unrn.seminario.dao.UsuarioDAOJDBC;
 import ar.edu.unrn.seminario.exception.ConexionBaseDeDatosException;
+import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.dao.ConnectionManager;
 
-
 public class PersistenceApi implements IApi{
-    private JuegoDAO juegoDAO;
-    private UsuarioDAO usuarioDAO;
-    private RolDAO rolDAO;
-    // agregar los demas DAOs
+	private JuegoDAO juegoDAO;
+	private UsuarioDAO usuarioDAO;
+	private RolDAO rolDAO;
 
-    public PersistenceApi(JuegoDAO juegoDAO) {
-        this.juegoDAO = juegoDAO;
-        this.rolDAO = new RolDAOJDBC();
-        this.usuarioDAO = new UsuarioDAOJDBC();
-    }
+	// agregar los demas DAOs
 
-    public PersistenceApi(JuegoDAO juegoDAO, RolDAO rolDAO) {
-        this.juegoDAO = juegoDAO;
-        this.rolDAO = rolDAO;
-        this.usuarioDAO = new UsuarioDAOJDBC();
-    }
+	public PersistenceApi(JuegoDAO juegoDAO, UsuarioDAO usuarioDAO, RolDAO RolDAO) {
+	    this.juegoDAO = juegoDAO;
+	    this.usuarioDAO = usuarioDAO;
+		this.rolDAO = RolDAO;
+	}
 
-    public PersistenceApi(JuegoDAO juegoDAO, UsuarioDAO usuarioDAO) {
-        this.juegoDAO = juegoDAO;
-        this.usuarioDAO = usuarioDAO;
-        this.rolDAO = new RolDAOJDBC();
-    }
+	// para el registrarJuego
+    public PersistenceApi(JuegoDAOJDBC juegoDAOJDBC) {
+		this.juegoDAO = juegoDAOJDBC;
+	}
 
-    public void registrarJuego(Juego juego) {
+
+	public void registrarJuego(Juego juego) {
         if (ConnectionManager.getConnection() == null) {
             throw new ConexionBaseDeDatosException("No hay conexión disponible con la base de datos.");
         }
