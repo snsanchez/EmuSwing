@@ -18,22 +18,25 @@ public class JuegoDAOJDBC implements JuegoDAO {
         }
 		try (Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn
-                        .prepareStatement("INSERT INTO juegos(id, titulo, genero, desarrollador, consola, anio, urlPortada, urlEmulador) "
-                            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)");) {
+                        .prepareStatement("INSERT INTO juegos(titulo, genero, desarrollador, consola, anio, urlPortada, urlEmulador) "
+                            + "VALUES (?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);) {
 
-			
-
-			statement.setInt(1, juego.getId());
-			statement.setString(2, juego.getTitulo());
-			statement.setString(3, juego.getGenero());
-			statement.setString(4, juego.getDesarrollador());
-			statement.setString(5, juego.getConsola());
-			statement.setInt(6, juego.getAño());
-			statement.setString(7, juego.getUrlPortada());
-                        statement.setString(8, juego.getUrlEmulador());
+			statement.setString(1, juego.getTitulo());
+			statement.setString(2, juego.getGenero());
+			statement.setString(3, juego.getDesarrollador());
+			statement.setString(4, juego.getConsola());
+			statement.setInt(5, juego.getAño());
+			statement.setString(6, juego.getUrlPortada());
+                        statement.setString(7, juego.getUrlEmulador());
 			int cantidad = statement.executeUpdate();
 			if (cantidad > 0) {
-				// System.out.println("Modificando " + cantidad + " registros");
+				try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+					if (generatedKeys.next()) {
+						juego.setId(generatedKeys.getInt(1));
+					} else {
+						throw new JuegoDAOException("No se pudo obtener el ID del juego insertado.", null);
+					}
+				}
 			} else {
 				throw new JuegoDAOException("No se pudo insertar el juego.", null);
 			}
@@ -43,8 +46,8 @@ public class JuegoDAOJDBC implements JuegoDAO {
 		} catch (SQLException e) {
 			throw new JuegoDAOException("Error al procesar la inserción del juego.", e.getSQLState(), e);
 		}
-    	
-    	
+
+
     }
 
     @Override
@@ -89,8 +92,8 @@ public class JuegoDAOJDBC implements JuegoDAO {
         try(Connection conn = ConnectionManager.getConnection();
             PreparedStatement statement = conn.prepareStatement(
                     "DELETE FROM juegos WHERE id = ?");){
-            
-            
+
+
 
             statement.setInt(1, id);
             int cantidad = statement.executeUpdate();
@@ -125,7 +128,7 @@ public class JuegoDAOJDBC implements JuegoDAO {
 		try (Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn.prepareStatement(
 					"SELECT * FROM juegos WHERE id = ?");){
-			
+
 
 			statement.setInt(1, id);
 
@@ -139,7 +142,7 @@ public class JuegoDAOJDBC implements JuegoDAO {
 		}
 
 
-        return juego;                
+        return juego;
     }
 
     @Override
@@ -162,5 +165,3 @@ public class JuegoDAOJDBC implements JuegoDAO {
         return juegos;
     }
 }
-
-
