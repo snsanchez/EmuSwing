@@ -144,7 +144,7 @@ public class VentanaPrincipal extends JFrame {
         btnSoporte.addActionListener(e -> javax.swing.JOptionPane.showMessageDialog(
                 VentanaPrincipal.this,
                 "Repositorio: https://github.com/snsanchez/EmuSwing\n"
-                        + "Desarrolladores: Thiago García, Santiago Sánchez, Joaquín Cuevas, Ramiro Gomez",
+                        + "Desarrolladores: Thiago García, Santiago Sánchez, Joaquín Cuevas, Ramiro Gomez, Thiago Muñoz",
                 "Soporte",
                 javax.swing.JOptionPane.INFORMATION_MESSAGE));
         panelMenu.add(btnSoporte);
