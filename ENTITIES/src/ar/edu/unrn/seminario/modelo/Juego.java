@@ -33,7 +33,7 @@ public class Juego implements Comparable<Juego> {
         this.año = año;
         this.urlPortada = validarUrlPortada(urlPortada);
         this.urlEmulador = validarUrlEmulador(urlEmulador);
-    
+
     }
     @Override
     public String toString() {
@@ -90,26 +90,26 @@ public class Juego implements Comparable<Juego> {
     }
 
     private String validarUrlPortada(String urlPortada) {
-        if (urlPortada == null) {
+        if (urlPortada == null || urlPortada.trim().isEmpty()) {
             return null;
         }
 
         String urlNormalizada = urlPortada.trim();
+
         try {
             URI uri = new URI(urlNormalizada);
-            String host = uri.getHost();
-            String hostNormalizado = host == null ? "" : host.toLowerCase(Locale.ROOT);
-            String path = uri.getRawPath();
 
             if (!"https".equalsIgnoreCase(uri.getScheme())
-                    || !(hostNormalizado.equals("archive.org") || hostNormalizado.endsWith(".archive.org"))
-                    || path == null
-                    || !path.toLowerCase(Locale.ROOT).endsWith(".png")) {
+                    || uri.getHost() == null
+                    || uri.getHost().trim().isEmpty()) {
+
                 throw new PortadaIncorrectaException(
-                        "La portada debe ser una URL HTTPS de archive.org que apunte a un archivo PNG.");
+                        "La portada debe ser una URL HTTPS válida.");
             }
+
         } catch (URISyntaxException e) {
-            throw new PortadaIncorrectaException("La URL de la portada no es válida.", e);
+            throw new PortadaIncorrectaException(
+                    "La URL de la portada no es válida.", e);
         }
 
         return urlNormalizada;

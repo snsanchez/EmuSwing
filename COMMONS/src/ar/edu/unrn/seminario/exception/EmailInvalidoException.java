@@ -1,0 +1,8 @@
+package ar.edu.unrn.seminario.exception;
+
+public class EmailInvalidoException extends RuntimeException {
+
+    public EmailInvalidoException(String mensaje) {
+        super(mensaje);
+    }
+}
