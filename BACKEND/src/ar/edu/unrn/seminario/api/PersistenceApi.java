@@ -284,17 +284,42 @@ public class PersistenceApi implements IApi {
 	}
 
 	@Override
-	public String getGanador() {
-		// TODO Auto-generated method stub
-		return null;
+	public void registrarHorasJugadas(String username, Integer idJuego, Integer horas) {
+	    if (username == null || idJuego == null || horas == null || horas <= 0) {
+	        return;
+	    }
+	    RegistroJuego registro = new RegistroJuego(username, idJuego, horas);
+	    registroJuegoDAO.update(registro);
 	}
 
 	@Override
 	public Integer obtenerHorasJugadas(String username) {
-		// TODO Auto-generated method stub
-		return null;
+	    int totalHoras = 0;
+	    for (RegistroJuego r : registroJuegoDAO.findByUsername(username)) {
+	        if (r.getHoras() != null) {
+	            totalHoras += r.getHoras();
+	        }
+	    }
+	    return totalHoras;
 	}
 
+	@Override
+	public String getGanador() {
+	    Map<String, Integer> acumuladoPorUsuario = new HashMap<>();
+	    for (RegistroJuego r : registroJuegoDAO.findAll()) {
+	        acumuladoPorUsuario.merge(r.getUsername(), r.getHoras(), Integer::sum);
+	    }
+	    String ganador = null;
+	    int maxHoras = -1;
+	    for (Map.Entry<String, Integer> entry : acumuladoPorUsuario.entrySet()) {
+	        if (entry.getValue() > maxHoras) {
+	            maxHoras = entry.getValue();
+	            ganador = entry.getKey();
+	        }
+	    }
+	    return ganador;
+	}
+	
 	@Override
 	public boolean otorgarSuscripcionAutomatico(String username) {
 		// TODO Auto-generated method stub

@@ -22,6 +22,15 @@ CREATE TABLE IF NOT EXISTS juegos (
 
     CONSTRAINT pk_juegos PRIMARY KEY (id)
 );
+    
+CREATE TABLE IF NOT EXISTS registros_juego (
+    username VARCHAR(100) NOT NULL,
+    id_juego INT NOT NULL,
+    horas INT NOT NULL DEFAULT 0,
+    CONSTRAINT pk_registros_juego PRIMARY KEY (username, id_juego),
+    CONSTRAINT fk_registros_juego_juego FOREIGN KEY (id_juego) REFERENCES juegos(id)
+);
+
 
 CREATE TABLE IF NOT EXISTS roles (
     codigo INT NOT NULL AUTO_INCREMENT,
