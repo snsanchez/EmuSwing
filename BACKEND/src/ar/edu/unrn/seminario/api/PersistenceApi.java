@@ -11,14 +11,26 @@ import ar.edu.unrn.seminario.exception.RolNoEncontradoException;
 import ar.edu.unrn.seminario.exception.UsuarioExistenteException;
 import ar.edu.unrn.seminario.mappers.JuegoMapper;
 import ar.edu.unrn.seminario.modelo.Juego;
+import java.util.HashMap;
+import java.util.Map;
+import ar.edu.unrn.seminario.dao.RegistroJuegoDAO;
+import ar.edu.unrn.seminario.dao.RegistroJuegoDAOJDBC;
+import ar.edu.unrn.seminario.modelo.RegistroJuego;
+
 
 public class PersistenceApi implements IApi{
-    private JuegoDAO juegoDAO;
-    // agregar los demas DAOs
+	private JuegoDAO juegoDAO;
+	private RegistroJuegoDAO registroJuegoDAO;
 
-    public PersistenceApi(JuegoDAO juegoDAO) {
-        this.juegoDAO = juegoDAO;
-    }
+	public PersistenceApi(JuegoDAO juegoDAO) {
+	    this.juegoDAO = juegoDAO;
+	    this.registroJuegoDAO = new RegistroJuegoDAOJDBC();
+	}
+
+	public PersistenceApi(JuegoDAO juegoDAO, RegistroJuegoDAO registroJuegoDAO) {
+	    this.juegoDAO = juegoDAO;
+	    this.registroJuegoDAO = registroJuegoDAO;
+	}
 
     public void registrarJuego(Juego juego) {
         juegoDAO.create(juego);
@@ -144,17 +156,42 @@ public class PersistenceApi implements IApi{
 	}
 
 	@Override
-	public String getGanador() {
-		// TODO Auto-generated method stub
-		return null;
+	public void registrarHorasJugadas(String username, Integer idJuego, Integer horas) {
+	    if (username == null || idJuego == null || horas == null || horas <= 0) {
+	        return;
+	    }
+	    RegistroJuego registro = new RegistroJuego(username, idJuego, horas);
+	    registroJuegoDAO.update(registro);
 	}
 
 	@Override
 	public Integer obtenerHorasJugadas(String username) {
-		// TODO Auto-generated method stub
-		return null;
+	    int totalHoras = 0;
+	    for (RegistroJuego r : registroJuegoDAO.findByUsername(username)) {
+	        if (r.getHoras() != null) {
+	            totalHoras += r.getHoras();
+	        }
+	    }
+	    return totalHoras;
 	}
 
+	@Override
+	public String getGanador() {
+	    Map<String, Integer> acumuladoPorUsuario = new HashMap<>();
+	    for (RegistroJuego r : registroJuegoDAO.findAll()) {
+	        acumuladoPorUsuario.merge(r.getUsername(), r.getHoras(), Integer::sum);
+	    }
+	    String ganador = null;
+	    int maxHoras = -1;
+	    for (Map.Entry<String, Integer> entry : acumuladoPorUsuario.entrySet()) {
+	        if (entry.getValue() > maxHoras) {
+	            maxHoras = entry.getValue();
+	            ganador = entry.getKey();
+	        }
+	    }
+	    return ganador;
+	}
+	
 	@Override
 	public boolean otorgarSuscripcionAutomatico(String username) {
 		// TODO Auto-generated method stub

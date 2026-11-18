@@ -302,12 +302,18 @@ public class MemoryApi implements IApi {
 	    return false;
 	}
 
+	
 	@Override
-	public Integer obtenerHorasJugadas(String username) {		// Retortna las horas acumuladas del usuario
-	    if (registrosSimulados.containsKey(username)) {
-	        return registrosSimulados.get(username).getHoras();
-	    }
-	    return 0;
+	public void registrarHorasJugadas(String username, Integer idJuego, Integer horas) {
+		if (username == null || idJuego == null || horas == null || horas <= 0) {
+			return;
+		}
+		RegistroJuego existente = registrosSimulados.get(username);
+		if (existente != null && existente.getIdJuego().equals(idJuego)) {
+			existente.setHoras(existente.getHoras() + horas);
+		} else {
+			registrosSimulados.put(username, new RegistroJuego(username, idJuego, horas));
+		}
 	}
 	
 	public void agregarAFavoritos(Integer idJuego) {
@@ -395,6 +401,12 @@ public class MemoryApi implements IApi {
 		}
 		this.juegos.removeIf(j -> j.getId().equals(juego.getId()));
 		this.juegos.add(juego);
+	}
+
+	@Override
+	public Integer obtenerHorasJugadas(String username) {
+		RegistroJuego reg = registrosSimulados.get(username);
+		return (reg != null) ? reg.getHoras() : 0;
 	}
 }
 

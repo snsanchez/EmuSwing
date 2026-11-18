@@ -7,19 +7,34 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
+import ar.edu.unrn.seminario.api.IApi;
 
 public class VentanaJuego extends JFrame {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
     private static final String URL_PRUEBA = "https://archive.org/embed/msdos_DOOM_1993";
     private JPanel contentPane;
     private EmuladorWeb emuladorWeb;
+
+    private IApi api;
+    private String username;
+    private Integer idJuego;
+    private long tiempoInicio;
+    private boolean tiempoRegistrado = false;
 
     public VentanaJuego() {
         this(URL_PRUEBA);
     }
 
     public VentanaJuego(String urlJuego) {
+        this(null, "bjgorosito", 1, urlJuego);
+    }
+
+    public VentanaJuego(IApi api, String username, Integer idJuego, String urlJuego) {
+        this.api = api;
+        this.username = username;
+        this.idJuego = idJuego;
+        this.tiempoInicio = System.currentTimeMillis();
+
         setTitle("EmuSwing - Jugando");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(900, 650);
@@ -34,13 +49,36 @@ public class VentanaJuego extends JFrame {
 
         addWindowListener(new WindowAdapter() {
             @Override
+            public void windowClosing(WindowEvent e) {
+                guardarTiempoJugado();
+            }
+
+            @Override
             public void windowClosed(WindowEvent e) {
+                guardarTiempoJugado();
                 if (emuladorWeb != null) {
                     emuladorWeb.cerrar();
                     emuladorWeb = null;
                 }
             }
         });
+    }
+
+    private void guardarTiempoJugado() {
+        if (tiempoRegistrado) {
+            return;
+        }
+        tiempoRegistrado = true;
+
+        long tiempoFin = System.currentTimeMillis();
+        long milisegundosJugados = tiempoFin - tiempoInicio;
+
+        // 1 segundo = 1 hora simulada para probar en vivo
+        int horasJugadas = (int) (milisegundosJugados / 1000);
+
+        if (api != null && horasJugadas > 0) {
+            api.registrarHorasJugadas("bjgorosito", idJuego, horasJugadas);
+        }
     }
 
     private void construirPanelSuperior() {
@@ -147,10 +185,6 @@ public class VentanaJuego extends JFrame {
         contentPane.add(panelJuego, BorderLayout.CENTER);
     }
 
-    public static void main(String[] args) {
-            SwingUtilities.invokeLater(() -> {
-                VentanaJuego ventana = new VentanaJuego();
-                ventana.setVisible(true);
-            });
-        }
+   
+    
 }

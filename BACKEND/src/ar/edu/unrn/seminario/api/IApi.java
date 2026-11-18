@@ -58,8 +58,9 @@ public interface IApi {
 	
 	boolean obtenerEstadoSuscripcion(String username);
 	
+	void registrarHorasJugadas(String username, Integer idJuego, Integer horas);
 	
-
+	
 	// para los juegos favoritos
 	void agregarAFavoritos(Integer idJuego);
 	void quitarDeFavoritos(Integer idJuego);
