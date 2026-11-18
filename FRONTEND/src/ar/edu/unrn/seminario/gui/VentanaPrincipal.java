@@ -122,7 +122,22 @@ public class VentanaPrincipal extends JFrame {
         });
 
         panelMenu.add(btnRegistrarUsuario);
-
+        
+     // --- BOTÓN REGISTRAR JUEGO ----
+        JButton btnRegistrarJuego = crearBotonMenu("Registrar Juego");
+        btnRegistrarJuego.addActionListener(e -> {
+            try {
+                RegistrarJuego ventanaRegistrar = new RegistrarJuego(api);
+                ventanaRegistrar.setVisible(true);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this,
+                        "Error al abrir el registro de juegos.",
+                        "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        panelMenu.add(btnRegistrarJuego);
+        
         // -- BOTON JUEGOS PARA LA CONEXION CON LISTADO JUEGOS --
         JButton btnMenuJuegos = crearBotonMenu("Juegos");
         btnMenuJuegos.addActionListener(e -> {
