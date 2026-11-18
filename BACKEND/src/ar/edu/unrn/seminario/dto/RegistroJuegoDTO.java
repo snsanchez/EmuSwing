@@ -2,9 +2,9 @@ package ar.edu.unrn.seminario.dto;
 
 public class RegistroJuegoDTO {
     private Integer idJuego;
-    private Integer horas;
+    private Double horas;
 
-    public RegistroJuegoDTO(Integer idJuego, Integer horas) {
+    public RegistroJuegoDTO(Integer idJuego, Double horas) {
         this.idJuego = idJuego;
         this.horas = horas;
     }
@@ -13,7 +13,7 @@ public class RegistroJuegoDTO {
     public Integer getIdJuego() {
         return idJuego; 
     } 
-    public Integer getHoras() {
+    public Double getHoras() {
         return horas;
     }
 
@@ -21,7 +21,7 @@ public class RegistroJuegoDTO {
 		this.idJuego = idJuego;
 	}
 
-	public void setHoras(Integer horas) {
+    public void setHoras(Double horas) {
 		this.horas = horas;
 	}
     

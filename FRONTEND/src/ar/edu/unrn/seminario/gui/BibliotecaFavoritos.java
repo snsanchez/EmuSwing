@@ -112,9 +112,10 @@ public class BibliotecaFavoritos extends JFrame {
 				return;
 			}
 			String urlJuego = api.getUrlJuegoByTitulo(juegoSeleccionado.getTitulo());
+			// reeemplazar por String urlJuego = juegoSeleccionado.getUrlEmulador();
 			if (urlJuego != null) {
 				try {
-					VentanaJuego ventana = new VentanaJuego(urlJuego);
+					VentanaJuego ventana = new VentanaJuego(api, juegoSeleccionado.getId(), urlJuego);
 					ventana.setVisible(true);
 				} catch (Exception ex) {
 					ex.printStackTrace();

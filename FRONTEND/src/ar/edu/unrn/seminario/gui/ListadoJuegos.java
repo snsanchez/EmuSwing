@@ -3,12 +3,9 @@ package ar.edu.unrn.seminario.gui;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Image;
-import java.net.URL;
 import java.util.List;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,17 +14,17 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.api.PersistenceApi;
+import ar.edu.unrn.seminario.dao.ConnectionManager;
+import ar.edu.unrn.seminario.dao.JuegoDAOJDBC;
 import ar.edu.unrn.seminario.dto.JuegoDTO;
 import ar.edu.unrn.seminario.exception.CatalogoVacioException;
+import ar.edu.unrn.seminario.helpers.ImagenHelper;
 import ar.edu.unrn.seminario.helpers.UIHelper;
 
 public class ListadoJuegos extends JFrame {
 
-	private IApi api;
-
 	public ListadoJuegos(IApi api) {
-		this.api = api;
-
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setTitle("Catálogo de Juegos");
 		setSize(UIHelper.ANCHO_CONTENIDO, UIHelper.ALTO_CONTENIDO);
@@ -59,12 +56,11 @@ public class ListadoJuegos extends JFrame {
 							
 							@Override
 							public void mouseClicked(java.awt.event.MouseEvent evt) {
-								// Usamos el método getUrlJuegoByTitulo 
-								String urlJuego = api.getUrlJuegoByTitulo(j.getTitulo());
+								String urlJuego = j.getUrlEmulador();
 								
 								if (urlJuego != null) {
 									try {
-										VentanaJuego ventanaJuego = new VentanaJuego(urlJuego);
+										VentanaJuego ventanaJuego = new VentanaJuego(api, j.getId(), urlJuego);
 										ventanaJuego.setVisible(true);
 									} catch (Exception ex) {
 										ex.printStackTrace();
@@ -122,39 +118,11 @@ public class ListadoJuegos extends JFrame {
 		tarjeta.setBackground(UIHelper.COLOR_TARJETA);
 		tarjeta.setBorder(BorderFactory.createLineBorder(UIHelper.COLOR_BORDE, 2));
 
-		String nombreArchivo = "esw-logo.png"; 
-
-		if (juego.getId() == 1) {
-			nombreArchivo = "Street-Fighter-II-USA_cover_1024x705.jpg";
-		} else if (juego.getId() == 2) {
-			nombreArchivo = "doom_1993_cover_720x1080.jpg"; 
-		} else if (juego.getId() == 3) {
-			nombreArchivo = "Wolfenstein 3D (PC Version).jpg"; 
-		} else if (juego.getId() == 4) {
-			nombreArchivo = "Super-Mario-Word_1990_cover_474x332.jpg";
-		}
-
-		String ruta = "/img/" + nombreArchivo;
-		URL imgURL = getClass().getResource(ruta);
-		
 		JLabel lblImagen = new JLabel();
 		lblImagen.setHorizontalAlignment(SwingConstants.CENTER);
 		lblImagen.setPreferredSize(new Dimension(UIHelper.ANCHO_PORTADA, UIHelper.ALTO_PORTADA));
-
-		if (imgURL != null) {
-			ImageIcon iconOriginal = new ImageIcon(imgURL);
-			Image imagenEscalada = iconOriginal.getImage().getScaledInstance(
-					UIHelper.ANCHO_PORTADA, 
-					UIHelper.ALTO_PORTADA, 
-					Image.SCALE_SMOOTH
-			);
-			lblImagen.setIcon(new ImageIcon(imagenEscalada));
-		} else {
-			lblImagen.setText("Sin Imagen");
-			lblImagen.setFont(UIHelper.FONT_TARJETA);
-			lblImagen.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
-			System.out.println("No se encontró la imagen: " + ruta);
-		}
+		ImagenHelper.cargarImagen(juego.getUrlPortada(), juego.getTitulo(), lblImagen,
+				UIHelper.ANCHO_PORTADA, UIHelper.ALTO_PORTADA);
 		
 		tarjeta.add(lblImagen, BorderLayout.CENTER);
 
@@ -176,8 +144,9 @@ public class ListadoJuegos extends JFrame {
 	public static void main(String[] args) {
 		java.awt.EventQueue.invokeLater(() -> {
 			try {
-				IApi apiPrueba = new ar.edu.unrn.seminario.api.MemoryApi();
-				ListadoJuegos frame = new ListadoJuegos(apiPrueba);
+				ConnectionManager.getConnection();
+				IApi api = new PersistenceApi(new JuegoDAOJDBC());
+				ListadoJuegos frame = new ListadoJuegos(api);
 				frame.setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();

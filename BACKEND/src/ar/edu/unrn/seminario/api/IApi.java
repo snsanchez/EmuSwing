@@ -1,6 +1,7 @@
 package ar.edu.unrn.seminario.api;
 import ar.edu.unrn.seminario.exception.CatalogoVacioException;
 import ar.edu.unrn.seminario.exception.UsuarioExistenteException;
+import ar.edu.unrn.seminario.modelo.Juego;
 import ar.edu.unrn.seminario.exception.RolNoEncontradoException;
 
 import java.util.List;
@@ -51,14 +52,15 @@ public interface IApi {
 	
 	String getGanador();
 	
-	Integer obtenerHorasJugadas(String username);
+	Double obtenerHorasJugadas(String username);
 	
 	boolean otorgarSuscripcionAutomatico(String username);
 	
 	boolean obtenerEstadoSuscripcion(String username);
 	
+	void registrarHorasJugadas(String username, Integer idJuego, Double horas);
 	
-
+	
 	// para los juegos favoritos
 	void agregarAFavoritos(Integer idJuego);
 	void quitarDeFavoritos(Integer idJuego);
@@ -68,4 +70,27 @@ public interface IApi {
 	List<JuegoDTO> obtenerJuegosBiblioteca() throws CatalogoVacioException;
 
 	List<JuegoDTO> obtenerJuegos() throws CatalogoVacioException;
+
+	void registrarJuego(Juego juego);
+	// Registrar un juego en la BD
+
+	JuegoDTO getJuegoPorId(Integer idJuego);
+	// Obtener un juego de la BD por su ID
+
+	void eliminarJuego(Juego juego);
+	// Eliminar un juego de la BD
+
+	void eliminarJuegoPorId(Integer idJuego);
+
+	void actualizarJuego(Juego juego);
+
+	
+
+
+
+
+
+
+
+
 }

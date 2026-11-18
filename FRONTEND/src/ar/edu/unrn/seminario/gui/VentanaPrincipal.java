@@ -4,6 +4,7 @@
 package ar.edu.unrn.seminario.gui;
 
 import ar.edu.unrn.seminario.helpers.UIHelper;
+import ar.edu.unrn.seminario.helpers.ImagenHelper;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -31,7 +32,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import ar.edu.unrn.seminario.api.IApi;
-import ar.edu.unrn.seminario.api.MemoryApi;
+import ar.edu.unrn.seminario.api.PersistenceApi;
+import ar.edu.unrn.seminario.dao.ConnectionManager;
+import ar.edu.unrn.seminario.dao.JuegoDAOJDBC;
+import ar.edu.unrn.seminario.dto.JuegoDTO;
+import ar.edu.unrn.seminario.exception.CatalogoVacioException;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -46,11 +51,17 @@ public class VentanaPrincipal extends JFrame {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    IApi api = new MemoryApi();
+                    ConnectionManager.getConnection();
+                    IApi api = new PersistenceApi(new JuegoDAOJDBC());
 
                     VentanaPrincipal frame = new VentanaPrincipal(api);
                     frame.setVisible(true);
 
+                } catch (ar.edu.unrn.seminario.exception.ConexionBaseDeDatosException e) {
+                    javax.swing.JOptionPane.showMessageDialog(null,
+                            e.getMessage(),
+                            "Error de conexión",
+                            javax.swing.JOptionPane.ERROR_MESSAGE);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -86,7 +97,7 @@ public class VentanaPrincipal extends JFrame {
         panelMenu.setOpaque(false);
 
         panelMenu.add(crearBotonMenu("Mi Perfil"));
-        
+
      // --- BOTÓN BIBLIOTECA CON SU CONEXIÓN Y LISTENER ---
         JButton btnMenuBiblioteca = crearBotonMenu("Biblioteca");
         btnMenuBiblioteca.addActionListener(e -> {
@@ -95,13 +106,13 @@ public class VentanaPrincipal extends JFrame {
                 ventanaBiblioteca.setVisible(true);
             } catch (Exception ex) {
                 ex.printStackTrace();
-                javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this, 
-                    "Error al abrir la biblioteca.", 
+                javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this,
+                    "Error al abrir la biblioteca.",
                     "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             }
         });
         panelMenu.add(btnMenuBiblioteca);
-        
+
      // Botón Registrar Usuario
         JButton btnRegistrarUsuario = crearBotonMenu("Registrar Usuario");
 
@@ -112,28 +123,36 @@ public class VentanaPrincipal extends JFrame {
 
         panelMenu.add(btnRegistrarUsuario);
         
-        // -- BOTON JUEGOS PARA LA CONEXION CON LISTADO JUEGOS --
-        JButton btnMenuJuegos = crearBotonMenu("Juegos");
-        btnMenuJuegos.addActionListener(e -> {
+     // --- BOTÓN REGISTRAR JUEGO ----
+        JButton btnRegistrarJuego = crearBotonMenu("Registrar Juego");
+        btnRegistrarJuego.addActionListener(e -> {
             try {
-                ListadoJuegos ventanaListado = new ListadoJuegos(api);
-                ventanaListado.setVisible(true);
+                RegistrarJuego ventanaRegistrar = new RegistrarJuego(api);
+                ventanaRegistrar.setVisible(true);
             } catch (Exception ex) {
                 ex.printStackTrace();
-                javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this, 
-                    "Error al abrir el catálogo de juegos.", 
-                    "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this,
+                        "Error al abrir el registro de juegos.",
+                        "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             }
         });
-        panelMenu.add(btnMenuJuegos);
+        panelMenu.add(btnRegistrarJuego);
         
         panelMenu.add(crearBotonMenu("Tienda"));
-        panelMenu.add(crearBotonMenu("Soporte"));
+
+        JButton btnSoporte = crearBotonMenu("Soporte");
+        btnSoporte.addActionListener(e -> javax.swing.JOptionPane.showMessageDialog(
+                VentanaPrincipal.this,
+                "Repositorio: https://github.com/snsanchez/EmuSwing\n"
+                        + "Desarrolladores: Thiago García, Santiago Sánchez, Joaquín Cuevas, Ramiro Gomez, Thiago Muñoz",
+                "Soporte",
+                javax.swing.JOptionPane.INFORMATION_MESSAGE));
+        panelMenu.add(btnSoporte);
 
         JButton btnAjustes = crearBotonMenu("Ajustes");
         btnAjustes.addActionListener(e -> {
         	String usuarioGanador = api.getGanador();		//uso la api para obtener el usuario con mas horas
-        	
+
             VentanaConfiguracion ventanaConfig = new VentanaConfiguracion(api, usuarioGanador);		//aca abre ajustes pasando el usuario ganador
             ventanaConfig.setVisible(true);
         });
@@ -162,14 +181,13 @@ public class VentanaPrincipal extends JFrame {
 
         panelLogo.setOpaque(false);
 
-        URL imgURL = getClass().getResource("/img/esw-logo.png");
+        URL imgURL = getClass().getResource("/img/esw-logo-dark-nobg.png");
 
         if (imgURL != null) {
 
             ImageIcon iconOriginal = new ImageIcon(imgURL);
             // escalar la imagen para que no se vea gigante
-            Image imagenEscalada = iconOriginal.getImage().getScaledInstance(170, 134, Image.SCALE_SMOOTH);
-            JLabel lblLogo = new JLabel(new ImageIcon(imagenEscalada));
+            JLabel lblLogo = new JLabel(iconOriginal);
             panelLogo.add(lblLogo);
 
         } else {
@@ -177,7 +195,7 @@ public class VentanaPrincipal extends JFrame {
             lblLogo.setFont(UIHelper.FONT_TITULO);
             lblLogo.setForeground(UIHelper.COLOR_TEXTO);
             panelLogo.add(lblLogo);
-            System.out.println("No se encontró la imagen: /img/esw-logo.png");
+            System.out.println("No se encontró la imagen del logo");
         }
 
         panelHome.add(panelLogo, BorderLayout.NORTH);
@@ -210,29 +228,45 @@ public class VentanaPrincipal extends JFrame {
 
         JPanel panelUltimosJuegos = new JPanel(new BorderLayout(0, 8));
         panelUltimosJuegos.setOpaque(false);
-        JLabel lblUltimoJuegoJugado = new JLabel("Tus últimos juegos");
-        lblUltimoJuegoJugado.setFont(UIHelper.FONT_SECCION);
-        lblUltimoJuegoJugado.setForeground(UIHelper.COLOR_ACENTO);
-        panelUltimosJuegos.add(lblUltimoJuegoJugado, BorderLayout.NORTH);
 
-        // estos son solo datos de prueba, despues habria que cargarlos desde IApi
-        // pasando por una base de datos
-        String[] nombresJuegos = { "Super Street Fighter II", "Super Mario World", "Doom" };
-        String[] imagenesJuegos = { "/img/Street-Fighter-II-USA_cover_1024x705.jpg",
-                "/img/Super-Mario-Word_1990_cover_474x332.jpg", "/img/doom_1993_cover_720x1080.jpg" };
-        // GridLayout mantiene las tres tarjetas del mismo tamaño
-        JPanel panelTarjetas = new JPanel(new GridLayout(1, 3, 20, 0));
+        List<JuegoDTO> juegosRecientes = new ArrayList<JuegoDTO>();
+
+        // Simulación: se muestran hasta tres juegos reales del catálogo.
+        try {
+            List<JuegoDTO> juegos = api.obtenerJuegos();
+            int cantidad = Math.min(3, juegos.size());
+
+            for (int i = 0; i < cantidad; i++) {
+                juegosRecientes.add(juegos.get(i));
+            }
+        } catch (CatalogoVacioException e) {
+            System.out.println(e.getMessage());
+        } catch (ar.edu.unrn.seminario.exception.ConexionBaseDeDatosException e) {
+            throw e;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // GridLayout mantiene las tarjetas del mismo tamaño
+        JPanel panelTarjetas = new JPanel(new GridLayout(1,
+                Math.max(1, juegosRecientes.size()), 20, 0));
 
         panelTarjetas.setOpaque(false);
 
         panelTarjetas.setBorder(new EmptyBorder(5, 35, 5, 35));
 
-        for (int i = 0; i < nombresJuegos.length; i++) {
+        if (juegosRecientes.isEmpty()) {
+            JLabel lblSinJuegos = new JLabel("No hay juegos disponibles", SwingConstants.CENTER);
+            lblSinJuegos.setFont(UIHelper.FONT_SUBTITULO);
+            lblSinJuegos.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
+            panelTarjetas.add(lblSinJuegos);
+        } else {
+            for (JuegoDTO juego : juegosRecientes) {
+                JPanel tarjeta = crearTarjetaJuego(juego.getTitulo(), juego.getUrlPortada());
 
-            JPanel tarjeta = crearTarjetaJuego(nombresJuegos[i], imagenesJuegos[i]);
-
-            tarjetas.add(tarjeta);
-            panelTarjetas.add(tarjeta);
+                tarjetas.add(tarjeta);
+                panelTarjetas.add(tarjeta);
+            }
         }
 
         panelUltimosJuegos.add(panelTarjetas, BorderLayout.CENTER);
@@ -246,38 +280,43 @@ public class VentanaPrincipal extends JFrame {
         // el \u25B6 es Unicode para el icono de jugar
         JButton btnJugar = crearBotonAccion("\u25B6  Jugar", true);
 
-        // --- LISTENER DEL BOTÓN JUGAR 
+        // --- LISTENER DEL BOTÓN JUGAR
      		btnJugar.addActionListener(e -> {
      			// Verificamos que el usuario haya hecho clic en alguna tarjeta
      			if (juegoSeleccionado == null) {
-     				javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this, 
-     						"Por favor, seleccioná un juego primero.", 
+     				javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this,
+     						"Por favor, seleccioná un juego primero.",
      						"Atención", javax.swing.JOptionPane.WARNING_MESSAGE);
      				return;
      			}
 
      			// Buscamos la URL del juego usando el método getUrlJuegoByTitulo
-     			String urlJuego = api.getUrlJuegoByTitulo(juegoSeleccionado);
+                try {
+                    String urlJuego = api.getUrlJuegoByTitulo(juegoSeleccionado);
+                    Integer idJuego = api.getIdJuegoPorTitulo(juegoSeleccionado);
 
-     			if (urlJuego != null) {
-     				try {
-     					// Lanzamos el emulador web real
-     					VentanaJuego ventana = new VentanaJuego(urlJuego);
-     					ventana.setVisible(true);
-     				} catch (Exception ex) {
-     					ex.printStackTrace();
-     					javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this, 
-     						"Error al intentar iniciar el juego.", 
-     						"Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-     				}
-     			} else {
-     				javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this, 
-     						"El enlace para este juego no está disponible en la base de datos.", 
-     						"Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-     			}
+                    if (urlJuego != null && idJuego != null) {
+                        VentanaJuego ventana = new VentanaJuego(api, idJuego, urlJuego);
+                        ventana.setVisible(true);
+                    } else {
+                        javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this,
+                                "El enlace para este juego no está disponible en la base de datos.",
+                                "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (ar.edu.unrn.seminario.exception.ConexionBaseDeDatosException ex) {
+                    javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this,
+                            ex.getMessage(),
+                            "Error de conexión",
+                            javax.swing.JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this,
+                            "Error al intentar iniciar el juego.",
+                            "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                }
      		});
      		// ------------------------------------------------
-        
+
         panelAcciones.add(btnDetalles);
         panelAcciones.add(btnJugar);
         panelContenido.add(panelAcciones, BorderLayout.SOUTH);
@@ -397,42 +436,50 @@ public class VentanaPrincipal extends JFrame {
 
         lblPortada.setVerticalAlignment(SwingConstants.CENTER);
 
+        lblPortada.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
+
+        lblPortada.setFont(UIHelper.FONT_LABEL);
+
         lblPortada.setPreferredSize(new Dimension(UIHelper.ANCHO_PORTADA, UIHelper.ALTO_PORTADA));
 
-        URL urlImagen = getClass().getResource(rutaImagen);
-
-        if (urlImagen != null) {
-
-            ImageIcon iconoOriginal = new ImageIcon(urlImagen);
-
-            Image imagenOriginal = iconoOriginal.getImage();
-
-            int anchoOriginal = imagenOriginal.getWidth(null);
-
-            int altoOriginal = imagenOriginal.getHeight(null);
-
-            // Ajustamos la imagen para que entre dentro del espacio disponible sin
-            // deformarla y sin recortar partes de la portada.
-            // Tambien podriamos recortarla fisicamente manteniendo la relacion de aspecto.
-            // 3:4?
-            double escala = Math.min((double) UIHelper.ANCHO_PORTADA / anchoOriginal,
-                    (double) UIHelper.ALTO_PORTADA / altoOriginal);
-
-            int anchoEscalado = (int) (anchoOriginal * escala);
-
-            int altoEscalado = (int) (altoOriginal * escala);
-
-            Image imagenEscalada = imagenOriginal.getScaledInstance(anchoEscalado, altoEscalado, Image.SCALE_SMOOTH);
-
-            lblPortada.setIcon(new ImageIcon(imagenEscalada));
-
+        if (rutaImagen == null || rutaImagen.trim().isEmpty() || rutaImagen.startsWith("https://")) {
+            ImagenHelper.cargarImagen(rutaImagen, nombreJuego, lblPortada, UIHelper.ANCHO_PORTADA, UIHelper.ALTO_PORTADA);
         } else {
+            URL urlImagen = getClass().getResource(rutaImagen);
 
-            lblPortada.setText("Sin imagen");
+            if (urlImagen != null) {
 
-            lblPortada.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
+                ImageIcon iconoOriginal = new ImageIcon(urlImagen);
 
-            System.out.println("No se encontró la imagen: " + rutaImagen);
+                Image imagenOriginal = iconoOriginal.getImage();
+
+                int anchoOriginal = imagenOriginal.getWidth(null);
+
+                int altoOriginal = imagenOriginal.getHeight(null);
+
+                // Ajustamos la imagen para que entre dentro del espacio disponible sin
+                // deformarla y sin recortar partes de la portada.
+                // Tambien podriamos recortarla fisicamente manteniendo la relacion de aspecto.
+                // 3:4?
+                double escala = Math.min((double) UIHelper.ANCHO_PORTADA / anchoOriginal,
+                        (double) UIHelper.ALTO_PORTADA / altoOriginal);
+
+                int anchoEscalado = (int) (anchoOriginal * escala);
+
+                int altoEscalado = (int) (altoOriginal * escala);
+
+                Image imagenEscalada = imagenOriginal.getScaledInstance(anchoEscalado, altoEscalado, Image.SCALE_SMOOTH);
+
+                lblPortada.setIcon(new ImageIcon(imagenEscalada));
+
+            } else {
+
+                lblPortada.setText("Sin imagen");
+
+                lblPortada.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
+
+                System.out.println("No se encontró la imagen: " + rutaImagen);
+            }
         }
 
         // ---------- NOMBRE

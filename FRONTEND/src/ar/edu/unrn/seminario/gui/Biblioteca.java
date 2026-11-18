@@ -5,29 +5,35 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Image;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.api.PersistenceApi;
+import ar.edu.unrn.seminario.dao.ConnectionManager;
+import ar.edu.unrn.seminario.dao.JuegoDAOJDBC;
 import ar.edu.unrn.seminario.dto.JuegoDTO;
 import ar.edu.unrn.seminario.exception.CatalogoVacioException;
+import ar.edu.unrn.seminario.helpers.ImagenHelper;
 import ar.edu.unrn.seminario.helpers.UIHelper;
 
 public class Biblioteca extends JFrame {
@@ -38,12 +44,20 @@ public class Biblioteca extends JFrame {
 	// Variables para manejar la selección
 	private JuegoDTO juegoSeleccionado;
 	private final List<JPanel> filasJuegos = new ArrayList<>();
+
+	// Atributos necesarios para el buscador y lista en memoria.
+	private List<JuegoDTO> listaCompletaJuegos = new ArrayList<>();
+	private JTextField txtBuscador;
+	private JPanel panelSugerencias;
+	//Constante para el texto del placeholder
+	private static final String PLACEHOLDER_BUSCADOR = "Buscar Juego";
 	
 	public static void main(String[] args) {
 		java.awt.EventQueue.invokeLater(() -> {
 			try {
-				IApi apiPrueba = new ar.edu.unrn.seminario.api.MemoryApi();
-				Biblioteca frame = new Biblioteca(apiPrueba);
+				ConnectionManager.getConnection();
+				IApi api = new PersistenceApi(new JuegoDAOJDBC());
+				Biblioteca frame = new Biblioteca(api);
 				frame.setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -94,6 +108,58 @@ public class Biblioteca extends JFrame {
 		JPanel panelMargen = new JPanel(new BorderLayout());
 		panelMargen.setBackground(UIHelper.COLOR_FONDO);
 		panelMargen.setBorder(new EmptyBorder(0, 50, 20, 50));
+
+		// Bloque de barra de búsqueda y desplegable de sugerencias.
+		JPanel panelBusquedaContenedor = new JPanel(new BorderLayout());
+		panelBusquedaContenedor.setBackground(UIHelper.COLOR_FONDO);
+		panelBusquedaContenedor.setBorder(new EmptyBorder(0, 0, 15, 0));
+
+		// Se inicializa con el placeholder y color de texto secundario
+		txtBuscador = new JTextField(PLACEHOLDER_BUSCADOR);
+		txtBuscador.setFont(UIHelper.FONT_MENU);
+		txtBuscador.setBackground(UIHelper.COLOR_TARJETA_HOVER);
+		txtBuscador.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
+		txtBuscador.setCaretColor(UIHelper.COLOR_ACENTO);
+		txtBuscador.setBorder(new CompoundBorder(
+			new LineBorder(UIHelper.COLOR_ACENTO, 2, true),
+			new EmptyBorder(8, 12, 8, 12)
+		));
+
+		panelSugerencias = new JPanel();
+		panelSugerencias.setLayout(new BoxLayout(panelSugerencias, BoxLayout.Y_AXIS));
+		panelSugerencias.setBackground(UIHelper.COLOR_TARJETA);
+		panelSugerencias.setBorder(new LineBorder(UIHelper.COLOR_BORDE, 1, true));
+		panelSugerencias.setVisible(false);
+
+		// Listener para ocultar/mostrar el placeholder al hacer clic o salir
+		txtBuscador.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (txtBuscador.getText().equals(PLACEHOLDER_BUSCADOR)) {
+					txtBuscador.setText("");
+					txtBuscador.setForeground(UIHelper.COLOR_TEXTO);
+				}
+			}
+			@Override
+			public void focusLost(FocusEvent e) {
+				if (txtBuscador.getText().trim().isEmpty()) {
+					txtBuscador.setText(PLACEHOLDER_BUSCADOR);
+					txtBuscador.setForeground(UIHelper.COLOR_TEXTO_SECUNDARIO);
+				}
+			}
+		});
+
+		txtBuscador.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				actualizarBusqueda();
+			}
+		});
+
+		panelBusquedaContenedor.add(txtBuscador, BorderLayout.NORTH);
+		panelBusquedaContenedor.add(panelSugerencias, BorderLayout.CENTER);
+		panelMargen.add(panelBusquedaContenedor, BorderLayout.NORTH);
+
 		panelMargen.add(scrollPane, BorderLayout.CENTER);
 		
 		contentPane.add(panelMargen, BorderLayout.CENTER);
@@ -108,22 +174,19 @@ public class Biblioteca extends JFrame {
 		JButton btnVerFavoritos = crearBotonAccion("★ Ver Favoritos", false);
 		
 		// Lógica del nuevo botón "Ver Favoritos"
-				btnVerFavoritos.addActionListener(e -> {
-					try {
-						// Instanciamos la ventana que vamos a crear en el próximo paso
-						BibliotecaFavoritos ventanaFavoritos = new BibliotecaFavoritos(api);
-						ventanaFavoritos.setVisible(true);
-								
-						// Opcional: cerramos esta ventana para no apilar muchas pantallas
-						dispose(); 
-					  } catch (Exception ex) {
-						ex.printStackTrace();
-						javax.swing.JOptionPane.showMessageDialog(this, "Error al abrir favoritos.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-					}
-				});
-			
-		
-		
+		btnVerFavoritos.addActionListener(e -> {
+			try {
+				// Instanciamos la ventana que vamos a crear en el próximo paso
+				BibliotecaFavoritos ventanaFavoritos = new BibliotecaFavoritos(api);
+				ventanaFavoritos.setVisible(true);
+						
+				// Opcional: cerramos esta ventana para no apilar muchas pantallas
+				dispose(); 
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				javax.swing.JOptionPane.showMessageDialog(this, "Error al abrir favoritos.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+			}
+		});
 
 		// Lógica del botón Jugar
 		btnJugar.addActionListener(e -> {
@@ -132,9 +195,11 @@ public class Biblioteca extends JFrame {
 				return;
 			}
 			String urlJuego = api.getUrlJuegoByTitulo(juegoSeleccionado.getTitulo());
+			// reemplazar por String urlJuego = juegoSeleccionado.getUrlEmulador();
+
 			if (urlJuego != null) {
 				try {
-					VentanaJuego ventana = new VentanaJuego(urlJuego);
+					VentanaJuego ventana = new VentanaJuego(api, juegoSeleccionado.getId(), urlJuego);
 					ventana.setVisible(true);
 				} catch (Exception ex) {
 					ex.printStackTrace();
@@ -179,17 +244,17 @@ public class Biblioteca extends JFrame {
 
 		// ---------- CARGA DE JUEGOS ----------
 		cargarJuegos();
+
+		// Evita que el buscador tome foco automático al abrir la ventana
+		panelEncabezado.setFocusable(true);
+		javax.swing.SwingUtilities.invokeLater(() -> panelEncabezado.requestFocusInWindow());
 	}
 
 	private void cargarJuegos() {
 		try {
-			List<JuegoDTO> juegosTodos = api.obtenerJuegos();
-			for (JuegoDTO j : juegosTodos) {
-				JPanel filaJuego = crearFilaJuego(j);
-				panelListaJuegos.add(filaJuego);
-				filasJuegos.add(filaJuego); 
-				panelListaJuegos.add(javax.swing.Box.createRigidArea(new Dimension(0, 15)));
-			}
+			// Guardamos los juegos en memoria y delegamos el dibujado
+			listaCompletaJuegos = api.obtenerJuegos();
+			renderizarListaJuegos(listaCompletaJuegos);
 		} catch (CatalogoVacioException e) {
 			JLabel lblVacio = new JLabel(e.getMessage(), SwingConstants.CENTER);
 			lblVacio.setFont(UIHelper.FONT_SUBTITULO);
@@ -197,6 +262,91 @@ public class Biblioteca extends JFrame {
 			panelListaJuegos.add(lblVacio);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	// Métodos nuevos para dibujar dinámicamente y filtrar con stream
+	private void renderizarListaJuegos(List<JuegoDTO> juegosAMostrar) {
+		panelListaJuegos.removeAll();
+		filasJuegos.clear();
+		juegoSeleccionado = null;
+
+		for (JuegoDTO j : juegosAMostrar) {
+			JPanel filaJuego = crearFilaJuego(j);
+			panelListaJuegos.add(filaJuego);
+			filasJuegos.add(filaJuego);
+			panelListaJuegos.add(javax.swing.Box.createRigidArea(new Dimension(0, 15)));
+		}
+
+		panelListaJuegos.revalidate();
+		panelListaJuegos.repaint();
+	}
+
+	private void actualizarBusqueda() {
+		String textoRaw = txtBuscador.getText().trim();
+		String texto = textoRaw.toLowerCase();
+		panelSugerencias.removeAll();
+
+		// Si está vacío o tiene el placeholder, mostramos toda la lista
+		if (texto.isEmpty() || textoRaw.equals(PLACEHOLDER_BUSCADOR)) {
+			panelSugerencias.setVisible(false);
+			renderizarListaJuegos(listaCompletaJuegos);
+			return;
+		}
+
+		List<JuegoDTO> coincidencias = listaCompletaJuegos.stream()
+				.filter(j -> j.getTitulo().toLowerCase().contains(texto))
+				.collect(Collectors.toList());
+
+		if (coincidencias.isEmpty()) {
+			panelSugerencias.setVisible(false);
+		} else {
+			for (JuegoDTO juego : coincidencias) {
+				JLabel lblSugerencia = new JLabel(juego.getTitulo());
+				lblSugerencia.setFont(UIHelper.FONT_MENU);
+				lblSugerencia.setForeground(UIHelper.COLOR_TEXTO);
+				lblSugerencia.setBorder(new EmptyBorder(6, 12, 6, 12));
+				lblSugerencia.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				lblSugerencia.setOpaque(true);
+				lblSugerencia.setBackground(UIHelper.COLOR_TARJETA);
+
+				lblSugerencia.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						txtBuscador.setText(juego.getTitulo());
+						txtBuscador.setForeground(UIHelper.COLOR_TEXTO);
+						panelSugerencias.setVisible(false);
+						filtrarYSeleccionar(juego);
+					}
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						lblSugerencia.setBackground(UIHelper.COLOR_TARJETA_HOVER);
+					}
+					@Override
+					public void mouseExited(MouseEvent e) {
+						lblSugerencia.setBackground(UIHelper.COLOR_TARJETA);
+					}
+				});
+
+				panelSugerencias.add(lblSugerencia);
+			}
+			panelSugerencias.setVisible(true);
+		}
+
+		panelSugerencias.revalidate();
+		panelSugerencias.repaint();
+		renderizarListaJuegos(coincidencias);
+	}
+
+	private void filtrarYSeleccionar(JuegoDTO juegoElegido) {
+		List<JuegoDTO> unicoJuego = listaCompletaJuegos.stream()
+				.filter(j -> j.getId().equals(juegoElegido.getId()))
+				.collect(Collectors.toList());
+
+		renderizarListaJuegos(unicoJuego);
+
+		if (!filasJuegos.isEmpty()) {
+			seleccionarFila(filasJuegos.get(0), juegoElegido);
 		}
 	}
 
@@ -210,21 +360,7 @@ public class Biblioteca extends JFrame {
 		JLabel lblPortada = new JLabel();
 		lblPortada.setPreferredSize(new Dimension(80, 100)); 
 		
-		String nombreArchivo = "esw-logo.png"; 
-		if (juego.getId().equals(api.getIdJuegoPorTitulo("Super Street Fighter II"))) nombreArchivo = "Street-Fighter-II-USA_cover_1024x705.jpg";
-		else if (juego.getId().equals(api.getIdJuegoPorTitulo("DOOM"))) nombreArchivo = "doom_1993_cover_720x1080.jpg"; 
-		else if (juego.getId().equals(api.getIdJuegoPorTitulo("Wolfenstein 3D"))) nombreArchivo = "Wolfenstein 3D (PC Version).jpg";
-		else if (juego.getId().equals(api.getIdJuegoPorTitulo("Super Mario World"))) nombreArchivo = "Super-Mario-Word_1990_cover_474x332.jpg"; 
-
-		URL imgURL = getClass().getResource("/img/" + nombreArchivo);
-		if (imgURL != null) {
-			ImageIcon iconOriginal = new ImageIcon(imgURL);
-			Image imagenEscalada = iconOriginal.getImage().getScaledInstance(80, 100, Image.SCALE_SMOOTH);
-			lblPortada.setIcon(new ImageIcon(imagenEscalada));
-		} else {
-			lblPortada.setText("Sin IMG");
-			lblPortada.setForeground(Color.GRAY);
-		}
+		ImagenHelper.cargarImagen(juego.getUrlPortada(), juego.getTitulo(), lblPortada, 80, 100);
 		fila.add(lblPortada, BorderLayout.WEST);
 
 		JLabel lblTitulo = new JLabel(juego.getTitulo());
