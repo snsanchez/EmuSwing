@@ -3,6 +3,7 @@ package ar.edu.unrn.seminario.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import ar.edu.unrn.seminario.exception.ConexionBaseDeDatosException;
 
 public class ConnectionManager {
 
@@ -16,8 +17,8 @@ public class ConnectionManager {
 	try {
 				conn = DriverManager.getConnection(URL_DB, USER, PASS);
 			} catch (SQLException sqlEx) {
-				System.out.println("No se ha podido conectar a " + URL_DB + ". " + sqlEx.getMessage());
-				System.out.println("Error al cargar el driver");
+				conn = null;
+				throw new ConexionBaseDeDatosException("No se ha podido conectar a " + URL_DB + ". " + sqlEx.getMessage());
 			}
 		}
 
@@ -25,9 +26,10 @@ public class ConnectionManager {
 	    if (conn != null) {
 				try{
 				conn.close();
-				conn = null;
 			}catch (SQLException e){
 			    e.printStackTrace();
+			} finally {
+				conn = null;
 			}
 		}
 	}
@@ -38,10 +40,16 @@ public class ConnectionManager {
 	}
 
 	public static Connection getConnection() {
-	    if (conn == null) {
+		try {
+			if (conn == null || conn.isClosed()) {
+				conn = null;
+				connect();
+			}
+		} catch (SQLException e) {
+			conn = null;
 			connect();
-	    }
-	    return conn;
+		}
+		return conn;
 	}
 
 }

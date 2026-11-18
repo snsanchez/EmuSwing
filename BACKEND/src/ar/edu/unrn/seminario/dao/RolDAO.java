@@ -1,0 +1,19 @@
+package ar.edu.unrn.seminario.dao;
+import java.util.List;
+
+import ar.edu.unrn.seminario.modelo.Rol;
+
+public interface RolDAO {
+	void create(Rol rol);
+
+	void update(Rol rol);
+
+	void remove(Long id);
+
+	void remove(Rol rol);
+
+	Rol find(Integer codigo);
+
+	List<Rol> findAll();
+
+}

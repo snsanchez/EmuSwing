@@ -46,8 +46,8 @@ public class JuegoDAOJDBC implements JuegoDAO {
 		} catch (SQLException e) {
 			throw new JuegoDAOException("Error al procesar la inserción del juego.", e.getSQLState(), e);
 		}
-    	
-    	
+
+
     }
 
     @Override
@@ -92,8 +92,8 @@ public class JuegoDAOJDBC implements JuegoDAO {
         try(Connection conn = ConnectionManager.getConnection();
             PreparedStatement statement = conn.prepareStatement(
                     "DELETE FROM juegos WHERE id = ?");){
-            
-            
+
+
 
             statement.setInt(1, id);
             int cantidad = statement.executeUpdate();
@@ -128,7 +128,7 @@ public class JuegoDAOJDBC implements JuegoDAO {
 		try (Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn.prepareStatement(
 					"SELECT * FROM juegos WHERE id = ?");){
-			
+
 
 			statement.setInt(1, id);
 
@@ -142,7 +142,7 @@ public class JuegoDAOJDBC implements JuegoDAO {
 		}
 
 
-        return juego;                
+        return juego;
     }
 
     @Override
@@ -165,4 +165,3 @@ public class JuegoDAOJDBC implements JuegoDAO {
         return juegos;
     }
 }
-

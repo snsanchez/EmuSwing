@@ -1,6 +1,16 @@
 -- datos de prueba para ingresar juegos
 use emuswing_db;
 
+INSERT INTO roles (codigo, nombre) VALUES
+(1, "ADMIN"),
+(2, "ESTUDIANTE"),
+(3, "INVITADO");
+
+INSERT INTO usuarios (usuario, contrasena, nombre, email, codigo_rol, activo, estado_suscripcion) VALUES
+("admin", "1234", "Admin", "admin@unrn.edu.ar", 1, FALSE, FALSE),
+("ldifabio", "4", "Lucas", "ldifabio@unrn.edu.ar", 2, FALSE, FALSE),
+("bjgorosito", "1234", "Bruno", "bjgorosito@unrn.edu.ar", 3, FALSE, FALSE);
+
 INSERT INTO juegos (titulo, genero, desarrollador, consola, anio, urlPortada, urlEmulador) VALUES
 ("Super Street Fighter II", "Lucha", "Capcom", "SNES", 1993, "https://dn721803.ca.archive.org/0/items/Super_Street_Fighter_II_USA.md/00_coverscreenshot.png", "https://archive.org/embed/Super_Street_Fighter_II_USA.md"),
 ("DOOM", "FPS", "id Software", "MS-DOS", 1993, "https://dn710106.ca.archive.org/0/items/doom1.21/Cover.jpg", "https://archive.org/embed/msdos_DOOM_1993"),
