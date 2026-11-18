@@ -113,7 +113,7 @@ public class VentanaPrincipal extends JFrame {
 
         panelMenu.add(btnRegistrarUsuario);
         
-     // --- BOTÓN REGISTRAR JUEGO ---
+     // --- BOTÓN REGISTRAR JUEGO ----
         JButton btnRegistrarJuego = crearBotonMenu("Registrar Juego");
         btnRegistrarJuego.addActionListener(e -> {
             try {
