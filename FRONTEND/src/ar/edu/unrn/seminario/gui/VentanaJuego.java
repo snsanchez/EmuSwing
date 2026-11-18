@@ -26,7 +26,11 @@ public class VentanaJuego extends JFrame {
     }
 
     public VentanaJuego(String urlJuego) {
-        this(null, "bjgorosito", 1, urlJuego);
+        this(null, null, null, urlJuego);
+    }
+
+    public VentanaJuego(IApi api, Integer idJuego, String urlJuego) {
+        this(api, "bjgorosito", idJuego, urlJuego);
     }
 
     public VentanaJuego(IApi api, String username, Integer idJuego, String urlJuego) {
@@ -73,11 +77,10 @@ public class VentanaJuego extends JFrame {
         long tiempoFin = System.currentTimeMillis();
         long milisegundosJugados = tiempoFin - tiempoInicio;
 
-        // 1 segundo = 1 hora simulada para probar en vivo
-        int horasJugadas = (int) (milisegundosJugados / 1000);
+        double horasJugadas = milisegundosJugados / 3_600_000.0;
 
-        if (api != null && horasJugadas > 0) {
-            api.registrarHorasJugadas("bjgorosito", idJuego, horasJugadas);
+        if (api != null && username != null && idJuego != null && horasJugadas > 0) {
+            api.registrarHorasJugadas(username, idJuego, horasJugadas);
         }
     }
 

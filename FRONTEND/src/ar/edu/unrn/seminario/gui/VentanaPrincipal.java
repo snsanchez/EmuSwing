@@ -138,21 +138,6 @@ public class VentanaPrincipal extends JFrame {
         });
         panelMenu.add(btnRegistrarJuego);
         
-        // -- BOTON JUEGOS PARA LA CONEXION CON LISTADO JUEGOS --
-        JButton btnMenuJuegos = crearBotonMenu("Juegos");
-        btnMenuJuegos.addActionListener(e -> {
-            try {
-                ListadoJuegos ventanaListado = new ListadoJuegos(api);
-                ventanaListado.setVisible(true);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this,
-                    "Error al abrir el catálogo de juegos.",
-                    "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-            }
-        });
-        panelMenu.add(btnMenuJuegos);
-
         panelMenu.add(crearBotonMenu("Tienda"));
 
         JButton btnSoporte = crearBotonMenu("Soporte");
@@ -308,9 +293,10 @@ public class VentanaPrincipal extends JFrame {
      			// Buscamos la URL del juego usando el método getUrlJuegoByTitulo
                 try {
                     String urlJuego = api.getUrlJuegoByTitulo(juegoSeleccionado);
+                    Integer idJuego = api.getIdJuegoPorTitulo(juegoSeleccionado);
 
-                    if (urlJuego != null) {
-                        VentanaJuego ventana = new VentanaJuego(urlJuego);
+                    if (urlJuego != null && idJuego != null) {
+                        VentanaJuego ventana = new VentanaJuego(api, idJuego, urlJuego);
                         ventana.setVisible(true);
                     } else {
                         javax.swing.JOptionPane.showMessageDialog(VentanaPrincipal.this,

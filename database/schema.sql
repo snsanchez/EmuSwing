@@ -26,10 +26,13 @@ CREATE TABLE IF NOT EXISTS juegos (
 CREATE TABLE IF NOT EXISTS registros_juego (
     username VARCHAR(100) NOT NULL,
     id_juego INT NOT NULL,
-    horas INT NOT NULL DEFAULT 0,
+    horas DECIMAL(10, 6) NOT NULL DEFAULT 0,
     CONSTRAINT pk_registros_juego PRIMARY KEY (username, id_juego),
     CONSTRAINT fk_registros_juego_juego FOREIGN KEY (id_juego) REFERENCES juegos(id)
 );
+
+ALTER TABLE registros_juego
+    MODIFY horas DECIMAL(10, 6) NOT NULL DEFAULT 0;
 
 
 CREATE TABLE IF NOT EXISTS roles (

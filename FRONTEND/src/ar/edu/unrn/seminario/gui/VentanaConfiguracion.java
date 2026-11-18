@@ -328,7 +328,7 @@ public class VentanaConfiguracion extends JFrame {
 		btnVerEstado.addActionListener(new java.awt.event.ActionListener() {
 		    public void actionPerformed(java.awt.event.ActionEvent e) {
 		        boolean esGanador = api.otorgarSuscripcionAutomatico(username);		//consulta los datos y estado de la suscripcion en la API
-		        Integer horas = api.obtenerHorasJugadas(username);
+		        Double horas = api.obtenerHorasJugadas(username);
 		        boolean estado = api.obtenerEstadoSuscripcion(username);
 		        
 		        String mensaje = "Usuario: " + username + "\n";			//arma un reporte para mostrar el cartel

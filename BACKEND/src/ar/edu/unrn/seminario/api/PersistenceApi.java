@@ -1,6 +1,8 @@
 package ar.edu.unrn.seminario.api;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import ar.edu.unrn.seminario.dao.JuegoDAO;
@@ -17,16 +19,21 @@ import ar.edu.unrn.seminario.exception.RolNoEncontradoException;
 import ar.edu.unrn.seminario.exception.UsuarioExistenteException;
 import ar.edu.unrn.seminario.mappers.JuegoMapper;
 import ar.edu.unrn.seminario.modelo.Juego;
+import ar.edu.unrn.seminario.modelo.RegistroJuego;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.exception.ConexionBaseDeDatosException;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.dao.ConnectionManager;
+import ar.edu.unrn.seminario.dao.RegistroJuegoDAO;
+import ar.edu.unrn.seminario.dao.RegistroJuegoDAOJDBC;
+
 
 public class PersistenceApi implements IApi {
 	private JuegoDAO juegoDAO;
 	private UsuarioDAO usuarioDAO;
 	private RolDAO rolDAO;
+	private RegistroJuegoDAO registroJuegoDAO = new RegistroJuegoDAOJDBC();
 
 	// agregar los demas DAOs
 
@@ -34,6 +41,17 @@ public class PersistenceApi implements IApi {
 		this.juegoDAO = juegoDAO;
 		this.usuarioDAO = usuarioDAOJDBC;
 		this.rolDAO = RolDAO;
+	}
+
+	// para registroJuego
+	public PersistenceApi(JuegoDAO juegoDAO, RegistroJuegoDAOJDBC registroJuegoDAOJDBC) {
+	    this.juegoDAO = juegoDAO;
+	    this.registroJuegoDAO = registroJuegoDAOJDBC;
+		
+	}
+	public PersistenceApi(JuegoDAO juegoDAO, RegistroJuegoDAO registroJuegoDAO) {
+	    this.juegoDAO = juegoDAO;
+	    this.registroJuegoDAO = registroJuegoDAO;
 	}
 
 	// para el registrarJuego
@@ -284,7 +302,7 @@ public class PersistenceApi implements IApi {
 	}
 
 	@Override
-	public void registrarHorasJugadas(String username, Integer idJuego, Integer horas) {
+	public void registrarHorasJugadas(String username, Integer idJuego, Double horas) {
 	    if (username == null || idJuego == null || horas == null || horas <= 0) {
 	        return;
 	    }
@@ -293,8 +311,8 @@ public class PersistenceApi implements IApi {
 	}
 
 	@Override
-	public Integer obtenerHorasJugadas(String username) {
-	    int totalHoras = 0;
+	public Double obtenerHorasJugadas(String username) {
+	    double totalHoras = 0;
 	    for (RegistroJuego r : registroJuegoDAO.findByUsername(username)) {
 	        if (r.getHoras() != null) {
 	            totalHoras += r.getHoras();
@@ -305,13 +323,13 @@ public class PersistenceApi implements IApi {
 
 	@Override
 	public String getGanador() {
-	    Map<String, Integer> acumuladoPorUsuario = new HashMap<>();
+	    Map<String, Double> acumuladoPorUsuario = new HashMap<>();
 	    for (RegistroJuego r : registroJuegoDAO.findAll()) {
-	        acumuladoPorUsuario.merge(r.getUsername(), r.getHoras(), Integer::sum);
+	        acumuladoPorUsuario.merge(r.getUsername(), r.getHoras(), Double::sum);
 	    }
 	    String ganador = null;
-	    int maxHoras = -1;
-	    for (Map.Entry<String, Integer> entry : acumuladoPorUsuario.entrySet()) {
+	    double maxHoras = -1;
+	    for (Map.Entry<String, Double> entry : acumuladoPorUsuario.entrySet()) {
 	        if (entry.getValue() > maxHoras) {
 	            maxHoras = entry.getValue();
 	            ganador = entry.getKey();

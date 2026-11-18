@@ -23,7 +23,7 @@ public class RegistroJuegoDAOJDBC implements RegistroJuegoDAO {
 
             statement.setString(1, registro.getUsername());
             statement.setInt(2, registro.getIdJuego());
-            statement.setInt(3, registro.getHoras());
+            statement.setDouble(3, registro.getHoras());
 
             int cantidad = statement.executeUpdate();
             if (cantidad == 0) {
@@ -46,7 +46,7 @@ public class RegistroJuegoDAOJDBC implements RegistroJuegoDAO {
         try (Connection conn = ConnectionManager.getConnection();
              PreparedStatement statement = conn.prepareStatement(sql)) {
 
-            statement.setInt(1, registro.getHoras());
+            statement.setDouble(1, registro.getHoras());
             statement.setString(2, registro.getUsername());
             statement.setInt(3, registro.getIdJuego());
 
@@ -93,7 +93,7 @@ public class RegistroJuegoDAOJDBC implements RegistroJuegoDAO {
                     registro = new RegistroJuego(
                             rs.getString("username"),
                             rs.getInt("id_juego"),
-                            rs.getInt("horas"));
+                            rs.getDouble("horas"));
                 }
             }
         } catch (SQLException e) {
@@ -117,7 +117,7 @@ public class RegistroJuegoDAOJDBC implements RegistroJuegoDAO {
                     registros.add(new RegistroJuego(
                             rs.getString("username"),
                             rs.getInt("id_juego"),
-                            rs.getInt("horas")));
+                            rs.getDouble("horas")));
                 }
             }
         } catch (SQLException e) {
@@ -139,7 +139,7 @@ public class RegistroJuegoDAOJDBC implements RegistroJuegoDAO {
                 registros.add(new RegistroJuego(
                         rs.getString("username"),
                         rs.getInt("id_juego"),
-                        rs.getInt("horas")));
+                        rs.getDouble("horas")));
             }
         } catch (SQLException e) {
             throw new RegistroJuegoDAOException("Error al obtener todos los registros de juego.", e.getSQLState(), e);

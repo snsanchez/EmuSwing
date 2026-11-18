@@ -12,8 +12,11 @@ public class PruebaEmuSwing {
         SwingUtilities.invokeLater(() -> {
             try {
                 IApi api = new MemoryApi();
+                String tituloJuego = "Super Street Fighter II";
                 VentanaJuego ventana = new VentanaJuego(
-                    api.getUrlJuegoByTitulo("Super Street Fighter II")
+                    api,
+                    api.getIdJuegoPorTitulo(tituloJuego),
+                    api.getUrlJuegoByTitulo(tituloJuego)
                 );
                 // tambien se puede probar ingresar: DOOM, Wolfenstein 3D
                 ventana.setVisible(true);

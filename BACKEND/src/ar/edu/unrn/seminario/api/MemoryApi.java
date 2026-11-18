@@ -278,7 +278,7 @@ public class MemoryApi implements IApi {
 	@Override
 	public String getGanador() {		//busca y retorna el usuario con mayor cantidad de horas
 	    String usernameMax = null;
-	    int maxHoras = -1;
+	    double maxHoras = -1;
 	    for (Map.Entry<String, RegistroJuego> entry : registrosSimulados.entrySet()) {
 	        if (entry.getValue().getHoras() != null && entry.getValue().getHoras() > maxHoras) {
 	            maxHoras = entry.getValue().getHoras();
@@ -304,7 +304,7 @@ public class MemoryApi implements IApi {
 
 	
 	@Override
-	public void registrarHorasJugadas(String username, Integer idJuego, Integer horas) {
+	public void registrarHorasJugadas(String username, Integer idJuego, Double horas) {
 		if (username == null || idJuego == null || horas == null || horas <= 0) {
 			return;
 		}
@@ -404,9 +404,9 @@ public class MemoryApi implements IApi {
 	}
 
 	@Override
-	public Integer obtenerHorasJugadas(String username) {
+	public Double obtenerHorasJugadas(String username) {
 		RegistroJuego reg = registrosSimulados.get(username);
-		return (reg != null) ? reg.getHoras() : 0;
+		return (reg != null) ? reg.getHoras() : 0.0;
 	}
 }
 

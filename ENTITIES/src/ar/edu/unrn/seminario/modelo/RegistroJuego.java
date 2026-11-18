@@ -5,16 +5,16 @@ import java.util.Objects;
 public class RegistroJuego {
     private String username;
     private Integer idJuego;
-    private Integer horas;
+    private Double horas;
 
     public RegistroJuego() {}
 
-    public RegistroJuego(Integer idJuego, Integer horas) {
+    public RegistroJuego(Integer idJuego, double horas) {
         this.idJuego = idJuego;
         this.horas = horas;
     }
 
-    public RegistroJuego(String username, Integer idJuego, Integer horas) {
+    public RegistroJuego(String username, Integer idJuego, double horas) {
         this.username = username;
         this.idJuego = idJuego;
         this.horas = horas;
@@ -36,11 +36,11 @@ public class RegistroJuego {
         this.idJuego = idJuego;
     }
 
-    public Integer getHoras() {
+    public Double getHoras() {
         return horas;
     }
 
-    public void setHoras(Integer horas) {
+    public void setHoras(Double horas) {
         this.horas = horas;
     }
 

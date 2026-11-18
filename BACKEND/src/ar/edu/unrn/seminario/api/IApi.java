@@ -52,13 +52,13 @@ public interface IApi {
 	
 	String getGanador();
 	
-	Integer obtenerHorasJugadas(String username);
+	Double obtenerHorasJugadas(String username);
 	
 	boolean otorgarSuscripcionAutomatico(String username);
 	
 	boolean obtenerEstadoSuscripcion(String username);
 	
-	void registrarHorasJugadas(String username, Integer idJuego, Integer horas);
+	void registrarHorasJugadas(String username, Integer idJuego, Double horas);
 	
 	
 	// para los juegos favoritos

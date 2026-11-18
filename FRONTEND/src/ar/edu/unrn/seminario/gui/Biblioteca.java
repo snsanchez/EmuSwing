@@ -5,21 +5,17 @@ import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Image;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -32,8 +28,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.api.PersistenceApi;
+import ar.edu.unrn.seminario.dao.ConnectionManager;
+import ar.edu.unrn.seminario.dao.JuegoDAOJDBC;
 import ar.edu.unrn.seminario.dto.JuegoDTO;
 import ar.edu.unrn.seminario.exception.CatalogoVacioException;
+import ar.edu.unrn.seminario.helpers.ImagenHelper;
 import ar.edu.unrn.seminario.helpers.UIHelper;
 
 public class Biblioteca extends JFrame {
@@ -55,8 +55,9 @@ public class Biblioteca extends JFrame {
 	public static void main(String[] args) {
 		java.awt.EventQueue.invokeLater(() -> {
 			try {
-				IApi apiPrueba = new ar.edu.unrn.seminario.api.MemoryApi();
-				Biblioteca frame = new Biblioteca(apiPrueba);
+				ConnectionManager.getConnection();
+				IApi api = new PersistenceApi(new JuegoDAOJDBC());
+				Biblioteca frame = new Biblioteca(api);
 				frame.setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -198,7 +199,7 @@ public class Biblioteca extends JFrame {
 
 			if (urlJuego != null) {
 				try {
-					VentanaJuego ventana = new VentanaJuego(urlJuego);
+					VentanaJuego ventana = new VentanaJuego(api, juegoSeleccionado.getId(), urlJuego);
 					ventana.setVisible(true);
 				} catch (Exception ex) {
 					ex.printStackTrace();
@@ -359,21 +360,7 @@ public class Biblioteca extends JFrame {
 		JLabel lblPortada = new JLabel();
 		lblPortada.setPreferredSize(new Dimension(80, 100)); 
 		
-		String nombreArchivo = "esw-logo.png"; 
-		if (juego.getId().equals(api.getIdJuegoPorTitulo("Super Street Fighter II"))) nombreArchivo = "Street-Fighter-II-USA_cover_1024x705.jpg";
-		else if (juego.getId().equals(api.getIdJuegoPorTitulo("DOOM"))) nombreArchivo = "doom_1993_cover_720x1080.jpg"; 
-		else if (juego.getId().equals(api.getIdJuegoPorTitulo("Wolfenstein 3D"))) nombreArchivo = "Wolfenstein 3D (PC Version).jpg";
-		else if (juego.getId().equals(api.getIdJuegoPorTitulo("Super Mario World"))) nombreArchivo = "Super-Mario-Word_1990_cover_474x332.jpg"; 
-
-		URL imgURL = getClass().getResource("/img/" + nombreArchivo);
-		if (imgURL != null) {
-			ImageIcon iconOriginal = new ImageIcon(imgURL);
-			Image imagenEscalada = iconOriginal.getImage().getScaledInstance(80, 100, Image.SCALE_SMOOTH);
-			lblPortada.setIcon(new ImageIcon(imagenEscalada));
-		} else {
-			lblPortada.setText("Sin IMG");
-			lblPortada.setForeground(Color.GRAY);
-		}
+		ImagenHelper.cargarImagen(juego.getUrlPortada(), juego.getTitulo(), lblPortada, 80, 100);
 		fila.add(lblPortada, BorderLayout.WEST);
 
 		JLabel lblTitulo = new JLabel(juego.getTitulo());
